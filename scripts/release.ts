@@ -1,6 +1,9 @@
 import { execFileSync } from "node:child_process";
+import fs from "node:fs";
 
 const args = process.argv.slice(2);
+
+fs.rmSync("dist", { recursive: true, force: true });
 
 execFileSync("pnpm", ["run", "checks"]);
 execFileSync("pnpm", ["build"]);
