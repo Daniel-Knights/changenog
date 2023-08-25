@@ -9,9 +9,9 @@
     "typecheck": "tsc --noEmit",
     "checks": "pnpm lint && pnpm typecheck",
     "changenog": "tsx ./index.ts",
-    "release:patch": "pnpm run checks && pnpm build && pnpm version patch && pnpm run changenog && pnpm publish",
-    "release:minor": "pnpm run checks && pnpm build && pnpm version minor && pnpm run changenog && pnpm publish",
-    "release:major": "pnpm run checks && pnpm build && pnpm version major && pnpm run changenog && pnpm publish"
+    "release:patch": "tsx ./scripts/release patch",
+    "release:minor": "tsx ./scripts/release minor",
+    "release:major": "tsx ./scripts/release major"
   },
   "author": "Donk",
   "license": "ISC",
