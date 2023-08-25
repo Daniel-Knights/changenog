@@ -1,3 +1,11 @@
+## [0.2.0](https://github.com/Daniel-Knights/changenog/compare/v0.1.1...v0.2.0) (25/08/2023, 16:33:55)
+
+- feat(option): continue ([3c7b6aa](https://github.com/Daniel-Knights/changenog/commit/3c7b6aa3d480fc1e545f6726fc39908e29651780))
+- ci(release): clean dist ([25b9df3](https://github.com/Daniel-Knights/changenog/commit/25b9df37fa12268323eafa6202478370877381e0))
+- build(ts): only include index js ([ab675de](https://github.com/Daniel-Knights/changenog/commit/ab675deec0615e3382df411b04ae2c6d4081b6f5))
+- chore(deps): remove fs-extra types ([18120da](https://github.com/Daniel-Knights/changenog/commit/18120da98a9c7296ff63467e77b95d7d3397c0ac))
+- feat: correct pkg type checks ([a720362](https://github.com/Daniel-Knights/changenog/commit/a7203627758093ae1de414f045c8f8768dda8cb0))
+
 ## [0.1.1](https://github.com/Daniel-Knights/changenog/compare/v0.1.0...v0.1.1) (25/08/2023, 10:44:01)
 
 - ci(release): read package version at correct point ([bbec888](https://github.com/Daniel-Knights/changenog/commit/bbec8888f1184d2d5030a7e10c92d3a20a08ef5b))
