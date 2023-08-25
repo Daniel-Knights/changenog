@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 import fs from "fs-extra";
 import { gitlogPromise } from "gitlog";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
+
+const cliArgs = process.argv.slice(2);
 
 async function getGitRoot(dir: string, callCount = 0): Promise<string | undefined> {
   if (callCount > 20) {
@@ -55,16 +58,49 @@ if (prevVersion === pkg.version) {
   throw new Error("No new version");
 }
 
+function getRemoteUrl(): string {
+  if (cliArgs.includes("--no-links")) {
+    return "";
+  }
+
+  let remoteUrl;
+
+  try {
+    remoteUrl = execFileSync("git", ["config", "--get", "remote.origin.url"])
+      .toString()
+      .trim();
+  } catch {
+    remoteUrl = pkg.repository?.url?.trim() || "";
+  }
+
+  try {
+    return new URL(remoteUrl).toString();
+  } catch {
+    return "";
+  }
+}
+
+const remoteUrl = getRemoteUrl();
+const remoteIsGitHub = remoteUrl.startsWith("https://github.com/");
+const compareUrl = remoteIsGitHub
+  ? `${remoteUrl}/compare/${prevVersion}...${pkg.version}`
+  : `${remoteUrl}/compare/v${prevVersion}...v${pkg.version}`;
+
 const currentDate = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
   timeStyle: "medium",
 }).format(new Date());
-const versionHeading = prevVersion
-  ? `## [${pkg.version}](${pkg.repository.url}/compare/${prevVersion}...${pkg.version}) (${currentDate})\n\n`
-  : `## ${pkg.version} (${currentDate})\n\n`;
+
+const versionHeading =
+  remoteUrl && prevVersion
+    ? `## [${pkg.version}](${compareUrl}) (${currentDate})\n\n`
+    : `## ${pkg.version} (${currentDate})\n\n`;
+
 const formattedCommits = filteredCommits
   .map((c) => {
-    return `- ${c.subject} ([${c.abbrevHash}](${pkg.repository.url}/commit/${c.hash}))`;
+    return remoteUrl
+      ? `- ${c.subject} ([${c.abbrevHash}](${remoteUrl}/commit/${c.hash}))`
+      : `- ${c.subject} (${c.abbrevHash})`;
   })
   .join("\n");
 
