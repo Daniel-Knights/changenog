@@ -15,7 +15,7 @@
     "removeComments": true,
     "rootDir": ".",
     "outDir": "dist",
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
@@ -23,5 +23,6 @@
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./typings/"]
   },
+  "include": ["./index.ts"],
   "exclude": ["./node_modules/"]
 }
