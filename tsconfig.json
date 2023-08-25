@@ -20,6 +20,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
+    "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./typings/"]
   },
   "exclude": ["./node_modules/"]

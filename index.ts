@@ -1,26 +1,24 @@
 #!/usr/bin/env node
-import fs from "fs-extra";
-import { gitlogPromise } from "gitlog";
+import gitlog from "gitlog";
 import { execFileSync } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 
 const cliArgs = process.argv.slice(2);
 
-async function getGitRoot(dir: string, callCount = 0): Promise<string | undefined> {
+function getGitRoot(dir: string, callCount = 0): string | undefined {
   if (callCount > 20) {
     return;
   }
 
-  const hasGit = await fs.exists(path.join(dir, ".git"));
-
-  if (hasGit) {
+  if (fs.existsSync(path.join(dir, ".git"))) {
     return dir;
   }
 
   return getGitRoot(path.resolve(dir, ".."), callCount + 1);
 }
 
-const gitRoot = await getGitRoot(process.cwd());
+const gitRoot = getGitRoot(process.cwd());
 
 if (!gitRoot) {
   throw new Error("Could not find git root");
@@ -28,12 +26,12 @@ if (!gitRoot) {
 
 const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
 const dest = path.join(process.cwd(), "CHANGELOG.md");
-const hasExisting = await fs.exists(dest);
-const existingChangelog = hasExisting ? `\n\n${await fs.readFile(dest)}` : "";
+const hasExisting = fs.existsSync(dest);
+const existingChangelog = hasExisting ? `\n\n${fs.readFileSync(dest)}` : "";
 const prevVersion = existingChangelog.match(/(?<=## \[?)\d+\.\d+\.\d+/)?.[0];
 const prevDate = existingChangelog.match(/(?<=\().+(?=\)$)/m)?.[0];
 
-const allCommits = await gitlogPromise({
+const allCommits = gitlog.default({
   repo: process.cwd(),
   number: 1000,
   since: prevDate,
@@ -51,8 +49,8 @@ if (filteredCommits.length === 0) {
   throw new Error("No new commits");
 }
 
-const pkgBuffer = await fs.readFile(path.join(process.cwd(), "package.json"));
-const pkg = JSON.parse(pkgBuffer.toString());
+const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
+const pkg: typeof import("./package.json") = JSON.parse(pkgBuffer.toString());
 
 if (prevVersion === pkg.version) {
   throw new Error("No new version");
@@ -104,4 +102,4 @@ const formattedCommits = filteredCommits
   })
   .join("\n");
 
-await fs.writeFile(dest, `${versionHeading}${formattedCommits}${existingChangelog}`);
+fs.writeFileSync(dest, `${versionHeading}${formattedCommits}${existingChangelog}`);

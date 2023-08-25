@@ -45,7 +45,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "fs-extra": "^11.1.1",
     "gitlog": "^4.0.8"
   }
 }
