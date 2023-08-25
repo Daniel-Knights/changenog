@@ -1,3 +1,8 @@
+## [0.1.1](https://github.com/Daniel-Knights/changenog/compare/v0.1.0...v0.1.1) (25/08/2023, 10:44:01)
+
+- ci(release): read package version at correct point ([bbec888](https://github.com/Daniel-Knights/changenog/commit/bbec8888f1184d2d5030a7e10c92d3a20a08ef5b))
+- fix(links): compare link format ([f8e4a54](https://github.com/Daniel-Knights/changenog/commit/f8e4a54fb3dcc03e79f6d46931c84ff038d24ea6))
+
 ## [0.1.0](https://github.com/Daniel-Knights/changenog/compare/v0.0.1...v0.1.0) (25/08/2023, 10:32:02)
 
 - ci(release): add release script ([aa28f1e](https://github.com/Daniel-Knights/changenog/commit/aa28f1ee3eb686d4dfd5fe23a7658d64543a0078))
