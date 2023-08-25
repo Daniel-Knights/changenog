@@ -79,10 +79,7 @@ function getRemoteUrl(): string {
 }
 
 const remoteUrl = getRemoteUrl();
-const remoteIsGitHub = remoteUrl.startsWith("https://github.com/");
-const compareUrl = remoteIsGitHub
-  ? `${remoteUrl}/compare/${prevVersion}...${pkg.version}`
-  : `${remoteUrl}/compare/v${prevVersion}...v${pkg.version}`;
+const compareUrl = `${remoteUrl}/compare/v${prevVersion}...v${pkg.version}`;
 
 const currentDate = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",

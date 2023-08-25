@@ -25,8 +25,3 @@ See this repo's changelog for example output.
 ## Options
 
 - `--no-links` - Disable links
-
-## Supported remote links
-
-- GitHub
-- GitLab
