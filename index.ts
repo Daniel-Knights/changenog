@@ -12,11 +12,34 @@ type JSONValue =
   | { [x: string]: JSONValue }
   | Array<JSONValue>;
 
+const LOG_PREFIX = "\x1b[33m[changenog]\x1b[0m";
+
+const cliArgs = process.argv.slice(2);
+
+function exit(message: string, error?: boolean): never {
+  const formattedMessage = `${LOG_PREFIX} ${message}`;
+
+  if (cliArgs.includes("--continue")) {
+    if (error) {
+      console.error(`Error: ${formattedMessage}`);
+    } else {
+      console.log(`${formattedMessage}, exiting...`);
+    }
+
+    process.exit(0);
+  }
+
+  if (error) {
+    throw new Error(formattedMessage);
+  }
+
+  console.log(`${formattedMessage}, exiting...`);
+  process.exit(1);
+}
+
 function isJsonObj(val: unknown): val is Record<string, JSONValue> {
   return !!val && typeof val === "object" && !Array.isArray(val);
 }
-
-const cliArgs = process.argv.slice(2);
 
 function getGitRoot(dir: string, callCount = 0): string | undefined {
   if (callCount > 20) {
@@ -33,7 +56,7 @@ function getGitRoot(dir: string, callCount = 0): string | undefined {
 const gitRoot = getGitRoot(process.cwd());
 
 if (!gitRoot) {
-  throw new Error("Could not find git root");
+  exit("unable to find git root", true);
 }
 
 const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
@@ -58,18 +81,18 @@ const filteredCommits = allCommits.filter((commit) => {
 });
 
 if (filteredCommits.length === 0) {
-  throw new Error("No new commits");
+  exit("no new commits");
 }
 
 const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
 const pkg: JSONValue = JSON.parse(pkgBuffer.toString());
 
 if (!isJsonObj(pkg)) {
-  throw new Error("Unable to parse package.json");
+  exit("unable to parse package.json", true);
 }
 
 if (prevVersion === pkg.version) {
-  throw new Error("No new version");
+  exit("no new version");
 }
 
 function getRemoteUrl(): string {

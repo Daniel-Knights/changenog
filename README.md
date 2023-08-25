@@ -24,4 +24,5 @@ See this repo's changelog for example output.
 
 ## Options
 
-- `--no-links` - Disable links
+- `--no-links` - disable links
+- `--continue` - allow subsequent commands to run on incomplete exit

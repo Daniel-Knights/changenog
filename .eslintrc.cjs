@@ -47,6 +47,7 @@ module.exports = defineConfig({
     "@typescript-eslint/explicit-function-return-type": "error",
 
     "n/shebang": "off",
+    "n/no-process-exit": "off",
   },
   settings: {
     "import/resolver": {
