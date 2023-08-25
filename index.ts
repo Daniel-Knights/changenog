@@ -4,6 +4,18 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [x: string]: JSONValue }
+  | Array<JSONValue>;
+
+function isJsonObj(val: unknown): val is Record<string, JSONValue> {
+  return !!val && typeof val === "object" && !Array.isArray(val);
+}
+
 const cliArgs = process.argv.slice(2);
 
 function getGitRoot(dir: string, callCount = 0): string | undefined {
@@ -50,7 +62,11 @@ if (filteredCommits.length === 0) {
 }
 
 const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
-const pkg: typeof import("./package.json") = JSON.parse(pkgBuffer.toString());
+const pkg: JSONValue = JSON.parse(pkgBuffer.toString());
+
+if (!isJsonObj(pkg)) {
+  throw new Error("Unable to parse package.json");
+}
 
 if (prevVersion === pkg.version) {
   throw new Error("No new version");
@@ -61,17 +77,24 @@ function getRemoteUrl(): string {
     return "";
   }
 
-  let remoteUrl;
+  let remoteUrl = "";
 
   try {
     remoteUrl = execFileSync("git", ["config", "--get", "remote.origin.url"])
       .toString()
       .trim();
   } catch {
-    remoteUrl = pkg.repository?.url?.trim() || "";
+    if (
+      isJsonObj(pkg) &&
+      isJsonObj(pkg.repository) &&
+      typeof pkg.repository.url === "string"
+    ) {
+      remoteUrl = pkg.repository.url.trim();
+    }
   }
 
   try {
+    // `new URL` will throw an error if the URL is invalid
     return new URL(remoteUrl).toString();
   } catch {
     return "";
