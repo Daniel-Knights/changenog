@@ -1,3 +1,8 @@
+## [0.3.0](https://github.com/Daniel-Knights/changenog/compare/v0.2.0...v0.3.0) (27/08/2023, 13:21:12)
+
+- feat: use exec over exec file ([33600df](https://github.com/Daniel-Knights/changenog/commit/33600df8a0ab55289ddce4baac3c038e0c99dfd3))
+- ci(release): use spawn ([ea6d618](https://github.com/Daniel-Knights/changenog/commit/ea6d61880376d976c319c489bfaee34762055e97))
+
 ## [0.2.0](https://github.com/Daniel-Knights/changenog/compare/v0.1.1...v0.2.0) (25/08/2023, 16:33:55)
 
 - feat(option): continue ([3c7b6aa](https://github.com/Daniel-Knights/changenog/commit/3c7b6aa3d480fc1e545f6726fc39908e29651780))
