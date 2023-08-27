@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import gitlog from "gitlog";
-import { execFileSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -15,6 +15,10 @@ type JSONValue =
 const LOG_PREFIX = "\x1b[33m[changenog]\x1b[0m";
 
 const cliArgs = process.argv.slice(2);
+
+function isJsonObj(val: unknown): val is Record<string, JSONValue> {
+  return !!val && typeof val === "object" && !Array.isArray(val);
+}
 
 function exit(message: string, error?: boolean): never {
   const formattedMessage = `${LOG_PREFIX} ${message}`;
@@ -35,10 +39,6 @@ function exit(message: string, error?: boolean): never {
 
   console.log(`${formattedMessage}, exiting...`);
   process.exit(1);
-}
-
-function isJsonObj(val: unknown): val is Record<string, JSONValue> {
-  return !!val && typeof val === "object" && !Array.isArray(val);
 }
 
 function getGitRoot(dir: string, callCount = 0): string | undefined {
@@ -103,9 +103,7 @@ function getRemoteUrl(): string {
   let remoteUrl = "";
 
   try {
-    remoteUrl = execFileSync("git", ["config", "--get", "remote.origin.url"])
-      .toString()
-      .trim();
+    remoteUrl = execSync("git config --get remote.origin.url").toString().trim();
   } catch {
     if (
       isJsonObj(pkg) &&
