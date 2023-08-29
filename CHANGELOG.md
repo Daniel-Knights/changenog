@@ -1,3 +1,8 @@
+## [0.4.1](https://github.com/Daniel-Knights/changenog/compare/v0.4.0...v0.4.1) (29/08/2023, 17:10:53)
+
+- fix(links): only add compare link if prev tag exists ([8615182](https://github.com/Daniel-Knights/changenog/commit/86151826594b0644ba6f34ac4f07d1786ee91bb3))
+- docs(changelog): v0.4.0 ([26682e9](https://github.com/Daniel-Knights/changenog/commit/26682e9a57ad279e31e9582b2e9aee6bf38b7942))
+
 ## [0.4.0](https://github.com/Daniel-Knights/changenog/compare/v0.3.0...v0.4.0) (29/08/2023, 17:03:24)
 
 - feat: parse git tags ([d37ec62](https://github.com/Daniel-Knights/changenog/commit/d37ec62d46144a20811ada3aa1e62973c21baa95))
