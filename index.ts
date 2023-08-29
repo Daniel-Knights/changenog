@@ -172,7 +172,7 @@ const currentDate = new Intl.DateTimeFormat(undefined, {
 }).format(new Date());
 
 const versionHeading =
-  remoteUrl && prevVersion
+  remoteUrl && prevTag
     ? `## [${pkg.version}](${compareUrl}) (${currentDate})\n\n`
     : `## ${pkg.version} (${currentDate})\n\n`;
 
