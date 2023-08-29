@@ -103,7 +103,10 @@ function getRemoteUrl(): string {
   let remoteUrl = "";
 
   try {
-    remoteUrl = execSync("git config --get remote.origin.url").toString().trim();
+    remoteUrl = execSync("git config --get remote.origin.url")
+      .toString()
+      .replace(".git", "")
+      .trim();
   } catch {
     if (
       isJsonObj(pkg) &&
