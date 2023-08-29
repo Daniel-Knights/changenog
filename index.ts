@@ -16,8 +16,14 @@ const LOG_PREFIX = "\x1b[33m[changenog]\x1b[0m";
 
 const cliArgs = process.argv.slice(2);
 
+let isMonorepoPackage = false;
+
 function isJsonObj(val: unknown): val is Record<string, JSONValue> {
   return !!val && typeof val === "object" && !Array.isArray(val);
+}
+
+function parseVersion(version: string | undefined): string | undefined {
+  return version?.match(/\d+\.\d+\.\d+/)?.[0];
 }
 
 function exit(message: string, error?: boolean): never {
@@ -50,6 +56,8 @@ function getGitRoot(dir: string, callCount = 0): string | undefined {
     return dir;
   }
 
+  isMonorepoPackage = true;
+
   return getGitRoot(path.resolve(dir, ".."), callCount + 1);
 }
 
@@ -59,40 +67,69 @@ if (!gitRoot) {
   exit("unable to find git root", true);
 }
 
-const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
+const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
+const pkg: JSONValue = JSON.parse(pkgBuffer.toString());
+
+if (!isJsonObj(pkg) || typeof pkg.name !== "string") {
+  exit("unable to parse package.json", true);
+}
+
+const allTags = execSync(
+  'git tag -l --sort=-creatordate --format=%(creatordate:"format:%d/%m/%Y, %H:%M:%S")//%(refname:short)',
+)
+  .toString()
+  .split("\n")
+  .filter(Boolean)
+  .map((t) => {
+    return t.match(/(?<date>.+?)\/\/(?<tag>.+)/)!.groups!;
+  });
+const filteredTags = isMonorepoPackage
+  ? allTags.filter((t) => {
+      return t.tag?.startsWith(pkg.name as string);
+    })
+  : allTags;
+
+const currentTag = filteredTags[0];
+
+if (!currentTag) {
+  exit("missing git tag", true);
+}
+
+const currentVersion = parseVersion(currentTag?.tag);
+
 const dest = path.join(process.cwd(), "CHANGELOG.md");
 const hasExisting = fs.existsSync(dest);
 const existingChangelog = hasExisting ? `\n\n${fs.readFileSync(dest)}` : "";
 const prevVersion = existingChangelog.match(/(?<=## \[?)\d+\.\d+\.\d+/)?.[0];
 const prevDate = existingChangelog.match(/(?<=\().+(?=\)$)/m)?.[0];
 
+if (prevVersion && prevVersion === currentVersion) {
+  exit("no new version");
+}
+
+if (currentVersion !== pkg.version) {
+  exit("git tag and package version mismatch", true);
+}
+
+const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
+
 const allCommits = gitlog.default({
   repo: process.cwd(),
   number: 1000,
   since: prevDate,
 });
-// Filter out version commits and merge commits
+// Filter out NPM version commits and merge commits
 const filteredCommits = allCommits.filter((commit) => {
+  // Restrict to current package
   if (!commit.files.some((f) => f.startsWith(relativePackagePath))) {
     return false;
   }
 
-  return !/\d+\.\d+\.\d+/.test(commit.subject) && commit.files.length > 0;
+  return !/^\d+\.\d+\.\d+$/.test(commit.subject) && commit.files.length > 0;
 });
 
 if (filteredCommits.length === 0) {
   exit("no new commits");
-}
-
-const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
-const pkg: JSONValue = JSON.parse(pkgBuffer.toString());
-
-if (!isJsonObj(pkg)) {
-  exit("unable to parse package.json", true);
-}
-
-if (prevVersion === pkg.version) {
-  exit("no new version");
 }
 
 function getRemoteUrl(): string {
@@ -126,7 +163,8 @@ function getRemoteUrl(): string {
 }
 
 const remoteUrl = getRemoteUrl();
-const compareUrl = `${remoteUrl}/compare/v${prevVersion}...v${pkg.version}`;
+const prevTag = filteredTags[1];
+const compareUrl = `${remoteUrl}/compare/${prevTag?.tag}...${currentTag.tag}`;
 
 const currentDate = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",

@@ -6,6 +6,12 @@ Parses Git commits since last entry, restricts them by current working directory
 
 Running `changenog` from inside a subdirectory will find the nearest parent that's a git repository, and filter commits to only include those that have changes within that subdirectory.
 
+Requirements:
+
+- `package.json` with name and version
+- At least one Git tag
+- Monorepo package tags must be in the format `<package-name>/<version>`
+
 ## Usage
 
 ```bash
