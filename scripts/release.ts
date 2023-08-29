@@ -5,19 +5,19 @@ const args = process.argv.slice(2);
 
 fs.rmSync("dist", { recursive: true, force: true });
 
-function exec(cmd: string, passedArgs: string[]): void {
+function run(cmd: string, passedArgs: string[]): void {
   spawnSync(cmd, passedArgs, { stdio: "inherit" });
 }
 
-exec("pnpm", ["run", "checks"]);
-exec("pnpm", ["build"]);
-exec("pnpm", ["version", args[0]]);
-exec("tsx", ["./index.ts"]);
-exec("git", ["add", "."]);
+run("pnpm", ["run", "checks"]);
+run("pnpm", ["build"]);
+run("pnpm", ["version", args[0]]);
+run("tsx", ["./index.ts"]);
+run("git", ["add", "."]);
 
 const pkg = await import("../package.json");
 
-exec("git", ["commit", "-m", `docs(changelog): v${pkg.default.version}`]);
-exec("git", ["push"]);
-exec("git", ["push", "--tags"]);
-exec("pnpm", ["publish"]);
+run("git", ["commit", "-m", `docs(changelog): v${pkg.default.version}`]);
+run("git", ["push"]);
+run("git", ["push", "--tags"]);
+run("pnpm", ["publish"]);
