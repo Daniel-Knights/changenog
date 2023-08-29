@@ -100,8 +100,8 @@ const currentVersion = parseVersion(currentTag?.tag);
 const dest = path.join(process.cwd(), "CHANGELOG.md");
 const hasExisting = fs.existsSync(dest);
 const existingChangelog = hasExisting ? `\n\n${fs.readFileSync(dest)}` : "";
-const prevVersion = existingChangelog.match(/(?<=## \[?)\d+\.\d+\.\d+/)?.[0];
-const prevDate = existingChangelog.match(/(?<=\().+(?=\)$)/m)?.[0];
+const prevVersion = existingChangelog.match(/\d+\.\d+\.\d+/)?.[0];
+const prevDate = existingChangelog.match(/\d{2}\/\d{2}\/\d{4}, \d{2}:\d{2}:\d{2}/)?.[0];
 
 if (prevVersion && prevVersion === currentVersion) {
   exit("no new version");
