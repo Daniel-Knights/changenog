@@ -1,3 +1,10 @@
+## [0.4.0](https://github.com/Daniel-Knights/changenog/compare/v0.3.0...v0.4.0) (29/08/2023, 17:03:24)
+
+- feat: parse git tags ([d37ec62](https://github.com/Daniel-Knights/changenog/commit/d37ec62d46144a20811ada3aa1e62973c21baa95))
+- fix(links): remove git url suffix ([f73758d](https://github.com/Daniel-Knights/changenog/commit/f73758d6d87d8c9ffdb3994b94e0b4f0df0d1689))
+- refactor(release): rename exec to run ([72c877e](https://github.com/Daniel-Knights/changenog/commit/72c877e8196ae68e1bc6545be1cde5d5c3388103))
+- docs(changelog): v0.3.0 ([c0ac752](https://github.com/Daniel-Knights/changenog/commit/c0ac752c41eeb10fecfb097bb2af19423141180a))
+
 ## [0.3.0](https://github.com/Daniel-Knights/changenog/compare/v0.2.0...v0.3.0) (27/08/2023, 13:21:12)
 
 - feat: use exec over exec file ([33600df](https://github.com/Daniel-Knights/changenog/commit/33600df8a0ab55289ddce4baac3c038e0c99dfd3))
