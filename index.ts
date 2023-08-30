@@ -139,12 +139,16 @@ function getRemoteUrl(): string {
 }
 
 const remoteUrl = getRemoteUrl();
-const reversedTags = tagsSinceLastEntry.reverse();
+const reversedTags = tagsSinceLastEntry.reverse(); // Oldest tags first
 const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
 const maxCommitsArg = getArg("--max-commits");
+
 const allCommits = gitlog.default({
   repo: process.cwd(),
   number: maxCommitsArg ? Number(maxCommitsArg) : 1000,
+  // `after` means `>=`, so we have to add 1s to prevent commits made at the same
+  // time as previous entry being returned
+  after: prevEntryDate && new Date(prevEntryDate.getTime() + 1000).toString(),
 });
 // Filter out NPM version commits and merge commits
 const filteredCommits = allCommits.filter((commit) => {
@@ -157,6 +161,7 @@ const filteredCommits = allCommits.filter((commit) => {
 
   return !isNpmVersionCommit && commit.files.length > 0;
 });
+const reversedCommits = filteredCommits.reverse(); // Oldest commits first
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -168,17 +173,11 @@ reversedTags.forEach((tag) => {
   const tagDate = new Date(tag.date);
   const prevTagIndex = packageTags.findIndex((t) => t.name === tag.name) + 1;
   const prevTag = packageTags[prevTagIndex];
-  const prevTagDate = prevTag ? new Date(prevTag.date) : prevEntryDate;
 
-  const entryCommits = filteredCommits.filter((commit) => {
-    const commitDate = new Date(commit.authorDate);
-
-    if (!prevTagDate) {
-      return commitDate <= tagDate;
-    }
-
-    return commitDate <= tagDate && commitDate > prevTagDate;
+  const spliceIndex = reversedCommits.findIndex((commit) => {
+    return new Date(commit.authorDate) > tagDate;
   });
+  const entryCommits = reversedCommits.splice(0, spliceIndex).reverse();
 
   if (entryCommits.length === 0) return;
 
