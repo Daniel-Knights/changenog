@@ -183,13 +183,14 @@ reversedTags.forEach((tag) => {
   if (entryCommits.length === 0) return;
 
   const tagVersion = parseVersion(tag.name);
-  const compareUrl = `${remoteUrl}/compare/${prevTag?.name}...${tag.name}`;
+  const compareUrl = prevTag
+    ? `${remoteUrl}/compare/${prevTag?.name}...${tag.name}`
+    : `${remoteUrl}/tags`;
   const formattedDate = dateFormatter.format(tagDate);
 
-  const versionHeading =
-    remoteUrl && prevTag
-      ? `## [${tagVersion}](${compareUrl}) (${formattedDate})\n\n`
-      : `## ${tagVersion} (${formattedDate})\n\n`;
+  const versionHeading = remoteUrl
+    ? `## [${tagVersion}](${compareUrl}) (${formattedDate})`
+    : `## ${tagVersion} (${formattedDate})`;
 
   const formattedCommits = entryCommits
     .map((c) => {
@@ -199,7 +200,7 @@ reversedTags.forEach((tag) => {
     })
     .join("\n");
 
-  newChangelog = `${versionHeading}${formattedCommits}\n\n${newChangelog}`;
+  newChangelog = `${versionHeading}\n\n${formattedCommits}\n\n${newChangelog}`;
 });
 
 fs.writeFileSync(dest, newChangelog.trim());
