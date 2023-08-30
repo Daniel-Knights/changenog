@@ -1,3 +1,14 @@
+## [0.5.0](https://github.com/Daniel-Knights/changenog/compare/v0.4.1...v0.5.0) (30/08/2023)
+
+- feat(links): link to all tags if no previous version ([33e7b88](https://github.com/Daniel-Knights/changenog/commit/33e7b8890799fb76f619faafdf710809a4cf8923))
+- docs(readme): tag parsing, remove requirements ([075da27](https://github.com/Daniel-Knights/changenog/commit/075da27effd1745c631a3de51528b97341254022))
+- feat(option): max-commits, get arg fn ([20748cd](https://github.com/Daniel-Knights/changenog/commit/20748cd725f6b252c200cc975b1d506e345d5f90))
+- feat: shorter date formats ([e69f7d1](https://github.com/Daniel-Knights/changenog/commit/e69f7d175ba850cdd9b80a9ec32c10ed27ed8ed6))
+- feat: parse git tags, add all entries since last ([b1d9b0c](https://github.com/Daniel-Knights/changenog/commit/b1d9b0ce6840daa65597fe1e03e54a830aa95c09))
+- chore: vscode launch config ([62bfd7d](https://github.com/Daniel-Knights/changenog/commit/62bfd7dccba522e985b4fb51dd55408c6b5e6a5c))
+- fix: prev version and date regex ([0d1bd12](https://github.com/Daniel-Knights/changenog/commit/0d1bd12284d598522d90afefefb9a399398c6b70))
+- docs(changelog): v0.4.1 ([de9f58f](https://github.com/Daniel-Knights/changenog/commit/de9f58f35acf64bf428963081700e1194e8e7aaa))
+
 ## [0.4.1](https://github.com/Daniel-Knights/changenog/compare/v0.4.0...v0.4.1) (29/08/2023, 17:10:53)
 
 - fix(links): only add compare link if prev tag exists ([8615182](https://github.com/Daniel-Knights/changenog/commit/86151826594b0644ba6f34ac4f07d1786ee91bb3))
