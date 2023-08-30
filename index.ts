@@ -13,6 +13,9 @@ type JSONValue =
   | Array<JSONValue>;
 
 const LOG_PREFIX = "\x1b[33m[changenog]\x1b[0m";
+// https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+const SEMVER_REGEX =
+  /(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?/;
 
 const cliArgs = process.argv.slice(2);
 
@@ -23,7 +26,7 @@ function isJsonObj(val: unknown): val is Record<string, JSONValue> {
 }
 
 function parseVersion(version: string | undefined): string | undefined {
-  return version?.match(/\d+\.\d+\.\d+/)?.[0];
+  return version?.match(SEMVER_REGEX)?.[0];
 }
 
 function exit(message: string, error?: boolean): never {
@@ -47,16 +50,21 @@ function exit(message: string, error?: boolean): never {
   process.exit(1);
 }
 
+const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
+const pkg: Record<string, JSONValue> = JSON.parse(pkgBuffer.toString());
+
 function getGitRoot(dir: string, callCount = 0): string | undefined {
   if (callCount > 20) {
     return;
   }
 
+  if (callCount > 0 && pkg.name && pkg.version) {
+    isMonorepoPackage = true;
+  }
+
   if (fs.existsSync(path.join(dir, ".git"))) {
     return dir;
   }
-
-  isMonorepoPackage = true;
 
   return getGitRoot(path.resolve(dir, ".."), callCount + 1);
 }
@@ -67,69 +75,35 @@ if (!gitRoot) {
   exit("unable to find git root", true);
 }
 
-const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
-const pkg: JSONValue = JSON.parse(pkgBuffer.toString());
-
-if (!isJsonObj(pkg) || typeof pkg.name !== "string") {
-  exit("unable to parse package.json", true);
-}
+const dest = path.join(process.cwd(), "CHANGELOG.md");
+const existingChangelog = fs.existsSync(dest) ? fs.readFileSync(dest, "utf-8") : "";
+const lastEntryDateString = existingChangelog.match(
+  /\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d/,
+)?.[0];
+const lastEntryDate = lastEntryDateString ? new Date(lastEntryDateString) : undefined;
 
 const allTags = execSync(
-  'git tag -l --sort=-creatordate --format=%(creatordate:"format:%d/%m/%Y, %H:%M:%S")//%(refname:short)',
+  "git tag -l --sort=-creatordate --format=%(creatordate:iso-strict)//%(refname:short)",
+  { encoding: "utf-8" },
 )
-  .toString()
   .split("\n")
   .filter(Boolean)
   .map((t) => {
-    return t.match(/(?<date>.+?)\/\/(?<tag>.+)/)!.groups!;
+    return t.match(/(?<date>.+?)\/\/(?<name>.+)/)!.groups as {
+      date: string;
+      name: string;
+    };
   });
-const filteredTags = isMonorepoPackage
-  ? allTags.filter((t) => {
-      return t.tag?.startsWith(pkg.name as string);
-    })
-  : allTags;
-
-const currentTag = filteredTags[0];
-
-if (!currentTag) {
-  exit("missing git tag", true);
-}
-
-const currentVersion = parseVersion(currentTag?.tag);
-
-const dest = path.join(process.cwd(), "CHANGELOG.md");
-const hasExisting = fs.existsSync(dest);
-const existingChangelog = hasExisting ? `\n\n${fs.readFileSync(dest)}` : "";
-const prevVersion = existingChangelog.match(/\d+\.\d+\.\d+/)?.[0];
-const prevDate = existingChangelog.match(/\d{2}\/\d{2}\/\d{4}, \d{2}:\d{2}:\d{2}/)?.[0];
-
-if (prevVersion && prevVersion === currentVersion) {
-  exit("no new version");
-}
-
-if (currentVersion !== pkg.version) {
-  exit("git tag and package version mismatch", true);
-}
-
-const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
-
-const allCommits = gitlog.default({
-  repo: process.cwd(),
-  number: 1000,
-  since: prevDate,
-});
-// Filter out NPM version commits and merge commits
-const filteredCommits = allCommits.filter((commit) => {
-  // Restrict to current package
-  if (!commit.files.some((f) => f.startsWith(relativePackagePath))) {
+const tagsSinceLastEntry = allTags.filter((t) => {
+  if (lastEntryDate && new Date(t.date) <= lastEntryDate) {
     return false;
   }
 
-  return !/^\d+\.\d+\.\d+$/.test(commit.subject) && commit.files.length > 0;
+  return !isMonorepoPackage || t.name.startsWith(`${pkg.name}/`);
 });
 
-if (filteredCommits.length === 0) {
-  exit("no new commits");
+if (tagsSinceLastEntry.length === 0) {
+  exit("no new version(s)");
 }
 
 function getRemoteUrl(): string {
@@ -145,11 +119,7 @@ function getRemoteUrl(): string {
       .replace(".git", "")
       .trim();
   } catch {
-    if (
-      isJsonObj(pkg) &&
-      isJsonObj(pkg.repository) &&
-      typeof pkg.repository.url === "string"
-    ) {
+    if (isJsonObj(pkg.repository) && typeof pkg.repository.url === "string") {
       remoteUrl = pkg.repository.url.trim();
     }
   }
@@ -163,25 +133,59 @@ function getRemoteUrl(): string {
 }
 
 const remoteUrl = getRemoteUrl();
-const prevTag = filteredTags[1];
-const compareUrl = `${remoteUrl}/compare/${prevTag?.tag}...${currentTag.tag}`;
+const reversedTags = tagsSinceLastEntry.reverse();
+const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
+const allCommits = gitlog.default({
+  repo: process.cwd(),
+  number: 1000,
+});
+// Filter out NPM version commits and merge commits
+const filteredCommits = allCommits.filter((commit) => {
+  // Restrict to current package
+  if (!commit.files.some((f) => f.startsWith(relativePackagePath))) {
+    return false;
+  }
 
-const currentDate = new Intl.DateTimeFormat(undefined, {
-  dateStyle: "short",
-  timeStyle: "medium",
-}).format(new Date());
+  const isNpmVersionCommit = new RegExp(`^${SEMVER_REGEX.source}$`).test(commit.subject);
 
-const versionHeading =
-  remoteUrl && prevTag
-    ? `## [${pkg.version}](${compareUrl}) (${currentDate})\n\n`
-    : `## ${pkg.version} (${currentDate})\n\n`;
+  return !isNpmVersionCommit && commit.files.length > 0;
+});
 
-const formattedCommits = filteredCommits
-  .map((c) => {
-    return remoteUrl
-      ? `- ${c.subject} ([${c.abbrevHash}](${remoteUrl}/commit/${c.hash}))`
-      : `- ${c.subject} (${c.abbrevHash})`;
-  })
-  .join("\n");
+let newChangelog = existingChangelog;
 
-fs.writeFileSync(dest, `${versionHeading}${formattedCommits}${existingChangelog}`);
+reversedTags.forEach((tag) => {
+  const tagDate = new Date(tag.date);
+  const prevTag = allTags[allTags.findIndex((t) => t.name === tag.name) + 1];
+  const prevTagDate = prevTag ? new Date(prevTag.date) : lastEntryDate;
+
+  const entryCommits = filteredCommits.filter((commit) => {
+    const commitDate = new Date(commit.authorDate);
+
+    if (!prevTagDate) {
+      return commitDate <= tagDate;
+    }
+
+    return commitDate <= tagDate && commitDate > prevTagDate;
+  });
+
+  if (entryCommits.length === 0) return;
+
+  const tagVersion = parseVersion(tag.name);
+  const compareUrl = `${remoteUrl}/compare/${prevTag?.name}...${tag.name}`;
+  const versionHeading =
+    remoteUrl && prevTag
+      ? `## [${tagVersion}](${compareUrl}) (${tag.date})\n\n`
+      : `## ${tagVersion} (${tag.date})\n\n`;
+
+  const formattedCommits = entryCommits
+    .map((c) => {
+      return remoteUrl
+        ? `- ${c.subject} ([${c.abbrevHash}](${remoteUrl}/commit/${c.hash}))`
+        : `- ${c.subject} (${c.abbrevHash})`;
+    })
+    .join("\n");
+
+  newChangelog = `${versionHeading}${formattedCommits}\n\n${newChangelog}`;
+});
+
+fs.writeFileSync(dest, newChangelog.trim());
