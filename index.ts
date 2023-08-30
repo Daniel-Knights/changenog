@@ -75,31 +75,33 @@ if (!gitRoot) {
   exit("unable to find git root", true);
 }
 
-const dest = path.join(process.cwd(), "CHANGELOG.md");
-const existingChangelog = fs.existsSync(dest) ? fs.readFileSync(dest, "utf-8") : "";
-const lastEntryDateString = existingChangelog.match(
-  /\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d/,
-)?.[0];
-const lastEntryDate = lastEntryDateString ? new Date(lastEntryDateString) : undefined;
-
-const allTags = execSync(
+const packageTags = execSync(
   "git tag -l --sort=-creatordate --format=%(creatordate:iso-strict)//%(refname:short)",
   { encoding: "utf-8" },
 )
   .split("\n")
-  .filter(Boolean)
   .map((t) => {
-    return t.match(/(?<date>.+?)\/\/(?<name>.+)/)!.groups as {
+    return t.match(/(?<date>.+?)\/\/(?<name>.+)/)?.groups as {
       date: string;
       name: string;
     };
-  });
-const tagsSinceLastEntry = allTags.filter((t) => {
-  if (lastEntryDate && new Date(t.date) <= lastEntryDate) {
-    return false;
-  }
+  })
+  .filter((t) => {
+    if (!t) return false;
 
-  return !isMonorepoPackage || t.name.startsWith(`${pkg.name}/`);
+    return !isMonorepoPackage || t.name.startsWith(`${pkg.name}/`);
+  });
+
+const dest = path.join(process.cwd(), "CHANGELOG.md");
+const existingChangelog = fs.existsSync(dest) ? fs.readFileSync(dest, "utf-8") : "";
+const prevEntryVersion = parseVersion(existingChangelog);
+const prevEntryTag = packageTags.find((t) => {
+  return parseVersion(t.name) === prevEntryVersion;
+});
+const prevEntryDate = prevEntryTag ? new Date(prevEntryTag.date) : undefined;
+
+const tagsSinceLastEntry = packageTags.filter((t) => {
+  return !prevEntryDate || new Date(t.date) > prevEntryDate;
 });
 
 if (tagsSinceLastEntry.length === 0) {
@@ -151,12 +153,17 @@ const filteredCommits = allCommits.filter((commit) => {
   return !isNpmVersionCommit && commit.files.length > 0;
 });
 
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "short",
+});
+
 let newChangelog = existingChangelog;
 
 reversedTags.forEach((tag) => {
   const tagDate = new Date(tag.date);
-  const prevTag = allTags[allTags.findIndex((t) => t.name === tag.name) + 1];
-  const prevTagDate = prevTag ? new Date(prevTag.date) : lastEntryDate;
+  const prevTagIndex = packageTags.findIndex((t) => t.name === tag.name) + 1;
+  const prevTag = packageTags[prevTagIndex];
+  const prevTagDate = prevTag ? new Date(prevTag.date) : prevEntryDate;
 
   const entryCommits = filteredCommits.filter((commit) => {
     const commitDate = new Date(commit.authorDate);
@@ -172,10 +179,12 @@ reversedTags.forEach((tag) => {
 
   const tagVersion = parseVersion(tag.name);
   const compareUrl = `${remoteUrl}/compare/${prevTag?.name}...${tag.name}`;
+  const formattedDate = dateFormatter.format(tagDate);
+
   const versionHeading =
     remoteUrl && prevTag
-      ? `## [${tagVersion}](${compareUrl}) (${tag.date})\n\n`
-      : `## ${tagVersion} (${tag.date})\n\n`;
+      ? `## [${tagVersion}](${compareUrl}) (${formattedDate})\n\n`
+      : `## ${tagVersion} (${formattedDate})\n\n`;
 
   const formattedCommits = entryCommits
     .map((c) => {
