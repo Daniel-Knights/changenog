@@ -32,3 +32,4 @@ See this repo's changelog for example output.
 
 - `--no-links` - disable links
 - `--continue` - allow subsequent commands to run on incomplete exit
+- `--max-commits=<number>` - maximum number of commits to process (default: 1000)

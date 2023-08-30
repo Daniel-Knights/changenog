@@ -25,6 +25,10 @@ function isJsonObj(val: unknown): val is Record<string, JSONValue> {
   return !!val && typeof val === "object" && !Array.isArray(val);
 }
 
+function getArg(arg: string): string | undefined {
+  return cliArgs.find((a) => a.startsWith(`${arg}=`))?.split("=")[1];
+}
+
 function parseVersion(version: string | undefined): string | undefined {
   return version?.match(SEMVER_REGEX)?.[0];
 }
@@ -137,9 +141,10 @@ function getRemoteUrl(): string {
 const remoteUrl = getRemoteUrl();
 const reversedTags = tagsSinceLastEntry.reverse();
 const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
+const maxCommitsArg = getArg("--max-commits");
 const allCommits = gitlog.default({
   repo: process.cwd(),
-  number: 1000,
+  number: maxCommitsArg ? Number(maxCommitsArg) : 1000,
 });
 // Filter out NPM version commits and merge commits
 const filteredCommits = allCommits.filter((commit) => {
