@@ -2,15 +2,11 @@
 
 Zero-config changelog generator with monorepo support.
 
-Parses Git commits since last entry, restricts them by current working directory, and adds a new entry to the changelog.
+Parses Git tags and commits since last entry, restricts them by current working directory, and adds any missing entries to the changelog.
 
 Running `changenog` from inside a subdirectory will find the nearest parent that's a git repository, and filter commits to only include those that have changes within that subdirectory.
 
-Requirements:
-
-- `package.json` with name and version
-- At least one Git tag
-- Monorepo package tags must be in the format `<package-name>/<version>`
+**NOTE:** monorepo packages must be tagged in `<package-name>/<version>` format.
 
 ## Usage
 
