@@ -57,9 +57,9 @@ function exit(message: string, error?: boolean): never {
 const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
 const pkg: Record<string, JSONValue> = JSON.parse(pkgBuffer.toString());
 
-function getGitRoot(dir: string, callCount = 0): string | undefined {
+function getGitRoot(dir = process.cwd(), callCount = 0): string {
   if (callCount > 20) {
-    return;
+    exit("unable to find git root", true);
   }
 
   if (callCount > 0 && pkg.name && pkg.version) {
@@ -73,11 +73,7 @@ function getGitRoot(dir: string, callCount = 0): string | undefined {
   return getGitRoot(path.resolve(dir, ".."), callCount + 1);
 }
 
-const gitRoot = getGitRoot(process.cwd());
-
-if (!gitRoot) {
-  exit("unable to find git root", true);
-}
+const gitRoot = getGitRoot();
 
 const packageTags = execSync(
   "git tag -l --sort=-creatordate --format=%(creatordate:iso-strict)//%(refname:short)",
