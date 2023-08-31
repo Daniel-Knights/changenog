@@ -104,11 +104,13 @@ const prevEntryTag = packageTags.find((t) => {
 });
 const prevEntryDate = prevEntryTag ? new Date(prevEntryTag.date) : undefined;
 
-const tagsSinceLastEntry = packageTags.filter((t) => {
-  return !prevEntryDate || new Date(t.date) > prevEntryDate;
-});
+const tagsSincePrevEntry = packageTags
+  .filter((t) => {
+    return !prevEntryDate || new Date(t.date) > prevEntryDate;
+  })
+  .reverse(); // Oldest to newest
 
-if (tagsSinceLastEntry.length === 0) {
+if (tagsSincePrevEntry.length === 0) {
   exit("no new version(s)");
 }
 
@@ -139,29 +141,31 @@ function getRemoteUrl(): string {
 }
 
 const remoteUrl = getRemoteUrl();
-const reversedTags = tagsSinceLastEntry.reverse(); // Oldest tags first
 const relativePackagePath = path.relative(gitRoot, process.cwd()).replace(/\\/g, "/");
 const maxCommitsArg = getArg("--max-commits");
 
-const allCommits = gitlog.default({
-  repo: process.cwd(),
-  number: maxCommitsArg ? Number(maxCommitsArg) : 1000,
-  // `after` means `>=`, so we have to add 1s to prevent commits made at the same
-  // time as previous entry being returned
-  after: prevEntryDate && new Date(prevEntryDate.getTime() + 1000).toString(),
-});
-// Filter out NPM version commits and merge commits
-const filteredCommits = allCommits.filter((commit) => {
-  // Restrict to current package
-  if (!commit.files.some((f) => f.startsWith(relativePackagePath))) {
-    return false;
-  }
+const commitsSincePrevEntry = gitlog
+  .default({
+    repo: process.cwd(),
+    number: maxCommitsArg ? Number(maxCommitsArg) : 1000,
+    // `after` means `>=`, so we have to add 1s to prevent commits made at the same
+    // time as previous entry being returned
+    after: prevEntryDate && new Date(prevEntryDate.getTime() + 1000).toString(),
+  })
+  // Filter out NPM version commits and merge commits
+  .filter((commit) => {
+    // Restrict to current package
+    if (!commit.files.some((f) => f.startsWith(relativePackagePath))) {
+      return false;
+    }
 
-  const isNpmVersionCommit = new RegExp(`^${SEMVER_REGEX.source}$`).test(commit.subject);
+    const isNpmVersionCommit = new RegExp(`^${SEMVER_REGEX.source}$`).test(
+      commit.subject,
+    );
 
-  return !isNpmVersionCommit && commit.files.length > 0;
-});
-const reversedCommits = filteredCommits.reverse(); // Oldest commits first
+    return !isNpmVersionCommit && commit.files.length > 0;
+  })
+  .reverse(); // Oldest to newest
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -169,15 +173,17 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
 
 let newChangelog = existingChangelog;
 
-reversedTags.forEach((tag) => {
+tagsSincePrevEntry.forEach((tag) => {
   const tagDate = new Date(tag.date);
   const prevTagIndex = packageTags.findIndex((t) => t.name === tag.name) + 1;
   const prevTag = packageTags[prevTagIndex];
 
-  const spliceIndex = reversedCommits.findIndex((commit) => {
+  const spliceIndex = commitsSincePrevEntry.findIndex((commit) => {
     return new Date(commit.authorDate) > tagDate;
   });
-  const entryCommits = reversedCommits.splice(0, spliceIndex).reverse();
+  const entryCommits = commitsSincePrevEntry
+    .splice(0, spliceIndex === -1 ? commitsSincePrevEntry.length : spliceIndex)
+    .reverse();
 
   if (entryCommits.length === 0) return;
 
