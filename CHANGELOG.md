@@ -1,3 +1,14 @@
+## [0.5.2](https://github.com/Daniel-Knights/changenog/compare/v0.5.1...v0.5.2) (31/08/2023)
+
+- refactor: simplify get git root ([a107024](https://github.com/Daniel-Knights/changenog/commit/a10702480ca86117503e4cd7b06b13f087e8f2ac))
+- fix: handle if no commits later than tag ([dcccc40](https://github.com/Daniel-Knights/changenog/commit/dcccc406bf3f85e91449b901b5bcb6d48a54cf6d))
+
+## [0.5.1](https://github.com/Daniel-Knights/changenog/compare/v0.5.0...v0.5.1) (30/08/2023)
+
+- perf: prevent unnecessary iterations ([4f148e1](https://github.com/Daniel-Knights/changenog/commit/4f148e147a414493a224a222333d83bc5ed8d721))
+- docs(changelog): regenerate from scratch ([69cb7d7](https://github.com/Daniel-Knights/changenog/commit/69cb7d75e49f030dd7e5cf2bcfc1ff162b422834))
+- docs(changelog): v0.5.0 ([c9b7811](https://github.com/Daniel-Knights/changenog/commit/c9b7811a84e293c06eaf2843370c509698f8db47))
+
 ## [0.5.0](https://github.com/Daniel-Knights/changenog/compare/v0.4.1...v0.5.0) (30/08/2023)
 
 - feat(links): link to all tags if no previous version ([33e7b88](https://github.com/Daniel-Knights/changenog/commit/33e7b8890799fb76f619faafdf710809a4cf8923))
