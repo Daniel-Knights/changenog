@@ -171,9 +171,8 @@ let newChangelog = existingChangelog;
 
 tagsSincePrevEntry.forEach((tag) => {
   const tagDate = new Date(tag.date);
-  const prevTagIndex = packageTags.findIndex((t) => t.name === tag.name) + 1;
-  const prevTag = packageTags[prevTagIndex];
 
+  // Splice commits since prev tag
   const spliceIndex = commitsSincePrevEntry.findIndex((commit) => {
     return new Date(commit.authorDate) > tagDate;
   });
@@ -183,16 +182,21 @@ tagsSincePrevEntry.forEach((tag) => {
 
   if (entryCommits.length === 0) return;
 
-  const tagVersion = parseVersion(tag.name);
+  // Format compare URL
+  const prevTagIndex = packageTags.findIndex((t) => t.name === tag.name) + 1;
+  const prevTag = packageTags[prevTagIndex];
   const compareUrl = prevTag
     ? `${remoteUrl}/compare/${prevTag?.name}...${tag.name}`
     : `${remoteUrl}/tags`;
-  const formattedDate = dateFormatter.format(tagDate);
 
+  // Format version heading
+  const tagVersion = parseVersion(tag.name);
+  const formattedDate = dateFormatter.format(tagDate);
   const versionHeading = remoteUrl
     ? `## [${tagVersion}](${compareUrl}) (${formattedDate})`
     : `## ${tagVersion} (${formattedDate})`;
 
+  // Format commits
   const formattedCommits = entryCommits
     .map((c) => {
       return remoteUrl
