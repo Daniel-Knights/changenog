@@ -76,7 +76,7 @@ function getGitRoot(dir = process.cwd(), callCount = 0): string {
 const gitRoot = getGitRoot();
 
 const packageTags = execSync(
-  "git tag -l --sort=-creatordate --format=%(creatordate:iso-strict)//%(refname:short)",
+  'git tag -l --sort=-creatordate --format="%(creatordate:iso-strict)//%(refname:short)"',
   { encoding: "utf-8" },
 )
   .split("\n")
