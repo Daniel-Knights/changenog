@@ -1,3 +1,10 @@
+## [0.6.0](https://github.com/Daniel-Knights/changenog/compare/v0.5.2...v0.6.0) (3/27/24)
+
+- fix: wrap git tag flag in quotes ([990c61d](https://github.com/Daniel-Knights/changenog/commit/990c61dd1ad4d1b950e859766f79bfcdbbe19f0a))
+- chore(deps): bump ([418fed0](https://github.com/Daniel-Knights/changenog/commit/418fed0bf0d20b1a95f62cc5239653ac065c2a53))
+- refactor(text formatting): var ordering and comments ([afe81dd](https://github.com/Daniel-Knights/changenog/commit/afe81dd8c91d40ea18b446e46995ae960acee71a))
+- docs(changelog): v0.5.2 ([03afabd](https://github.com/Daniel-Knights/changenog/commit/03afabd614c632c01dd4ca7416d14a0d6418a2cb))
+
 ## [0.5.2](https://github.com/Daniel-Knights/changenog/compare/v0.5.1...v0.5.2) (31/08/2023)
 
 - refactor: simplify get git root ([a107024](https://github.com/Daniel-Knights/changenog/commit/a10702480ca86117503e4cd7b06b13f087e8f2ac))
