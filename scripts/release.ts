@@ -1,5 +1,4 @@
-import { spawnSync } from "node:child_process";
-import type { SpawnSyncOptions } from "node:child_process";
+import { spawnSync, SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
 
 const args = process.argv.slice(2);

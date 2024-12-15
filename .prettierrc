@@ -6,10 +6,12 @@
   "singleQuote": false,
   "trailingComma": "all",
   "arrowParens": "always",
+  
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": ["^@/", "^\\.\\./", "^\\./"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript"],
   "importOrderGroupNamespaceSpecifiers": true,
   "importOrderCaseInsensitive": true
 }
