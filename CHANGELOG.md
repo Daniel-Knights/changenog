@@ -1,4 +1,4 @@
-## [0.6.0](https://github.com/Daniel-Knights/changenog/compare/v0.5.2...v0.6.0) (3/27/24)
+## [0.6.0](https://github.com/Daniel-Knights/changenog/compare/v0.5.2...v0.6.0) (27/03/2024)
 
 - fix: wrap git tag flag in quotes ([990c61d](https://github.com/Daniel-Knights/changenog/commit/990c61dd1ad4d1b950e859766f79bfcdbbe19f0a))
 - chore(deps): bump ([418fed0](https://github.com/Daniel-Knights/changenog/commit/418fed0bf0d20b1a95f62cc5239653ac065c2a53))
