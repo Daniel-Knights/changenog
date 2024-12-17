@@ -50,7 +50,7 @@ export default typescriptEslint.config(
       "n/hashbang": [
         "error",
         {
-          convertPath: { "index.ts": ["index.ts", "dist/index.js"] },
+          convertPath: { "src/**/*.ts": ["^src/(.+).ts$", "dist/$1.js"] },
         },
       ],
 

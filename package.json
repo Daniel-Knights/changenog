@@ -8,7 +8,7 @@
     "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit",
     "checks": "pnpm lint && pnpm typecheck",
-    "changenog": "tsx ./index.ts",
+    "changenog": "tsx ./src/index.ts",
     "release:patch": "tsx ./scripts/release patch",
     "release:minor": "tsx ./scripts/release minor",
     "release:major": "tsx ./scripts/release major"
@@ -37,6 +37,9 @@
   "files": [
     "dist"
   ],
+  "dependencies": {
+    "gitlog": "^5.1.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
@@ -53,8 +56,5 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0"
-  },
-  "dependencies": {
-    "gitlog": "^5.1.0"
   }
 }

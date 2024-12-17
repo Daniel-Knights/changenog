@@ -24,6 +24,6 @@
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./typings/"]
   },
-  "include": ["./index.ts"],
+  "include": ["./src/**/*.ts"],
   "exclude": ["./node_modules/"]
 }
