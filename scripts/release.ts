@@ -20,7 +20,7 @@ fs.rmSync("dist", { recursive: true, force: true });
 run("pnpm", ["run", "checks"]);
 run("pnpm", ["build"]);
 run("pnpm", ["version", args[0]]);
-run("tsx", ["./index.ts"]);
+run("tsx", ["./src/index.ts"]);
 run("git", ["add", "."]);
 
 const pkg = await import("../package.json");
