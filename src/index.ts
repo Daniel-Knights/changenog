@@ -13,14 +13,37 @@ import {
   SEMVER_REGEX,
 } from "./utils.js";
 
+type GitTag = {
+  date: string;
+  name: string;
+};
+
+type GitCommit = {
+  subject: string;
+  authorDate: string;
+  hash: string;
+  abbrevHash: string;
+};
+
 const cliArgs = process.argv.slice(2);
 const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
 const pkg: Record<string, JSONValue> = JSON.parse(pkgBuffer.toString());
 
-const opts = {
+const rawOpts = {
   continue: cliArgs.includes("--continue"),
   noLinks: cliArgs.includes("--no-links"),
   maxCommits: getArg(cliArgs, "--max-commits"),
+  locale: getArg(cliArgs, "--locale"),
+} as const;
+
+const opts = {
+  continue: rawOpts.continue,
+  noLinks: rawOpts.noLinks,
+  maxCommits:
+    rawOpts.maxCommits && /^[1-9]\d+$/.test(rawOpts.maxCommits)
+      ? Number(rawOpts.maxCommits)
+      : 1000,
+  locale: Intl.DateTimeFormat.supportedLocalesOf(rawOpts.locale)[0] ?? "en-GB",
 } as const;
 
 async function main() {
@@ -63,7 +86,7 @@ function getNewChangelog(
   tagsSince: GitTag[],
   commitsSince: GitCommit[],
 ) {
-  const dateFormatter = new Intl.DateTimeFormat(undefined, {
+  const dateFormatter = new Intl.DateTimeFormat(opts.locale, {
     dateStyle: "short",
   });
 
@@ -188,7 +211,7 @@ async function getCommitsSince(gitRootDir: string, prevEntryDate?: Date) {
 
   const commits = await gitlog({
     repo: process.cwd(),
-    number: opts.maxCommits ? Number(opts.maxCommits) : 1000,
+    number: opts.maxCommits,
     // `after` means `>=`, so we have to add 1s to prevent commits made at the same
     // time as previous entry being returned
     after: prevEntryDate && new Date(prevEntryDate.getTime() + 1000).toString(),
@@ -214,15 +237,3 @@ async function getCommitsSince(gitRootDir: string, prevEntryDate?: Date) {
 }
 
 main();
-
-type GitTag = {
-  date: string;
-  name: string;
-};
-
-type GitCommit = {
-  subject: string;
-  authorDate: string;
-  hash: string;
-  abbrevHash: string;
-};
