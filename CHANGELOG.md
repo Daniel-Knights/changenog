@@ -1,3 +1,15 @@
+## [1.0.0](https://github.com/Daniel-Knights/changenog/compare/v0.6.0...v1.0.0) (18/12/2024)
+
+- feat: consistent locale for date formatting, add locale cli option ([e7f7019](https://github.com/Daniel-Knights/changenog/commit/e7f701966b85a721d5fc169f1ac1bc9911e3cf13))
+- chore(eslint): correct eslint script ([c26531e](https://github.com/Daniel-Knights/changenog/commit/c26531e383c9a478de63cbe0b52c9cc99e91d85b))
+- chore(deps): bump ([ef8de9d](https://github.com/Daniel-Knights/changenog/commit/ef8de9d87658723df0d24b9c0c4b28c1f9503972))
+- build(typescript): correct rootDir ([a9be89a](https://github.com/Daniel-Knights/changenog/commit/a9be89ad13a84d8d086550032c6ee5f2d3a4e1c7))
+- refactor: tidy up code, move to src directory, and add utils file ([a310701](https://github.com/Daniel-Knights/changenog/commit/a310701de2baee21ca128063046943c4026f2285))
+- chore: bump all deps and update configs for eslint, prettier, and typescript ([2ff9351](https://github.com/Daniel-Knights/changenog/commit/2ff9351fc09e0ff7900749601a40dc9503564ada))
+- docs(changelog): fix date format ([3bf3439](https://github.com/Daniel-Knights/changenog/commit/3bf3439aca5167c06befcced159edee99465c147))
+- ci(release): throw on unclean working tree ([7a09219](https://github.com/Daniel-Knights/changenog/commit/7a0921933b5c2da2b79a5dd57af06c322b9e25e6))
+- docs(changelog): v0.6.0 ([29bb780](https://github.com/Daniel-Knights/changenog/commit/29bb780b093dcde74a9018970138a017b9866645))
+
 ## [0.6.0](https://github.com/Daniel-Knights/changenog/compare/v0.5.2...v0.6.0) (27/03/2024)
 
 - fix: wrap git tag flag in quotes ([990c61d](https://github.com/Daniel-Knights/changenog/commit/990c61dd1ad4d1b950e859766f79bfcdbbe19f0a))
