@@ -14,7 +14,7 @@
     "noUnusedParameters": true,
     "noUncheckedIndexedAccess": true,
     "removeComments": true,
-    "rootDir": ".",
+    "rootDir": "./src",
     "outDir": "dist",
     "sourceMap": false,
     "strict": true,
