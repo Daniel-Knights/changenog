@@ -9,6 +9,7 @@ const filterPresets = {
 
 export function getOptions(cliArgs: string[]) {
   const rawOpts = {
+    overwrite: cliArgs.includes("--overwrite"),
     continue: cliArgs.includes("--continue"),
     noLinks: cliArgs.includes("--no-links"),
     maxCommits: getArg(cliArgs, "--max-commits")[0],
@@ -18,6 +19,7 @@ export function getOptions(cliArgs: string[]) {
   } as const;
 
   return {
+    overwrite: rawOpts.overwrite,
     continue: rawOpts.continue,
     noLinks: rawOpts.noLinks,
     maxCommits:

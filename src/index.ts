@@ -29,7 +29,8 @@ async function main() {
   if (!gitRoot) return;
 
   const dest = path.join(process.cwd(), "CHANGELOG.md");
-  const existingChangelog = fs.existsSync(dest) ? fs.readFileSync(dest, "utf-8") : "";
+  const existingChangelog =
+    !opts.overwrite && fs.existsSync(dest) ? fs.readFileSync(dest, "utf-8") : "";
   const prevEntryVersion = parseVersion(existingChangelog);
   const allTags = getTags(gitRoot.isMonorepo);
 
