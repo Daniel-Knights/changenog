@@ -1,3 +1,11 @@
+## [1.1.0](https://github.com/Daniel-Knights/changenog/compare/v1.0.0...v1.1.0) (20/12/2024)
+
+- feat(options): overwrite ([ce34638](https://github.com/Daniel-Knights/changenog/commit/ce3463842e22893fb388685043b196e2e8fb013f))
+- feat: filters ([04d5b33](https://github.com/Daniel-Knights/changenog/commit/04d5b33cb697bb33536aaeab511d1e3c0adae569))
+- ci(release): run changenog instead of file directly ([27db0e1](https://github.com/Daniel-Knights/changenog/commit/27db0e1d23a8135a080f22bb722e1b4b9cd15e2a))
+- docs(changelog): v1.0.0 ([a9323bc](https://github.com/Daniel-Knights/changenog/commit/a9323bc09b1b7727c781e6f6d655475ac119e42f))
+- ci(release): fix changenog path ([6acba4b](https://github.com/Daniel-Knights/changenog/commit/6acba4bc99bc284a354db94e7a332bc3743afe3d))
+
 ## [1.0.0](https://github.com/Daniel-Knights/changenog/compare/v0.6.0...v1.0.0) (18/12/2024)
 
 - feat: consistent locale for date formatting, add locale cli option ([e7f7019](https://github.com/Daniel-Knights/changenog/commit/e7f701966b85a721d5fc169f1ac1bc9911e3cf13))
