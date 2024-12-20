@@ -16,8 +16,8 @@ export function isJsonObj(val: unknown): val is Record<string, JSONValue> {
   return !!val && typeof val === "object" && !Array.isArray(val);
 }
 
-export function getArg(cliArgs: string[], arg: string): string | undefined {
-  return cliArgs.find((a) => a.startsWith(`${arg}=`))?.split("=")[1];
+export function getArg(cliArgs: string[], arg: string): string[] {
+  return cliArgs.filter((a) => a.startsWith(`${arg}=`))?.map((a) => a.split("=")[1]!);
 }
 
 export function parseVersion(version: string | undefined): string | undefined {

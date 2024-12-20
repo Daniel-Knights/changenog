@@ -4,14 +4,8 @@ import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-import {
-  exit,
-  getArg,
-  isJsonObj,
-  JSONValue,
-  parseVersion,
-  SEMVER_REGEX,
-} from "./utils.js";
+import { getOptions } from "./options.js";
+import { exit, isJsonObj, JSONValue, parseVersion, SEMVER_REGEX } from "./utils.js";
 
 type GitTag = {
   date: string;
@@ -28,23 +22,7 @@ type GitCommit = {
 const cliArgs = process.argv.slice(2);
 const pkgBuffer = fs.readFileSync(path.join(process.cwd(), "package.json"));
 const pkg: Record<string, JSONValue> = JSON.parse(pkgBuffer.toString());
-
-const rawOpts = {
-  continue: cliArgs.includes("--continue"),
-  noLinks: cliArgs.includes("--no-links"),
-  maxCommits: getArg(cliArgs, "--max-commits"),
-  locale: getArg(cliArgs, "--locale"),
-} as const;
-
-const opts = {
-  continue: rawOpts.continue,
-  noLinks: rawOpts.noLinks,
-  maxCommits:
-    rawOpts.maxCommits && /^[1-9]\d+$/.test(rawOpts.maxCommits)
-      ? Number(rawOpts.maxCommits)
-      : 1000,
-  locale: Intl.DateTimeFormat.supportedLocalesOf(rawOpts.locale)[0] ?? "en-GB",
-} as const;
+const opts = getOptions(cliArgs);
 
 async function main() {
   const gitRoot = getGitRoot();
@@ -70,7 +48,7 @@ async function main() {
 
   const commitsSince = await getCommitsSince(gitRoot.dir, prevEntryDate);
 
-  const newChangelog = getNewChangelog(
+  const newChangelog = generateChangelog(
     existingChangelog,
     allTags,
     tagsSince,
@@ -80,7 +58,10 @@ async function main() {
   fs.writeFileSync(dest, newChangelog);
 }
 
-function getNewChangelog(
+/**
+ * Generates the new changelog.
+ */
+function generateChangelog(
   existingChangelog: string,
   allTags: GitTag[],
   tagsSince: GitTag[],
@@ -136,7 +117,13 @@ function getNewChangelog(
   return newChangelog.trim();
 }
 
-function getGitRoot(dir = process.cwd(), callCount = 0) {
+/**
+ * Gets the root of the git repo.
+ */
+function getGitRoot(
+  dir = process.cwd(),
+  callCount = 0,
+): { dir: string; isMonorepo: boolean } | undefined {
   if (callCount > 20) {
     exit("unable to find git root", opts.continue, true);
 
@@ -153,7 +140,10 @@ function getGitRoot(dir = process.cwd(), callCount = 0) {
   return getGitRoot(path.resolve(dir, ".."), callCount + 1);
 }
 
-function getRemoteUrl(): string {
+/**
+ * Gets the remote URL of the repo.
+ */
+function getRemoteUrl() {
   if (opts.noLinks) {
     return "";
   }
@@ -179,6 +169,9 @@ function getRemoteUrl(): string {
   }
 }
 
+/**
+ * Gets all tags in the repo.
+ */
 function getTags(isMonorepo: boolean) {
   return execSync(
     'git tag -l --sort=-creatordate --format="%(creatordate:iso-strict)//%(refname:short)"',
@@ -198,6 +191,9 @@ function getTags(isMonorepo: boolean) {
     });
 }
 
+/**
+ * Gets tags since the previous entry.
+ */
 function getTagsSince(allTags: GitTag[], prevEntryDate?: Date) {
   return allTags
     .filter((t) => {
@@ -206,6 +202,9 @@ function getTagsSince(allTags: GitTag[], prevEntryDate?: Date) {
     .reverse(); // Oldest to newest
 }
 
+/**
+ * Gets commits since the previous entry.
+ */
 async function getCommitsSince(gitRootDir: string, prevEntryDate?: Date) {
   const relPackagePath = path.relative(gitRootDir, process.cwd()).replace(/\\/g, "/");
 
@@ -230,7 +229,11 @@ async function getCommitsSince(gitRootDir: string, prevEntryDate?: Date) {
           commit.subject,
         );
 
-        return !isNpmVersionCommit && commit.files.length > 0;
+        return (
+          !isNpmVersionCommit &&
+          commit.files.length > 0 &&
+          opts.filter.every((f) => f.test(commit.subject))
+        );
       })
       .reverse() // Oldest to newest
   );
