@@ -63,4 +63,5 @@ my commit message
 #### Presets
 
 - `angular` - include only `feat`, `fix`, `perf`, and `docs` commits that match the [Angular commit message convention](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)
+- `angular-readme-only-docs` - exclude Angular `docs` commits unless they have a scope of `readme`
 - `no-changelog` - exclude all commits with `changelog` in the subject

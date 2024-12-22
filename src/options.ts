@@ -4,6 +4,7 @@ type FilterPreset = keyof typeof filterPresets;
 
 const filterPresets = {
   angular: /^(?:feat|fix|perf|docs)(?:\(.+?\))?!?:.*$/,
+  "angular-readme-only-docs": /^(?!docs(?!\()|docs\((?!readme\))).*$/,
   "no-changelog": /^(?!.*[^a-zA-Z]changelog[^a-zA-Z]).*$/,
 } as const;
 
