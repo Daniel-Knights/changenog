@@ -1,3 +1,8 @@
+## [1.2.0](https://github.com/Daniel-Knights/changenog/compare/v1.1.0...v1.2.0) (22/12/2024)
+
+- feat(filters): angular-readme-only-docs ([42f42f8](https://github.com/Daniel-Knights/changenog/commit/42f42f80520bd50b9234f62d5bff72964d987acf))
+- docs(changelog): v1.1.0 ([a63d476](https://github.com/Daniel-Knights/changenog/commit/a63d47613e11e8d292cfca2c7f0e5c0eee0b8c19))
+
 ## [1.1.0](https://github.com/Daniel-Knights/changenog/compare/v1.0.0...v1.1.0) (20/12/2024)
 
 - feat(options): overwrite ([ce34638](https://github.com/Daniel-Knights/changenog/commit/ce3463842e22893fb388685043b196e2e8fb013f))
