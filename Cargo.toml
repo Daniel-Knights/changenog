@@ -1,0 +1,22 @@
+[package]
+name = "changenog"
+version = "2.0.0"
+edition = "2024"
+license = "ISC"
+description = "Zero-config changelog generator with monorepo support."
+repository = "https://github.com/Daniel-Knights/changenog"
+readme = "README.md"
+keywords = ["changelog", "automation", "monorepo", "git", "github", "gitlab"]
+categories = ["development-tools", "filesystem", "command-line-utilities"]
+include = ["src/**/*.rs"]
+
+[dependencies]
+fancy-regex = "0.14"
+chrono = "0.4"
+
+[profile.release]
+panic = "abort"   # Strip expensive panic clean-up logic
+codegen-units = 1 # Compile crates one after another so the compiler can optimize better
+lto = true        # Enables link to optimizations
+opt-level = "s"   # Optimize for binary size
+strip = true      # Strip debug symbols
