@@ -1,0 +1,25 @@
+{
+  "name": "changenog",
+  "version": "1.2.0",
+  "description": "Zero-config changelog generator with monorepo support.",
+  "author": "Donk",
+  "license": "ISC",
+  "type": "module",
+  "readme": "../../README.md",
+  "bin": "./changenog",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Daniel-Knights/changenog"
+  },
+  "bugs": {
+    "url": "https://github.com/Daniel-Knights/changenog/issues"
+  },
+  "keywords": [
+    "changelog",
+    "automation",
+    "monorepo",
+    "git",
+    "github",
+    "gitlab"
+  ]
+}

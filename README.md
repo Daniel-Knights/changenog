@@ -1,17 +1,17 @@
 # changenog
 
+<!-- TODO: mention semver requirement -->
+
 Zero-config changelog generator with monorepo support.
 
 Parses Git tags and commits since last entry, restricts them by current working directory, and adds any missing entries to the changelog.
 
 Running `changenog` from inside a subdirectory will find the nearest parent that's a git repository, and filter commits to only include those that have changes within that subdirectory.
 
-**NOTE:** monorepo packages must be tagged in `<package-name>/<version>` format.
-
 ## Usage
 
 ```bash
-npm i -D changenog
+pnpm i -D changenog
 ```
 
 ```json
@@ -28,11 +28,11 @@ See this repo's changelog for example output.
 
 - `--overwrite` - overwrite existing changelog
 - `--no-links` - disable links
-- `--continue` - allow subsequent commands to run on incomplete exit
 - `--max-commits=<number>` - maximum number of commits to process (default: 1000)
-- `--locale=<string>` - valid locale string passed to `Intl.DateTimeFormat` (default: `en-GB`)
-- `--filter-preset=<string>` - filter preset to use
-- `--filter-regex=<string>` - regex that a commit must match to be included
+- `--remote-url=<string>` - remote URL to use for links (default: origin)
+- `--tag-prefix=<string>` - prefix for git tags, required for monorepo packages
+- `--filter-preset=<string>` - filter preset(s) to use
+- `--filter-regex=<string>` - regex pattern(s) that each commit must match to be included
 
 ### Filters
 

@@ -1,4 +1,5 @@
 // @ts-check
+/* eslint-disable n/no-unpublished-import */
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 // @ts-expect-error - eslint-plugin-import does not have types

@@ -14,8 +14,6 @@
     "noUnusedParameters": true,
     "noUncheckedIndexedAccess": true,
     "removeComments": true,
-    "rootDir": "./src",
-    "outDir": "dist",
     "sourceMap": false,
     "strict": true,
     "strictFunctionTypes": true,
@@ -24,6 +22,5 @@
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./typings/"]
   },
-  "include": ["./src/**/*.ts"],
   "exclude": ["./node_modules/"]
 }
