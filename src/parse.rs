@@ -1,13 +1,19 @@
 use fancy_regex::Regex;
 
-/// https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-pub const SEMVER_REGEX: &str = r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?";
+use crate::git::GitTag;
 
-/// Returns matched semver version
-pub fn match_version(match_str: &str) -> Option<String> {
-    Regex::new(SEMVER_REGEX)
+pub fn get_prev_entry_tag(existing_changelog: &str, all_tags: &Vec<GitTag>) -> Option<GitTag> {
+    let prev_entry_captures = Regex::new(r"## *\[?([^\]]+)")
         .unwrap()
-        .find(match_str)
-        .unwrap()
-        .map(|m| m.as_str().to_string())
+        .captures(existing_changelog);
+
+    let mut prev_entry_tag = None;
+
+    if let Ok(Some(unwrapped_captures)) = prev_entry_captures {
+        let prev_entry_heading = unwrapped_captures.get(1).unwrap().as_str();
+
+        prev_entry_tag = all_tags.iter().find(|t| t.name == prev_entry_heading);
+    };
+
+    prev_entry_tag.cloned()
 }
