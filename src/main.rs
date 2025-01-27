@@ -9,14 +9,12 @@ use chrono::DateTime;
 use git::{GitCommit, GitRoot, GitTag, get_remote_url};
 use log::log_exit;
 use options::Options;
-use parse::match_version;
+use parse::get_prev_entry_tag;
 
 mod git;
 mod log;
 mod options;
 mod parse;
-
-// TODO: if on branch other than main, doesn't account for no new version
 
 fn main() {
     let cwd = current_dir().unwrap();
@@ -25,7 +23,7 @@ fn main() {
     let opts = Options::from_args(cli_args);
 
     let git_root = GitRoot::get(cwd, 0);
-    let all_tags = GitTag::get_tags(git_root.is_monorepo, opts.tag_prefix.as_ref());
+    let all_tags = GitTag::get_tags(&opts.tag_filter_regex);
 
     if all_tags.is_empty() {
         log_exit("no tags found");
@@ -41,20 +39,7 @@ fn main() {
         &fs::read_to_string(cwd.join(&dest)).unwrap_or("".to_string())
     };
 
-    let prev_entry_version = match_version(existing_changelog);
-    let prev_entry_tag = if prev_entry_version.is_none() {
-        None
-    } else {
-        all_tags.iter().find(|t| {
-            let matched_version = match_version(&t.name);
-
-            if matched_version.is_none() {
-                return false;
-            }
-
-            matched_version.unwrap() == prev_entry_version.clone().unwrap()
-        })
-    };
+    let prev_entry_tag = get_prev_entry_tag(existing_changelog, &all_tags);
 
     let prev_entry_date = if prev_entry_tag.is_some() {
         Some(DateTime::parse_from_rfc3339(prev_entry_tag.unwrap().date.as_str()).unwrap())
@@ -96,13 +81,6 @@ fn generate_changelog(
     let mut new_changelog = existing_changelog.to_string();
 
     tags_since.iter().for_each(|tag| {
-        // TODO: check how non semver tags are handled
-        let tag_version = match_version(&tag.name);
-
-        if tag_version.is_none() {
-            return;
-        }
-
         let tag_date = DateTime::parse_from_rfc3339(&tag.date).unwrap();
 
         let splice_index = commits_since
@@ -143,12 +121,12 @@ fn generate_changelog(
         let version_heading = if compare_url.is_some() {
             format!(
                 "## [{}]({}) ({})",
-                tag_version.unwrap(),
+                tag.name,
                 compare_url.unwrap(),
                 formatted_date
             )
         } else {
-            format!("## {} ({})", tag_version.unwrap(), formatted_date)
+            format!("## {} ({})", tag.name, formatted_date)
         };
 
         // Format commits

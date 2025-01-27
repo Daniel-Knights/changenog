@@ -11,9 +11,9 @@ struct RawOptions {
     no_links: bool,
     max_commits: Vec<String>,
     remote_url: Vec<String>,
-    tag_prefix: Vec<String>,
-    filter_regex: Vec<String>,
-    filter_preset: Vec<String>,
+    tag_filter_regex: Vec<String>,
+    commit_filter_regex: Vec<String>,
+    commit_filter_preset: Vec<String>,
 }
 
 pub struct Options {
@@ -21,7 +21,7 @@ pub struct Options {
     pub no_links: bool,
     pub max_commits: i32,
     pub remote_url: Option<String>,
-    pub tag_prefix: Option<String>,
+    pub tag_filter_regex: Vec<Regex>,
     pub filter: Vec<Regex>,
 }
 
@@ -35,12 +35,13 @@ impl Options {
             no_links: cli_args.contains(&"--no-links".to_string()),
             max_commits: Options::get_arg(&cli_args, "--max-commits"),
             remote_url: Options::get_arg(&cli_args, "--remote-url"),
-            tag_prefix: Options::get_arg(&cli_args, "--tag-prefix"),
-            filter_regex: Options::get_arg(&cli_args, "--filter-regex"),
-            filter_preset: Options::get_arg(&cli_args, "--filter-preset"),
+            tag_filter_regex: Options::get_arg(&cli_args, "--tag-filter-regex"),
+            commit_filter_regex: Options::get_arg(&cli_args, "--commit-filter-regex"),
+            commit_filter_preset: Options::get_arg(&cli_args, "--commit-filter-preset"),
         };
 
-        let filter_presets = Options::get_filter_presets(raw_opts.filter_preset);
+        let commit_filter_presets =
+            Options::get_commit_filter_presets(raw_opts.commit_filter_preset);
 
         Options {
             overwrite: raw_opts.overwrite,
@@ -52,18 +53,22 @@ impl Options {
                 .parse::<i32>()
                 .expect("invalid max-commits arg"),
             remote_url: raw_opts.remote_url.get(0).cloned(),
-            tag_prefix: raw_opts.tag_prefix.get(0).cloned(),
-            filter: raw_opts
-                .filter_regex
+            tag_filter_regex: raw_opts
+                .tag_filter_regex
                 .iter()
-                .map(|r| Regex::new(r).expect("invalid filter-regex arg"))
-                .chain(filter_presets)
-                .collect::<Vec<_>>(),
+                .map(|r| Regex::new(r).expect(&format!("invalid tag-filter-regex: {}", r)))
+                .collect::<Vec<Regex>>(),
+            filter: raw_opts
+                .commit_filter_regex
+                .iter()
+                .map(|r| Regex::new(r).expect(&format!("invalid commit-filter-regex: {}", r)))
+                .chain(commit_filter_presets)
+                .collect::<Vec<Regex>>(),
         }
     }
 
     /// Returns presets matching those passed
-    fn get_filter_presets(presets: Vec<String>) -> Vec<Regex> {
+    fn get_commit_filter_presets(presets: Vec<String>) -> Vec<Regex> {
         let mut presets_map: HashMap<String, Regex> = HashMap::new();
 
         presets_map.insert(

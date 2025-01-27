@@ -7,7 +7,7 @@ use std::{
 use chrono::{DateTime, FixedOffset, TimeDelta};
 use fancy_regex::{Captures, Regex};
 
-use crate::{log::log_exit, options::Options, parse::SEMVER_REGEX};
+use crate::{log::log_exit, options::Options};
 
 pub fn get_remote_url(opts: Options) -> Option<String> {
     if opts.no_links {
@@ -46,7 +46,6 @@ pub fn get_remote_url(opts: Options) -> Option<String> {
 #[derive(Debug)]
 pub struct GitRoot {
     pub dir: PathBuf,
-    pub is_monorepo: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -78,7 +77,6 @@ impl GitRoot {
         if fs::exists(dir.join(".git")).unwrap_or(false) {
             return GitRoot {
                 dir: dir.to_path_buf(),
-                is_monorepo: call_count > 0,
             };
         }
 
@@ -88,7 +86,7 @@ impl GitRoot {
 
 impl GitTag {
     /// Gets all tags in the repo
-    pub fn get_tags(is_monorepo: bool, tag_prefix: Option<&String>) -> Vec<GitTag> {
+    pub fn get_tags(tag_filter_regex: &Vec<Regex>) -> Vec<GitTag> {
         // Log in parsable format
         let cmd_output = Command::new("git")
             .args([
@@ -113,7 +111,9 @@ impl GitTag {
                 let raw_tag = tag_regex.captures(t).unwrap().unwrap();
                 let tag = GitTag::from_captures(raw_tag);
 
-                if is_monorepo && tag_prefix.is_some() && !tag.name.starts_with(tag_prefix.unwrap())
+                if tag_filter_regex
+                    .iter()
+                    .any(|r| !r.is_match(&tag.name).unwrap())
                 {
                     return None;
                 }
@@ -156,7 +156,6 @@ impl GitCommit {
         opts: &Options,
     ) -> Vec<GitCommit> {
         let rel_package_path = cwd.strip_prefix(git_root_dir).unwrap();
-        let semver_regex = Regex::new(&format!("^{}$", SEMVER_REGEX)).unwrap();
 
         GitCommit::get_raw_commits(opts, prev_entry_date)
             .iter()
@@ -173,11 +172,6 @@ impl GitCommit {
                     .iter()
                     .all(|f| !f.starts_with(rel_package_path.to_str().unwrap()))
                 {
-                    return None;
-                }
-
-                // Filter out semver version commits
-                if semver_regex.is_match(&parsed_commit.subject).unwrap() {
                     return None;
                 }
 
@@ -201,7 +195,6 @@ impl GitCommit {
         opts: &Options,
         prev_entry_date: Option<DateTime<FixedOffset>>,
     ) -> Vec<String> {
-        // TODO: max-count includes tags and most recent commit
         let max_commits_arg = format!("--max-count={}", opts.max_commits.to_string());
 
         let since_arg = format!(
