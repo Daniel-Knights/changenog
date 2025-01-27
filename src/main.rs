@@ -11,6 +11,7 @@ use log::log_exit;
 use options::Options;
 use parse::get_prev_entry_tag;
 
+mod constant;
 mod git;
 mod log;
 mod options;
