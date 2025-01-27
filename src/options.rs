@@ -2,9 +2,12 @@ use std::collections::HashMap;
 
 use fancy_regex::Regex;
 
-use crate::log::log_warn;
+use crate::{
+    constant::{ANGULAR_README_ONLY_DOCS_REGEX, ANGULAR_REGEX, NO_CHANGELOG_REGEX, SEMVER_REGEX},
+    log::log_warn,
+};
 
-/// Structs
+//// Structs
 
 struct RawOptions {
     overwrite: bool,
@@ -25,7 +28,7 @@ pub struct Options {
     pub filter: Vec<Regex>,
 }
 
-/// Implementations
+//// Implementations
 
 impl Options {
     /// Gets formatted options from CLI args
@@ -69,39 +72,15 @@ impl Options {
 
     /// Returns presets matching those passed
     fn get_commit_filter_presets(presets: Vec<String>) -> Vec<Regex> {
-        let mut presets_map: HashMap<String, Regex> = HashMap::new();
+        let mut presets_map: HashMap<&str, Regex> = HashMap::new();
 
+        presets_map.insert("angular", Regex::new(ANGULAR_REGEX).unwrap());
         presets_map.insert(
-            "angular".to_string(),
-            Regex::new(
-                r"(?x)^
-                    (?:feat|fix|perf|docs) # Type
-                    (?:\(.+?\))?!?: # Scope
-                    .* # Message
-                $",
-            )
-            .unwrap(),
+            "angular-readme-only-docs",
+            Regex::new(ANGULAR_README_ONLY_DOCS_REGEX).unwrap(),
         );
-        presets_map.insert(
-            "angular-readme-only-docs".to_string(),
-            Regex::new(
-                r"(?x)^
-                    (?!docs(?!\()|docs\((?!readme\)))
-                    .*
-                $",
-            )
-            .unwrap(),
-        );
-        presets_map.insert(
-            "no-changelog".to_string(),
-            Regex::new(
-                r"(?x)^
-                    (?!.*[^a-zA-Z]changelog[^a-zA-Z])
-                    .*
-                $",
-            )
-            .unwrap(),
-        );
+        presets_map.insert("no-changelog", Regex::new(NO_CHANGELOG_REGEX).unwrap());
+        presets_map.insert("no-semver", Regex::new(SEMVER_REGEX).unwrap());
 
         presets
             .iter()

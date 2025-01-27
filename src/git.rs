@@ -41,7 +41,7 @@ pub fn get_remote_url(opts: Options) -> Option<String> {
     None
 }
 
-/// Structs
+//// Structs
 
 #[derive(Debug)]
 pub struct GitRoot {
@@ -63,7 +63,7 @@ pub struct GitCommit {
     pub files: Vec<String>,
 }
 
-/// Implementations
+//// Implementations
 
 impl GitRoot {
     /// Gets the root of the git repo

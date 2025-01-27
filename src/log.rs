@@ -1,4 +1,4 @@
-pub const LOG_PREFIX: &str = "\x1b[33m[changenog]\x1b[0m";
+use crate::constant::LOG_PREFIX;
 
 fn format_msg(msg: &str) -> String {
     format!("{} {}", LOG_PREFIX, msg)
