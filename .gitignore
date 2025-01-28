@@ -2,3 +2,4 @@ node_modules
 dist
 target
 packages/**/changenog
+todo.txt
