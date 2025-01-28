@@ -3,6 +3,73 @@ import fs from "node:fs";
 
 const args = process.argv.slice(2);
 
+if (run("git", ["status", "-s"], { stdio: "pipe" }).stdout.toString()) {
+  throw new Error("Please commit all changes before running this script.");
+}
+
+// Main
+
+run("just", ["build"]);
+
+fs.copyFileSync("./target/release/changenog", "./packages/js/changenog");
+
+const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
+const packageJson = JSON.parse(fs.readFileSync("./packages/js/package.json", "utf-8"));
+const [, version] = cargoToml.match(/version = "([^"]+)"/)!;
+const newVersion = bumpVersion(version!, args[0]!);
+
+packageJson.version = newVersion;
+
+fs.writeFileSync("Cargo.toml", cargoToml.replace(version!, newVersion));
+fs.writeFileSync(
+  "./packages/js/package.json",
+  `${JSON.stringify(packageJson, null, 2)}\n`,
+);
+
+run("git", ["tag", `v${newVersion}`]);
+run("just", ["changenog"]);
+run("git", ["add", "."]);
+run("git", ["commit", "-m", `docs(changelog): ${newVersion}`]);
+run("git", ["push"]);
+run("git", ["push", "--tags"]);
+run("cargo", ["publish"]);
+run("pnpm", ["publish", "./packages/js"]);
+
+// Helper functions
+
+function bumpVersion(versionStr: string, kind: string) {
+  const versionFields = versionStr.split(".").map((n) => Number(n));
+
+  if (!/major|minor|patch/.test(kind)) {
+    throw new Error("Invalid version kind.");
+  }
+
+  if (versionFields.length !== 3) {
+    throw new Error("Invalid version string.");
+  }
+
+  switch (kind) {
+    case "major": {
+      versionFields[0]! += 1;
+      versionFields[1] = 0;
+      versionFields[2] = 0;
+
+      break;
+    }
+    case "minor": {
+      versionFields[1]! += 1;
+      versionFields[2] = 0;
+
+      break;
+    }
+    case "patch": {
+      versionFields[2]! += 1;
+    }
+  }
+
+  return versionFields.join(".");
+}
+
 function run(
   cmd: string,
   passedArgs: string[],
@@ -10,22 +77,3 @@ function run(
 ): ReturnType<typeof spawnSync> {
   return spawnSync(cmd, passedArgs, options);
 }
-
-if (run("git", ["status", "-s"], { stdio: "pipe" }).stdout.toString()) {
-  throw new Error("Please commit all changes before running this script.");
-}
-
-fs.rmSync("dist", { recursive: true, force: true });
-
-run("pnpm", ["run", "checks"]);
-run("pnpm", ["build"]);
-run("pnpm", ["version", args[0]]);
-run("pnpm", ["run", "changenog"]);
-run("git", ["add", "."]);
-
-const pkg = await import("../package.json");
-
-run("git", ["commit", "-m", `docs(changelog): v${pkg.default.version}`]);
-run("git", ["push"]);
-run("git", ["push", "--tags"]);
-run("pnpm", ["publish"]);
