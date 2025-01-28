@@ -19,7 +19,7 @@ pub const NO_CHANGELOG_REGEX: &str = r"(?x)^
 $";
 
 // https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-pub const SEMVER_REGEX: &str = r"(?x)^
+pub const NO_SEMVER_REGEX: &str = r"(?x)^
     (?!
         (0|[1-9]\d*)\.
         (0|[1-9]\d*)\.
