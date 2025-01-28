@@ -35,7 +35,9 @@ pub fn get_remote_url(opts: Options) -> Option<String> {
             .trim()
             .to_string();
 
-        return Some(url);
+        if !url.is_empty() {
+            return Some(url);
+        }
     }
 
     None
