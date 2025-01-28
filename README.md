@@ -24,11 +24,11 @@ See this repo's changelog for example output.
 
 - `--overwrite` - overwrite existing changelog
 - `--no-links` - disable links
-- `--max-commits=<number>` - maximum number of commits to process (default: 1000)
 - `--remote-url=<string>` - remote URL to use for links (default: origin)
+- `--max-commits=<number>` - maximum number of commits to process (default: 1000)
 - `--tag-filter-regex=<string>` - regex pattern(s) that each tag must match to be included
-- `--commit-filter-preset=<string>` - filter preset(s) to use
 - `--commit-filter-regex=<string>` - regex pattern(s) that each commit must match to be included
+- `--commit-filter-preset=<string>` - filter preset(s) to use
 
 ### Filters
 

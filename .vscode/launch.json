@@ -2,11 +2,11 @@
   "configurations": [
     {
       "name": "changenog",
+      "type": "lldb",
       "request": "launch",
-      "runtimeArgs": ["run-script", "changenog"],
-      "runtimeExecutable": "npm",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "node"
+      "cargo": {
+        "args": ["build"]
+      }
     }
   ]
 }
