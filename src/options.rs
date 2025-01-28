@@ -3,7 +3,9 @@ use std::collections::HashMap;
 use fancy_regex::Regex;
 
 use crate::{
-    constant::{ANGULAR_README_ONLY_DOCS_REGEX, ANGULAR_REGEX, NO_CHANGELOG_REGEX, SEMVER_REGEX},
+    constant::{
+        ANGULAR_README_ONLY_DOCS_REGEX, ANGULAR_REGEX, NO_CHANGELOG_REGEX, NO_SEMVER_REGEX,
+    },
     log::log_warn,
 };
 
@@ -80,7 +82,7 @@ impl Options {
             Regex::new(ANGULAR_README_ONLY_DOCS_REGEX).unwrap(),
         );
         presets_map.insert("no-changelog", Regex::new(NO_CHANGELOG_REGEX).unwrap());
-        presets_map.insert("no-semver", Regex::new(SEMVER_REGEX).unwrap());
+        presets_map.insert("no-semver", Regex::new(NO_SEMVER_REGEX).unwrap());
 
         presets
             .iter()
