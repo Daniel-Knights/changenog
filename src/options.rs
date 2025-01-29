@@ -26,8 +26,8 @@ pub struct Options {
     pub no_links: bool,
     pub max_commits: i32,
     pub remote_url: Option<String>,
-    pub tag_filter_regex: Vec<Regex>,
-    pub filter: Vec<Regex>,
+    pub tag_filters: Vec<Regex>,
+    pub commit_filters: Vec<Regex>,
 }
 
 //// Implementations
@@ -58,12 +58,12 @@ impl Options {
                 .parse::<i32>()
                 .expect("invalid max-commits arg"),
             remote_url: raw_opts.remote_url.get(0).cloned(),
-            tag_filter_regex: raw_opts
+            tag_filters: raw_opts
                 .tag_filter_regex
                 .iter()
                 .map(|r| Regex::new(r).expect(&format!("invalid tag-filter-regex: {}", r)))
                 .collect::<Vec<Regex>>(),
-            filter: raw_opts
+            commit_filters: raw_opts
                 .commit_filter_regex
                 .iter()
                 .map(|r| Regex::new(r).expect(&format!("invalid commit-filter-regex: {}", r)))

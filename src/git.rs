@@ -88,7 +88,7 @@ impl GitRoot {
 
 impl GitTag {
     /// Gets all tags in the repo
-    pub fn get_tags(tag_filter_regex: &Vec<Regex>) -> Vec<GitTag> {
+    pub fn get_tags(tag_filters: &Vec<Regex>) -> Vec<GitTag> {
         // Log in parsable format
         let cmd_output = Command::new("git")
             .args([
@@ -113,10 +113,7 @@ impl GitTag {
                 let raw_tag = tag_regex.captures(t).unwrap().unwrap();
                 let tag = GitTag::from_captures(raw_tag);
 
-                if tag_filter_regex
-                    .iter()
-                    .any(|r| !r.is_match(&tag.name).unwrap())
-                {
+                if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
                     return None;
                 }
 
@@ -179,7 +176,7 @@ impl GitCommit {
 
                 // Apply CLI arg filters
                 if opts
-                    .filter
+                    .commit_filters
                     .iter()
                     .any(|f| !f.is_match(&parsed_commit.subject).unwrap())
                 {
