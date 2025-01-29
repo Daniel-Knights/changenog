@@ -2,7 +2,7 @@ use fancy_regex::Regex;
 
 use crate::git::GitTag;
 
-pub fn get_prev_entry_tag(existing_changelog: &str, all_tags: &Vec<GitTag>) -> Option<GitTag> {
+pub fn get_prev_entry_tag(existing_changelog: &str, all_tags: &[GitTag]) -> Option<GitTag> {
     let prev_entry_captures = Regex::new(r"## *\[?([^\]\s\(]+)")
         .unwrap()
         .captures(existing_changelog);

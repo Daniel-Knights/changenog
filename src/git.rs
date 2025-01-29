@@ -88,7 +88,7 @@ impl GitRoot {
 
 impl GitTag {
     /// Gets all tags in the repo
-    pub fn get_tags(tag_filters: &Vec<Regex>) -> Vec<GitTag> {
+    pub fn get_tags(tag_filters: &[Regex]) -> Vec<GitTag> {
         // Log in parsable format
         let cmd_output = Command::new("git")
             .args([
@@ -124,7 +124,7 @@ impl GitTag {
 
     /// Gets tags since the previous entry
     pub fn get_tags_since(
-        all_tags: &Vec<GitTag>,
+        all_tags: &[GitTag],
         prev_entry_date: Option<DateTime<FixedOffset>>,
     ) -> Vec<GitTag> {
         all_tags

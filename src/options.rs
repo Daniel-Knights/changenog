@@ -34,19 +34,19 @@ pub struct Options {
 
 impl Options {
     /// Gets formatted options from CLI args
-    pub fn from_args(cli_args: Vec<String>) -> Options {
+    pub fn from_args(cli_args: &[String]) -> Options {
         let raw_opts = RawOptions {
             overwrite: cli_args.contains(&"--overwrite".to_string()),
             no_links: cli_args.contains(&"--no-links".to_string()),
-            max_commits: Options::get_arg(&cli_args, "--max-commits"),
-            remote_url: Options::get_arg(&cli_args, "--remote-url"),
-            tag_filter_regex: Options::get_arg(&cli_args, "--tag-filter-regex"),
-            commit_filter_regex: Options::get_arg(&cli_args, "--commit-filter-regex"),
-            commit_filter_preset: Options::get_arg(&cli_args, "--commit-filter-preset"),
+            max_commits: Options::get_arg(cli_args, "--max-commits"),
+            remote_url: Options::get_arg(cli_args, "--remote-url"),
+            tag_filter_regex: Options::get_arg(cli_args, "--tag-filter-regex"),
+            commit_filter_regex: Options::get_arg(cli_args, "--commit-filter-regex"),
+            commit_filter_preset: Options::get_arg(cli_args, "--commit-filter-preset"),
         };
 
         let commit_filter_presets =
-            Options::get_commit_filter_presets(raw_opts.commit_filter_preset);
+            Options::get_commit_filter_presets(&raw_opts.commit_filter_preset);
 
         Options {
             overwrite: raw_opts.overwrite,
@@ -73,7 +73,7 @@ impl Options {
     }
 
     /// Returns presets matching those passed
-    fn get_commit_filter_presets(presets: Vec<String>) -> Vec<Regex> {
+    fn get_commit_filter_presets(presets: &[String]) -> Vec<Regex> {
         let mut presets_map: HashMap<&str, Regex> = HashMap::new();
 
         presets_map.insert("angular", Regex::new(ANGULAR_REGEX).unwrap());
@@ -99,7 +99,7 @@ impl Options {
     }
 
     /// Finds arg and returns the parsed value(s)
-    fn get_arg(cli_args: &Vec<String>, arg: &str) -> Vec<String> {
+    fn get_arg(cli_args: &[String], arg: &str) -> Vec<String> {
         cli_args
             .iter()
             .filter_map(|a| {
