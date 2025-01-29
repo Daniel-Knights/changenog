@@ -24,7 +24,7 @@ fn main() {
     let opts = Options::from_args(cli_args);
 
     let git_root = GitRoot::get(cwd, 0);
-    let all_tags = GitTag::get_tags(&opts.tag_filter_regex);
+    let all_tags = GitTag::get_tags(&opts.tag_filters);
 
     if all_tags.is_empty() {
         log_exit("no tags found");

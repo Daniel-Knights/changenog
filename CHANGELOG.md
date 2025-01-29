@@ -58,7 +58,3 @@
 
 - feat(deps): drop fs-extra, sync ([7dd00eb](https://github.com/Daniel-Knights/changenog/commit/7dd00eb8b19d7001bef786d280c83511c0ae8724))
 - feat(links): get remote url from git log, github vs gitlab checks ([ddbcec4](https://github.com/Daniel-Knights/changenog/commit/ddbcec44e41495d826abcf7207d45635dc5a1c21))
-
-## [v0.0.1](https://github.com/Daniel-Knights/changenog/tags) (25/08/2023)
-
-- init ([53debdb](https://github.com/Daniel-Knights/changenog/commit/53debdbb7b10d3f0150e653d30456d6f796d8e5e))
