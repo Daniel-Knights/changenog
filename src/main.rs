@@ -21,7 +21,7 @@ fn main() {
     let cwd = current_dir().unwrap();
     let cwd = Path::new(cwd.to_str().unwrap());
     let cli_args = args().skip(1).collect::<Vec<String>>();
-    let opts = Options::from_args(cli_args);
+    let opts = Options::from_args(&cli_args);
 
     let git_root = GitRoot::get(cwd, 0);
     let all_tags = GitTag::get_tags(&opts.tag_filters);
@@ -61,8 +61,8 @@ fn main() {
     let new_changelog = generate_changelog(
         opts,
         existing_changelog,
-        all_tags,
-        tags_since,
+        &all_tags,
+        &tags_since,
         commits_since,
     );
 
@@ -73,8 +73,8 @@ fn main() {
 fn generate_changelog(
     opts: Options,
     existing_changelog: &str,
-    all_tags: Vec<GitTag>,
-    tags_since: Vec<GitTag>,
+    all_tags: &[GitTag],
+    tags_since: &[GitTag],
     mut commits_since: Vec<GitCommit>,
 ) -> String {
     let remote_url = get_remote_url(opts);
