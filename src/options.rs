@@ -53,13 +53,13 @@ impl ChangenogOptions {
             description: "disable links",
         },
         CliArg {
-            name: "--max-commits",
-            kind: CliArgKind::Number,
+            name: "--remote-url",
+            kind: CliArgKind::String,
             description: "remote URL to use for links (default: origin)",
         },
         CliArg {
-            name: "--remote-url",
-            kind: CliArgKind::String,
+            name: "--max-commits",
+            kind: CliArgKind::Number,
             description: "maximum number of commits to process (default: 1000)",
         },
         CliArg {
@@ -226,7 +226,7 @@ impl ChangenogOptions {
 
         Self::DEFINITIONS.iter().for_each(|d| {
             println!(
-                "  {}{} | {}{} | {} |",
+                "  {}{} | {}{} | {}",
                 d.name,
                 " ".repeat(longest_name_len - d.name.len()),
                 d.kind,
