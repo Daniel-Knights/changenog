@@ -7,9 +7,9 @@ use std::{
 use chrono::{DateTime, FixedOffset, TimeDelta};
 use fancy_regex::{Captures, Regex};
 
-use crate::{log::log_exit, options::Options};
+use crate::{log::log_exit, options::ChangenogOptions};
 
-pub fn get_remote_url(opts: Options) -> Option<String> {
+pub fn get_remote_url(opts: ChangenogOptions) -> Option<String> {
     if opts.no_links {
         return None;
     }
@@ -69,7 +69,7 @@ pub struct GitCommit {
 
 impl GitRoot {
     /// Gets the root of the git repo
-    pub fn get(dir: &Path, call_count: i8) -> GitRoot {
+    pub fn get(dir: &Path, call_count: i8) -> Self {
         if call_count > 20 {
             log_exit("unable to find git root");
 
@@ -77,18 +77,18 @@ impl GitRoot {
         }
 
         if fs::exists(dir.join(".git")).unwrap_or(false) {
-            return GitRoot {
+            return Self {
                 dir: dir.to_path_buf(),
             };
         }
 
-        GitRoot::get(dir.parent().unwrap(), call_count + 1)
+        Self::get(dir.parent().unwrap(), call_count + 1)
     }
 }
 
 impl GitTag {
     /// Gets all tags in the repo
-    pub fn get_tags(tag_filters: &[Regex]) -> Vec<GitTag> {
+    pub fn get_tags(tag_filters: &[Regex]) -> Vec<Self> {
         // Log in parsable format
         let cmd_output = Command::new("git")
             .args([
@@ -111,7 +111,7 @@ impl GitTag {
                 }
 
                 let raw_tag = tag_regex.captures(t).unwrap().unwrap();
-                let tag = GitTag::from_captures(raw_tag);
+                let tag = Self::from_captures(raw_tag);
 
                 if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
                     return None;
@@ -124,9 +124,9 @@ impl GitTag {
 
     /// Gets tags since the previous entry
     pub fn get_tags_since(
-        all_tags: &[GitTag],
+        all_tags: &[Self],
         prev_entry_date: Option<DateTime<FixedOffset>>,
-    ) -> Vec<GitTag> {
+    ) -> Vec<Self> {
         all_tags
             .iter()
             .filter(|t| {
@@ -138,8 +138,8 @@ impl GitTag {
             .collect()
     }
 
-    pub fn from_captures(captures: Captures) -> GitTag {
-        GitTag {
+    pub fn from_captures(captures: Captures) -> Self {
+        Self {
             name: captures.name("name").unwrap().as_str().to_string(),
             date: captures.name("date").unwrap().as_str().to_string(),
         }
@@ -152,14 +152,14 @@ impl GitCommit {
         git_root_dir: PathBuf,
         cwd: &Path,
         prev_entry_date: Option<DateTime<FixedOffset>>,
-        opts: &Options,
-    ) -> Vec<GitCommit> {
+        opts: &ChangenogOptions,
+    ) -> Vec<Self> {
         let rel_package_path = cwd.strip_prefix(git_root_dir).unwrap();
 
-        GitCommit::get_raw_commits(opts, prev_entry_date)
+        Self::get_raw_commits(opts, prev_entry_date)
             .iter()
             .filter_map(|commit| {
-                let parsed_commit = GitCommit::from_pretty(commit);
+                let parsed_commit = Self::from_pretty(commit);
 
                 if parsed_commit.files.len() == 0 {
                     return None;
@@ -186,12 +186,12 @@ impl GitCommit {
                 Some(parsed_commit)
             })
             .rev() // Oldest to newest
-            .collect::<Vec<GitCommit>>()
+            .collect::<Vec<Self>>()
     }
 
     /// Returns raw commits since previous entry in a parsable format
     fn get_raw_commits(
-        opts: &Options,
+        opts: &ChangenogOptions,
         prev_entry_date: Option<DateTime<FixedOffset>>,
     ) -> Vec<String> {
         let max_commits_arg = format!("--max-count={}", opts.max_commits.to_string());
@@ -226,7 +226,7 @@ impl GitCommit {
     }
 
     /// Parses raw commit into GitCommit
-    fn from_pretty(commit_str: &str) -> GitCommit {
+    fn from_pretty(commit_str: &str) -> Self {
         let parts = commit_str.split(">>>>>>>").collect::<Vec<&str>>();
         let (metadata, files) = (parts[0], parts[1]);
         let metadata_lines = metadata.lines().filter(|l| *l != "").collect::<Vec<&str>>();
@@ -254,7 +254,7 @@ impl GitCommit {
             metadata_lines[3].replace("subject: ", "").to_string(),
         ];
 
-        GitCommit {
+        Self {
             hash,
             abbrev_hash,
             author_date,

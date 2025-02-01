@@ -8,7 +8,7 @@ use std::{
 use chrono::DateTime;
 use git::{GitCommit, GitRoot, GitTag, get_remote_url};
 use log::log_exit;
-use options::Options;
+use options::ChangenogOptions;
 use parse::get_prev_entry_tag;
 
 mod constant;
@@ -21,7 +21,7 @@ fn main() {
     let cwd = current_dir().unwrap();
     let cwd = Path::new(cwd.to_str().unwrap());
     let cli_args = args().skip(1).collect::<Vec<String>>();
-    let opts = Options::from_args(&cli_args);
+    let opts = ChangenogOptions::from_args(&cli_args);
 
     let git_root = GitRoot::get(cwd, 0);
     let all_tags = GitTag::get_tags(&opts.tag_filters);
@@ -71,7 +71,7 @@ fn main() {
 
 /// Generates the new changelog
 fn generate_changelog(
-    opts: Options,
+    opts: ChangenogOptions,
     existing_changelog: &str,
     all_tags: &[GitTag],
     tags_since: &[GitTag],
