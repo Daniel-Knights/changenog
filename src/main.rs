@@ -21,6 +21,21 @@ fn main() {
     let cwd = current_dir().unwrap();
     let cwd = Path::new(cwd.to_str().unwrap());
     let cli_args = args().skip(1).collect::<Vec<String>>();
+
+    // Print version
+    if cli_args.contains(&"--version".to_string()) || cli_args.contains(&"-v".to_string()) {
+        println!("{}", env!("CARGO_PKG_VERSION"));
+
+        process::exit(0)
+    }
+
+    // Print help
+    if cli_args.contains(&"--help".to_string()) || cli_args.contains(&"-h".to_string()) {
+        ChangenogOptions::help();
+
+        process::exit(0)
+    }
+
     let opts = ChangenogOptions::from_args(&cli_args);
 
     let git_root = GitRoot::get(cwd, 0);

@@ -1,5 +1,6 @@
 use std::{
     collections::{HashMap, HashSet},
+    fmt::Display,
     process,
 };
 
@@ -34,6 +35,7 @@ enum CliArgKind {
 struct CliArg {
     name: &'static str,
     kind: CliArgKind,
+    description: &'static str,
 }
 
 //// Implementations
@@ -43,30 +45,37 @@ impl ChangenogOptions {
         CliArg {
             name: "--overwrite",
             kind: CliArgKind::Boolean,
+            description: "overwrite existing changelog",
         },
         CliArg {
             name: "--no-links",
             kind: CliArgKind::Boolean,
+            description: "disable links",
         },
         CliArg {
             name: "--max-commits",
             kind: CliArgKind::Number,
+            description: "remote URL to use for links (default: origin)",
         },
         CliArg {
             name: "--remote-url",
             kind: CliArgKind::String,
+            description: "maximum number of commits to process (default: 1000)",
         },
         CliArg {
             name: "--tag-filter-regex",
             kind: CliArgKind::Regex,
+            description: "regex pattern(s) that each tag must match to be included",
         },
         CliArg {
             name: "--commit-filter-regex",
             kind: CliArgKind::Regex,
+            description: "regex pattern(s) that each commit must match to be included",
         },
         CliArg {
             name: "--commit-filter-preset",
             kind: CliArgKind::String,
+            description: "filter preset(s) to use",
         },
     ];
 
@@ -119,34 +128,6 @@ impl ChangenogOptions {
                 .chain(commit_filter_presets)
                 .collect::<Vec<Regex>>(),
         }
-    }
-
-    /// Returns presets matching those passed
-    fn get_commit_filter_presets(presets: &HashSet<String>) -> Vec<Regex> {
-        let mut presets_map: HashMap<&str, Regex> = HashMap::new();
-
-        presets_map.insert("angular", Regex::new(ANGULAR_REGEX).unwrap());
-        presets_map.insert(
-            "angular-readme-only-docs",
-            Regex::new(ANGULAR_README_ONLY_DOCS_REGEX).unwrap(),
-        );
-        presets_map.insert("no-changelog", Regex::new(NO_CHANGELOG_REGEX).unwrap());
-        presets_map.insert("no-semver", Regex::new(NO_SEMVER_REGEX).unwrap());
-
-        presets
-            .iter()
-            .filter_map(|p| {
-                let found_preset = presets_map.get(p.as_str()).cloned();
-
-                if found_preset.is_none() {
-                    log_exit(&format!("unknown preset: {}", p));
-
-                    process::exit(1)
-                }
-
-                found_preset
-            })
-            .collect::<Vec<Regex>>()
     }
 
     /// Returns hash map of processed args
@@ -207,6 +188,54 @@ impl ChangenogOptions {
         processed_args
     }
 
+    /// Returns presets matching those passed
+    fn get_commit_filter_presets(presets: &HashSet<String>) -> Vec<Regex> {
+        let mut presets_map: HashMap<&str, Regex> = HashMap::new();
+
+        presets_map.insert("angular", Regex::new(ANGULAR_REGEX).unwrap());
+        presets_map.insert(
+            "angular-readme-only-docs",
+            Regex::new(ANGULAR_README_ONLY_DOCS_REGEX).unwrap(),
+        );
+        presets_map.insert("no-changelog", Regex::new(NO_CHANGELOG_REGEX).unwrap());
+        presets_map.insert("no-semver", Regex::new(NO_SEMVER_REGEX).unwrap());
+
+        presets
+            .iter()
+            .filter_map(|p| {
+                let found_preset = presets_map.get(p.as_str()).cloned();
+
+                if found_preset.is_none() {
+                    log_exit(&format!("unknown preset: {}", p));
+
+                    process::exit(1)
+                }
+
+                found_preset
+            })
+            .collect::<Vec<Regex>>()
+    }
+
+    pub fn help() {
+        let (longest_name_len, longest_kind_len) =
+            Self::DEFINITIONS.iter().fold((0, 0), |acc, d| {
+                (acc.0.max(d.name.len()), acc.1.max(d.kind.to_string().len()))
+            });
+
+        println!("Changenog options:");
+
+        Self::DEFINITIONS.iter().for_each(|d| {
+            println!(
+                "  {}{} | {}{} | {} |",
+                d.name,
+                " ".repeat(longest_name_len - d.name.len()),
+                d.kind,
+                " ".repeat(longest_kind_len - d.kind.to_string().len()),
+                d.description
+            );
+        });
+    }
+
     /// If `opt` is boolean, logs an error and exits the program
     fn assert_not_boolean(opt: &CliArg, arg: &str) {
         if opt.kind != CliArgKind::Boolean {
@@ -216,5 +245,18 @@ impl ChangenogOptions {
         log_exit(&format!("unexpected value for boolean flag: {}", arg));
 
         process::exit(1)
+    }
+}
+
+impl Display for CliArgKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let kind = match self {
+            Self::Boolean => "boolean",
+            Self::String => "string",
+            Self::Number => "number",
+            Self::Regex => "regex",
+        };
+
+        write!(f, "{}", kind)
     }
 }
