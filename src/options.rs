@@ -23,26 +23,76 @@ pub struct ChangenogOptions {
     pub commit_filters: Vec<Regex>,
 }
 
-pub struct CliFlags;
+#[derive(PartialEq)]
+enum CliArgKind {
+    Boolean,
+    String,
+    Number,
+    Regex,
+}
+
+struct CliArg {
+    name: &'static str,
+    kind: CliArgKind,
+}
 
 //// Implementations
 
 impl ChangenogOptions {
+    const DEFINITIONS: [CliArg; 7] = [
+        CliArg {
+            name: "--overwrite",
+            kind: CliArgKind::Boolean,
+        },
+        CliArg {
+            name: "--no-links",
+            kind: CliArgKind::Boolean,
+        },
+        CliArg {
+            name: "--max-commits",
+            kind: CliArgKind::Number,
+        },
+        CliArg {
+            name: "--remote-url",
+            kind: CliArgKind::String,
+        },
+        CliArg {
+            name: "--tag-filter-regex",
+            kind: CliArgKind::Regex,
+        },
+        CliArg {
+            name: "--commit-filter-regex",
+            kind: CliArgKind::Regex,
+        },
+        CliArg {
+            name: "--commit-filter-preset",
+            kind: CliArgKind::String,
+        },
+    ];
+
+    const OVERWRITE: &'static CliArg = &Self::DEFINITIONS[0];
+    const NO_LINKS: &'static CliArg = &Self::DEFINITIONS[1];
+    const MAX_COMMITS: &'static CliArg = &Self::DEFINITIONS[2];
+    const REMOTE_URL: &'static CliArg = &Self::DEFINITIONS[3];
+    const TAG_FILTER_REGEX: &'static CliArg = &Self::DEFINITIONS[4];
+    const COMMIT_FILTER_REGEX: &'static CliArg = &Self::DEFINITIONS[5];
+    const COMMIT_FILTER_PRESET: &'static CliArg = &Self::DEFINITIONS[6];
+
     /// Gets formatted options from CLI args
     pub fn from_args(cli_args: &[String]) -> Self {
         let processed_args = Self::process_args(cli_args);
 
         let commit_filter_presets = Self::get_commit_filter_presets(
             processed_args
-                .get(CliFlags::COMMIT_FILTER_PRESET)
+                .get(Self::COMMIT_FILTER_PRESET.name)
                 .unwrap_or(&HashSet::new()),
         );
 
         Self {
-            overwrite: processed_args.contains_key(CliFlags::OVERWRITE),
-            no_links: processed_args.contains_key(CliFlags::NO_LINKS),
+            overwrite: processed_args.contains_key(Self::OVERWRITE.name),
+            no_links: processed_args.contains_key(Self::NO_LINKS.name),
             max_commits: processed_args
-                .get(CliFlags::MAX_COMMITS)
+                .get(Self::MAX_COMMITS.name)
                 .unwrap_or(&HashSet::from(["1000".to_string()]))
                 .iter()
                 .nth(0)
@@ -50,19 +100,19 @@ impl ChangenogOptions {
                 .parse::<i32>()
                 .expect("invalid max-commits arg"),
             remote_url: processed_args
-                .get(CliFlags::REMOTE_URL)
+                .get(Self::REMOTE_URL.name)
                 .unwrap_or(&HashSet::new())
                 .iter()
                 .nth(0)
                 .map(|s| s.to_string()),
             tag_filters: processed_args
-                .get(CliFlags::TAG_FILTER_REGEX)
+                .get(Self::TAG_FILTER_REGEX.name)
                 .unwrap_or(&HashSet::new())
                 .iter()
                 .map(|r| Regex::new(r).expect(&format!("invalid tag-filter-regex: {}", r)))
                 .collect::<Vec<Regex>>(),
             commit_filters: processed_args
-                .get(CliFlags::COMMIT_FILTER_REGEX)
+                .get(Self::COMMIT_FILTER_REGEX.name)
                 .unwrap_or(&HashSet::new())
                 .iter()
                 .map(|r| Regex::new(r).expect(&format!("invalid commit-filter-regex: {}", r)))
@@ -113,20 +163,25 @@ impl ChangenogOptions {
             }
 
             let (key, val) = arg.split_once('=').unwrap_or((arg, ""));
+            let found_opt = Self::DEFINITIONS.iter().find(|f| f.name == key);
 
             // Exit on unknown arg
-            if !CliFlags::ALL.contains(&key) {
+            if found_opt.is_none() {
                 log_exit(&format!("unknown arg: {}", key));
 
                 process::exit(1)
             }
 
+            let opt = found_opt.unwrap();
+
             let entry = processed_args
-                .entry(key.to_string())
+                .entry(opt.name.to_string())
                 .or_insert(HashSet::new());
 
             // Insert val from `<key>=<val>` format
             if !val.is_empty() {
+                Self::assert_not_boolean(opt, arg);
+
                 entry.insert(val.to_string());
 
                 return;
@@ -141,6 +196,8 @@ impl ChangenogOptions {
                 return;
             }
 
+            Self::assert_not_boolean(opt, arg);
+
             // Insert next arg
             entry.insert(next_arg.unwrap().to_string());
 
@@ -149,24 +206,15 @@ impl ChangenogOptions {
 
         processed_args
     }
-}
 
-impl CliFlags {
-    const ALL: [&'static str; 7] = [
-        "--overwrite",
-        "--no-links",
-        "--max-commits",
-        "--remote-url",
-        "--tag-filter-regex",
-        "--commit-filter-regex",
-        "--commit-filter-preset",
-    ];
+    /// If `opt` is boolean, logs an error and exits the program
+    fn assert_not_boolean(opt: &CliArg, arg: &str) {
+        if opt.kind != CliArgKind::Boolean {
+            return;
+        }
 
-    const OVERWRITE: &str = Self::ALL[0];
-    const NO_LINKS: &str = Self::ALL[1];
-    const MAX_COMMITS: &str = Self::ALL[2];
-    const REMOTE_URL: &str = Self::ALL[3];
-    const TAG_FILTER_REGEX: &str = Self::ALL[4];
-    const COMMIT_FILTER_REGEX: &str = Self::ALL[5];
-    const COMMIT_FILTER_PRESET: &str = Self::ALL[6];
+        log_exit(&format!("unexpected value for boolean flag: {}", arg));
+
+        process::exit(1)
+    }
 }
