@@ -7,7 +7,7 @@ build-js:
 pack-js:
     just build-js && pnpm pack --dir ./packages/js --pack-destination ../../
 changenog:
-    ./target/release/changenog --overwrite --commit-filter-preset=angular --commit-filter-preset=angular-readme-only-docs
+    just build && ./target/release/changenog --overwrite --commit-filter-preset=angular --commit-filter-preset=angular-readme-only-docs
 release-patch:
     pnpm tsx ./scripts/release patch
 release-minor:
