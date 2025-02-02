@@ -1,5 +1,7 @@
+/* eslint-disable n/no-unpublished-import */
 import { spawnSync, SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
+import { Octokit } from "octokit";
 
 const args = process.argv.slice(2);
 
@@ -7,7 +9,13 @@ if (run("git", ["status", "-s"], { stdio: "pipe" }).stdout.toString()) {
   throw new Error("Please commit all changes before running this script.");
 }
 
-// Main
+//// Main
+
+const envFile = fs.readFileSync(".env", "utf-8");
+const [, githubToken] = envFile.match(/GITHUB_TOKEN=(.+)/)!;
+const octokit = new Octokit({ auth: githubToken });
+
+await octokit.rest.users.getAuthenticated(); // Will throw if token is invalid
 
 run("just", ["build"]);
 
@@ -17,6 +25,7 @@ const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
 const packageJson = JSON.parse(fs.readFileSync("./packages/js/package.json", "utf-8"));
 const [, version] = cargoToml.match(/version = "([^"]+)"/)!;
 const newVersion = bumpVersion(version!, args[0]!);
+const newTag = `v${newVersion}`;
 
 packageJson.version = newVersion;
 
@@ -26,7 +35,7 @@ fs.writeFileSync(
   `${JSON.stringify(packageJson, null, 2)}\n`,
 );
 
-run("git", ["tag", `v${newVersion}`]);
+run("git", ["tag", newTag]);
 run("just", ["changenog"]);
 run("git", ["add", "."]);
 run("git", ["commit", "-m", `docs(changelog): ${newVersion}`]);
@@ -35,7 +44,23 @@ run("git", ["push", "--tags"]);
 run("cargo", ["publish"]);
 run("pnpm", ["publish", "./packages/js"]);
 
-// Helper functions
+// Create release and upload binary asset
+const { data: release } = await octokit.rest.repos.createRelease({
+  owner: "Daniel-Knights",
+  repo: "changenog",
+  tag_name: newTag,
+  body: "See [CHANGELOG.md](CHANGELOG.md) for details.",
+});
+
+await octokit.rest.repos.uploadReleaseAsset({
+  owner: "Daniel-Knights",
+  repo: "changenog",
+  name: "changenog",
+  release_id: release.id,
+  data: fs.readFileSync("./target/release/changenog", "utf-8"),
+});
+
+//// Helper functions
 
 function bumpVersion(versionStr: string, kind: string) {
   const versionFields = versionStr.split(".").map((n) => Number(n));

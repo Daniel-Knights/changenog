@@ -3,3 +3,4 @@ dist
 target
 packages/**/changenog
 todo.txt
+.env
