@@ -4,7 +4,19 @@ Zero-config changelog generator with monorepo support.
 
 Parses Git tags and commits since last entry, restricts them by current working directory, and adds any missing entries to the changelog.
 
+See this repo's changelog for example output.
+
 ## Usage
+
+Can be installed globally, locally, or run directly from the binary.
+
+### Rust
+
+```bash
+cargo install changenog
+```
+
+### JS
 
 ```bash
 pnpm i -D changenog
@@ -18,7 +30,9 @@ pnpm i -D changenog
 }
 ```
 
-See this repo's changelog for example output.
+### Manual
+
+Download the latest binary from the [releases page](https://www.github.com/Daniel-Knights/changenog/releases).
 
 ## Options
 
