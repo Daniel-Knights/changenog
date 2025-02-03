@@ -1,6 +1,7 @@
 use std::{
     env::{args, current_dir},
     fs,
+    io::{Write, stdout},
     path::Path,
     process,
 };
@@ -47,12 +48,12 @@ fn main() {
         process::exit(0)
     }
 
-    let dest = cwd.join("CHANGELOG.md");
+    let abs_input_path = cwd.join(&opts.input_path);
 
     let existing_changelog = if opts.overwrite {
         ""
     } else {
-        &fs::read_to_string(cwd.join(&dest)).unwrap_or("".to_string())
+        &fs::read_to_string(cwd.join(&abs_input_path)).unwrap_or("".to_string())
     };
 
     let prev_entry_tag = get_prev_entry_tag(existing_changelog, &all_tags);
@@ -74,25 +75,31 @@ fn main() {
     let commits_since = GitCommit::get_commits_since(git_root.dir, cwd, prev_entry_date, &opts);
 
     let new_changelog = generate_changelog(
-        opts,
+        &opts,
         existing_changelog,
         &all_tags,
         &tags_since,
         commits_since,
     );
 
-    fs::write(dest, new_changelog).expect("unable to write changelog");
+    if opts.output == "file" {
+        fs::write(abs_input_path, new_changelog).expect("unable to write changelog");
+    } else if opts.output == "stdout" {
+        stdout()
+            .write_all(new_changelog.as_bytes())
+            .expect("unable to write changelog to stdout");
+    }
 }
 
 /// Generates the new changelog
 fn generate_changelog(
-    opts: ChangenogOptions,
+    opts: &ChangenogOptions,
     existing_changelog: &str,
     all_tags: &[GitTag],
     tags_since: &[GitTag],
     mut commits_since: Vec<GitCommit>,
 ) -> String {
-    let remote_url = get_remote_url(opts);
+    let remote_url = get_remote_url(&opts);
 
     let mut new_changelog = existing_changelog.to_string();
 
