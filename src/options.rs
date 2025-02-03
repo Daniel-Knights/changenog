@@ -17,6 +17,8 @@ use crate::{
 
 pub struct ChangenogOptions {
     pub overwrite: bool,
+    pub input_path: String,
+    pub output: String,
     pub no_links: bool,
     pub max_commits: i32,
     pub remote_url: Option<String>,
@@ -36,56 +38,93 @@ struct CliArg {
     name: &'static str,
     kind: CliArgKind,
     description: &'static str,
+    values: Option<&'static [&'static str]>,
+    default: Option<&'static str>,
 }
 
 //// Implementations
 
 impl ChangenogOptions {
-    const DEFINITIONS: [CliArg; 7] = [
+    const DEFINITIONS: [CliArg; 9] = [
         CliArg {
             name: "--overwrite",
             kind: CliArgKind::Boolean,
             description: "overwrite existing changelog",
+            values: None,
+            default: None,
+        },
+        CliArg {
+            name: "--input-path",
+            kind: CliArgKind::String,
+            description: "path to the source changelog",
+            values: None,
+            default: Some("CHANGELOG.md"),
+        },
+        CliArg {
+            name: "--output",
+            kind: CliArgKind::String,
+            description: "output of the generated changelog",
+            values: Some(&["file", "stdout"]),
+            default: Some("file"),
         },
         CliArg {
             name: "--no-links",
             kind: CliArgKind::Boolean,
             description: "disable links",
+            values: None,
+            default: None,
         },
         CliArg {
             name: "--remote-url",
             kind: CliArgKind::String,
-            description: "remote URL to use for links (default: origin)",
+            description: "remote URL to use for links.  default: origin",
+            values: None,
+            default: None,
         },
         CliArg {
             name: "--max-commits",
             kind: CliArgKind::Number,
-            description: "maximum number of commits to process (default: 1000)",
+            description: "maximum number of commits to process",
+            values: None,
+            default: Some("1000"),
         },
         CliArg {
             name: "--tag-filter-regex",
             kind: CliArgKind::Regex,
             description: "regex pattern(s) that each tag must match to be included",
+            values: None,
+            default: None,
         },
         CliArg {
             name: "--commit-filter-regex",
             kind: CliArgKind::Regex,
             description: "regex pattern(s) that each commit must match to be included",
+            values: None,
+            default: None,
         },
         CliArg {
             name: "--commit-filter-preset",
             kind: CliArgKind::String,
             description: "filter preset(s) to use",
+            values: Some(&[
+                "angular",
+                "angular-readme-only-docs",
+                "no-changelog",
+                "no-semver",
+            ]),
+            default: None,
         },
     ];
 
     const OVERWRITE: &'static CliArg = &Self::DEFINITIONS[0];
-    const NO_LINKS: &'static CliArg = &Self::DEFINITIONS[1];
-    const MAX_COMMITS: &'static CliArg = &Self::DEFINITIONS[2];
-    const REMOTE_URL: &'static CliArg = &Self::DEFINITIONS[3];
-    const TAG_FILTER_REGEX: &'static CliArg = &Self::DEFINITIONS[4];
-    const COMMIT_FILTER_REGEX: &'static CliArg = &Self::DEFINITIONS[5];
-    const COMMIT_FILTER_PRESET: &'static CliArg = &Self::DEFINITIONS[6];
+    const INPUT_PATH: &'static CliArg = &Self::DEFINITIONS[1];
+    const OUTPUT: &'static CliArg = &Self::DEFINITIONS[2];
+    const NO_LINKS: &'static CliArg = &Self::DEFINITIONS[3];
+    const REMOTE_URL: &'static CliArg = &Self::DEFINITIONS[4];
+    const MAX_COMMITS: &'static CliArg = &Self::DEFINITIONS[5];
+    const TAG_FILTER_REGEX: &'static CliArg = &Self::DEFINITIONS[6];
+    const COMMIT_FILTER_REGEX: &'static CliArg = &Self::DEFINITIONS[7];
+    const COMMIT_FILTER_PRESET: &'static CliArg = &Self::DEFINITIONS[8];
 
     /// Gets formatted options from CLI args
     pub fn from_args(cli_args: &[String]) -> Self {
@@ -99,10 +138,30 @@ impl ChangenogOptions {
 
         Self {
             overwrite: processed_args.contains_key(Self::OVERWRITE.name),
+            input_path: processed_args
+                .get(Self::INPUT_PATH.name)
+                .unwrap_or(&HashSet::from([Self::INPUT_PATH
+                    .default
+                    .unwrap()
+                    .to_string()]))
+                .iter()
+                .nth(0)
+                .unwrap()
+                .clone(),
+            output: processed_args
+                .get(Self::OUTPUT.name)
+                .unwrap_or(&HashSet::from([Self::OUTPUT.default.unwrap().to_string()]))
+                .iter()
+                .nth(0)
+                .unwrap()
+                .clone(),
             no_links: processed_args.contains_key(Self::NO_LINKS.name),
             max_commits: processed_args
                 .get(Self::MAX_COMMITS.name)
-                .unwrap_or(&HashSet::from(["1000".to_string()]))
+                .unwrap_or(&HashSet::from([Self::MAX_COMMITS
+                    .default
+                    .unwrap()
+                    .to_string()]))
                 .iter()
                 .nth(0)
                 .unwrap()
@@ -161,7 +220,7 @@ impl ChangenogOptions {
 
             // Insert val from `<key>=<val>` format
             if !val.is_empty() {
-                Self::assert_not_boolean(opt, arg);
+                Self::validate_arg(opt, val);
 
                 entry.insert(val.to_string());
 
@@ -177,10 +236,12 @@ impl ChangenogOptions {
                 return;
             }
 
-            Self::assert_not_boolean(opt, arg);
-
             // Insert next arg
-            entry.insert(next_arg.unwrap().to_string());
+            let val = next_arg.unwrap();
+
+            Self::validate_arg(opt, val);
+
+            entry.insert(val.clone());
 
             skip_next = true;
         });
@@ -202,20 +263,11 @@ impl ChangenogOptions {
 
         presets
             .iter()
-            .filter_map(|p| {
-                let found_preset = presets_map.get(p.as_str()).cloned();
-
-                if found_preset.is_none() {
-                    log_exit(&format!("unknown preset: {}", p));
-
-                    process::exit(1)
-                }
-
-                found_preset
-            })
+            .filter_map(|p| presets_map.get(p.as_str()).cloned())
             .collect::<Vec<Regex>>()
     }
 
+    /// Displays `--help` text
     pub fn help() {
         let (longest_name_len, longest_kind_len) =
             Self::DEFINITIONS.iter().fold((0, 0), |acc, d| {
@@ -225,26 +277,48 @@ impl ChangenogOptions {
         println!("Changenog options:");
 
         Self::DEFINITIONS.iter().for_each(|d| {
+            let mut description = d.description.to_string();
+
+            if let Some(values) = d.values {
+                description = format!("{}.  one of ['{}']", description, values.join("', '"));
+            }
+
+            if let Some(default) = d.default {
+                description = format!("{}.  default: '{}'", description, default);
+            };
+
             println!(
                 "  {}{} | {}{} | {}",
                 d.name,
                 " ".repeat(longest_name_len - d.name.len()),
                 d.kind,
                 " ".repeat(longest_kind_len - d.kind.to_string().len()),
-                d.description
+                description
             );
         });
     }
 
-    /// If `opt` is boolean, logs an error and exits the program
-    fn assert_not_boolean(opt: &CliArg, arg: &str) {
-        if opt.kind != CliArgKind::Boolean {
-            return;
+    /// Validates arg and its value
+    fn validate_arg(opt: &CliArg, val: &str) {
+        if opt.kind == CliArgKind::Boolean {
+            log_exit(&format!(
+                "unexpected value for boolean option: '{}={}'",
+                opt.name, val
+            ));
+
+            process::exit(1)
         }
 
-        log_exit(&format!("unexpected value for boolean flag: {}", arg));
+        if opt.values.is_some() && !opt.values.unwrap().contains(&val) {
+            log_exit(&format!(
+                "invalid value for option: '{}={}'.  must be one of ['{}']",
+                opt.name,
+                val,
+                opt.values.unwrap().join("', '")
+            ));
 
-        process::exit(1)
+            process::exit(1)
+        }
     }
 }
 

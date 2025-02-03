@@ -9,13 +9,13 @@ use fancy_regex::{Captures, Regex};
 
 use crate::{log::log_exit, options::ChangenogOptions};
 
-pub fn get_remote_url(opts: ChangenogOptions) -> Option<String> {
+pub fn get_remote_url(opts: &ChangenogOptions) -> Option<String> {
     if opts.no_links {
         return None;
     }
 
     if opts.remote_url.is_some() {
-        let mut url = opts.remote_url.unwrap();
+        let mut url = opts.remote_url.clone().unwrap();
 
         if url.ends_with("/") {
             url.pop();
