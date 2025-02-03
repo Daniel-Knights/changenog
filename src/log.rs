@@ -5,5 +5,5 @@ fn format_msg(msg: &str) -> String {
 }
 
 pub fn log_exit(msg: &str) {
-    println!("{}, exiting...", format_msg(msg))
+    println!("{}.  exiting...", format_msg(msg))
 }
