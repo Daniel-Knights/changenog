@@ -20,6 +20,7 @@ await octokit.rest.users.getAuthenticated(); // Will throw if token is invalid
 run("just", ["build"]);
 
 fs.copyFileSync("./target/release/changenog", "./packages/js/changenog");
+fs.copyFileSync("README.md", "./packages/js/README.md");
 
 const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
 const packageJson = JSON.parse(fs.readFileSync("./packages/js/package.json", "utf-8"));
@@ -49,7 +50,7 @@ const { data: release } = await octokit.rest.repos.createRelease({
   owner: "Daniel-Knights",
   repo: "changenog",
   tag_name: newTag,
-  body: "See [CHANGELOG.md](CHANGELOG.md) for details.",
+  body: "See [CHANGELOG.md](https://github.com/Daniel-Knights/changenog/blob/main/CHANGELOG.md) for details.",
 });
 
 await octokit.rest.repos.uploadReleaseAsset({
