@@ -6,7 +6,7 @@ license = "ISC"
 description = "Zero-config changelog generator with monorepo support."
 repository = "https://github.com/Daniel-Knights/changenog"
 readme = "README.md"
-keywords = ["changelog", "automation", "monorepo", "git", "github", "gitlab"]
+keywords = ["changelog", "automation", "monorepo", "git", "github"]
 categories = ["development-tools", "filesystem", "command-line-utilities"]
 include = ["src/**/*.rs"]
 
