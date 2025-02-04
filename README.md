@@ -12,11 +12,31 @@ Can be installed globally, locally, or run directly from the binary.
 
 ### Rust
 
+https://crates.io/crates/changenog
+
+#### Global
+
 ```bash
 cargo install changenog
 ```
 
+```bash
+changenog
+```
+
+#### Local
+
+```bash
+cargo add changenog --dev
+```
+
+```bash
+cargo run --bin changenog
+```
+
 ### JS
+
+https://www.npmjs.com/package/changenog
 
 ```bash
 pnpm i -D changenog
