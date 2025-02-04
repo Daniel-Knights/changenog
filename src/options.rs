@@ -56,7 +56,7 @@ impl ChangenogOptions {
         CliArg {
             name: "--input-path",
             kind: CliArgKind::String,
-            description: "path to the source changelog",
+            description: "path to the source changelog within the current working directory",
             values: None,
             default: Some("CHANGELOG.md"),
         },
