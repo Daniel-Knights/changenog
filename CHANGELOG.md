@@ -1,19 +1,3 @@
-## [v2.0.0](https://github.com/Daniel-Knights/changenog/compare/v1.2.0...v2.0.0) (04/02/2025)
-
-- feat(options): input-path and output options, uniform handling of expected values and defaults ([c1f60cc](https://github.com/Daniel-Knights/changenog/commit/c1f60cc06d49915ba0bb8f9cde058908ed84c8af))
-- docs(readme): update usage guide ([6caa0a5](https://github.com/Daniel-Knights/changenog/commit/6caa0a56728da9fc006fe13581b7e9a96e93dc27))
-- fix(options): correct arg descriptions and log formatting ([7326b92](https://github.com/Daniel-Knights/changenog/commit/7326b928ead7e3f82e3e90f6a04908a35de48287))
-- feat(options): print version and help ([728ef88](https://github.com/Daniel-Knights/changenog/commit/728ef8830ea9057af6b1b77d4f7bbadd3a99e2e0))
-- feat(options): structured option definitions, exit on boolean flags with values ([08c70fc](https://github.com/Daniel-Knights/changenog/commit/08c70fc6bb812bb2f8af5520bcfa9d86894d17c3))
-- feat(options): improve args processing, support space separated args, exit on invalid args ([5f1cadf](https://github.com/Daniel-Knights/changenog/commit/5f1cadf291e22878ccd582741376381f2140deaf))
-- perf: pass slice refs as args instead of vectors ([bbfbd13](https://github.com/Daniel-Knights/changenog/commit/bbfbd13ad986a518cb6f17c0e4626da95317db72))
-- fix(parse): prev entry tag regex ([de24610](https://github.com/Daniel-Knights/changenog/commit/de24610f068cf519e58934c741627726476b28cc))
-- fix(git): return none on empty remote url ([a192cdf](https://github.com/Daniel-Knights/changenog/commit/a192cdfdf2c3701630b282105942422942778fb0))
-- docs(readme): add description for no-semver filter preset ([b605d29](https://github.com/Daniel-Knights/changenog/commit/b605d297a14551edacbe135e8d278db80bfbaa9c))
-- feat(filters): no-semver preset ([cb4b5af](https://github.com/Daniel-Knights/changenog/commit/cb4b5af4678750a3f11a0a5845cb1ef3a58f8c77))
-- feat!: remove semver requirement, replace tag-prefix flag with tag-filter-regex, rename commit filter flags ([29dfbca](https://github.com/Daniel-Knights/changenog/commit/29dfbca6dd49a74c5ffc1883a85959038b323c67))
-- feat!: rust rewrite first draft, remove continue flag, remove locale flag and force ddmmyyyy, add remote-url flag, add tag-prefix flag and remove package name heuristics ([5a1bc24](https://github.com/Daniel-Knights/changenog/commit/5a1bc24647aa04ac13f265bc42527d662eb2b7f3))
-
 ## [v1.2.0](https://github.com/Daniel-Knights/changenog/compare/v1.1.0...v1.2.0) (22/12/2024)
 
 - feat(filters): angular-readme-only-docs ([42f42f8](https://github.com/Daniel-Knights/changenog/commit/42f42f80520bd50b9234f62d5bff72964d987acf))
