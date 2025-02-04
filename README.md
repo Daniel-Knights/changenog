@@ -36,13 +36,17 @@ Download the latest binary from the [releases page](https://www.github.com/Danie
 
 ## Options
 
-- `--overwrite` - overwrite existing changelog
-- `--no-links` - disable links
-- `--remote-url=<string>` - remote URL to use for links (default: origin)
-- `--max-commits=<number>` - maximum number of commits to process (default: 1000)
-- `--tag-filter-regex=<string>` - regex pattern(s) that each tag must match to be included
-- `--commit-filter-regex=<string>` - regex pattern(s) that each commit must match to be included
-- `--commit-filter-preset=<string>` - filter preset(s) to use
+| Option                 | Type    | Description                                                                                          |
+| ---------------------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| --overwrite            | boolean | overwrite existing changelog                                                                         |
+| --input-path           | string  | path to the source changelog within the current working directory. default: 'CHANGELOG.md'           |
+| --output               | string  | output of the generated changelog. one of ['file', 'stdout']. default: 'file'                        |
+| --no-links             | boolean | disable links                                                                                        |
+| --remote-url           | string  | remote URL to use for links. default: origin                                                         |
+| --max-commits          | number  | maximum number of commits to process. default: '1000'                                                |
+| --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included                                             |
+| --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included                                          |
+| --commit-filter-preset | string  | filter preset(s) to use. one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver'] |
 
 ### Filters
 
