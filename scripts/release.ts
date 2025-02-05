@@ -39,7 +39,7 @@ fs.writeFileSync(
 run("git", ["tag", newTag]);
 run("just", ["changenog"]);
 run("git", ["add", "."]);
-run("git", ["commit", "-m", `docs(changelog): ${newVersion}`]);
+run("git", ["commit", "-m", `chore(release): ${newTag}`]);
 run("git", ["push"]);
 run("git", ["push", "--tags"]);
 run("cargo", ["publish"]);
