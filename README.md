@@ -14,24 +14,12 @@ Can be installed globally, locally, or run directly from the binary.
 
 https://crates.io/crates/changenog
 
-#### Global
-
 ```bash
 cargo install changenog
 ```
 
 ```bash
 changenog
-```
-
-#### Local
-
-```bash
-cargo add changenog --dev
-```
-
-```bash
-cargo run --bin changenog
 ```
 
 ### JS
