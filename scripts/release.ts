@@ -45,20 +45,12 @@ run("git", ["push", "--tags"]);
 run("cargo", ["publish"]);
 run("pnpm", ["publish", "./packages/js"]);
 
-// Create release and upload binary asset
-const { data: release } = await octokit.rest.repos.createRelease({
+// Create release
+await octokit.rest.repos.createRelease({
   owner: "Daniel-Knights",
   repo: "changenog",
   tag_name: newTag,
   body: "See [CHANGELOG.md](https://github.com/Daniel-Knights/changenog/blob/main/CHANGELOG.md) for details.",
-});
-
-await octokit.rest.repos.uploadReleaseAsset({
-  owner: "Daniel-Knights",
-  repo: "changenog",
-  name: "changenog",
-  release_id: release.id,
-  data: fs.readFileSync("./target/release/changenog", "utf-8"),
 });
 
 //// Helper functions

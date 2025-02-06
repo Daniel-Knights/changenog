@@ -8,8 +8,6 @@ See this repo's changelog for example output.
 
 ## Usage
 
-Can be installed globally, locally, or run directly from the binary.
-
 ### Rust
 
 https://crates.io/crates/changenog
@@ -37,10 +35,6 @@ pnpm i -D changenog
   }
 }
 ```
-
-### Manual
-
-Download the latest binary from the [releases page](https://www.github.com/Daniel-Knights/changenog/releases).
 
 ## Options
 
