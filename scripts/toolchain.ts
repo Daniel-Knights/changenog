@@ -87,7 +87,9 @@ targets.forEach((target) => {
   const pkg = {
     name: `@changenog/${target}`,
     description: `${target} binary for Changenog, the changelog generator.`,
-    bin: `./changenog${os === "win32" ? ".exe" : ""}`,
+    bin: {
+      changenog: `./changenog${os === "win32" ? ".exe" : ""}`,
+    },
     ...corePkg,
     os: [os],
     cpu: [target?.includes("x86_64") ? "x64" : "arm64"],

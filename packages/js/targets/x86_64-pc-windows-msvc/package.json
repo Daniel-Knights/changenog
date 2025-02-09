@@ -1,7 +1,9 @@
 {
   "name": "@changenog/x86_64-pc-windows-msvc",
   "description": "x86_64-pc-windows-msvc binary for Changenog, the changelog generator.",
-  "bin": "./changenog.exe",
+  "bin": {
+    "changenog": "./changenog.exe"
+  },
   "version": "1.2.0",
   "author": "Donk",
   "license": "ISC",
