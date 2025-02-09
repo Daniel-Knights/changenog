@@ -91,8 +91,14 @@ jobs:
           version: "latest"
           run_install: false
 
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+          registry-url: "https://registry.npmjs.org"
+
       - name: Publish target to NPM
-        run: pnpm publish ./packages/js/targets/${{ matrix.target }} --access public --no-git-checks
+        run: pnpm publish ./packages/js/targets/${{ matrix.target }} --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
@@ -113,7 +119,13 @@ jobs:
           version: "latest"
           run_install: false
 
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+          registry-url: "https://registry.npmjs.org"
+
       - name: Publish core to NPM
-        run: pnpm publish ./packages/js/core --access public --no-git-checks
+        run: pnpm publish ./packages/js/core --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
