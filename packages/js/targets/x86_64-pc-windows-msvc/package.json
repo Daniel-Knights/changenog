@@ -1,0 +1,29 @@
+{
+  "name": "@changenog/x86_64-pc-windows-msvc",
+  "description": "x86_64-pc-windows-msvc binary for Changenog, the changelog generator.",
+  "bin": "./changenog.exe",
+  "version": "1.2.0",
+  "author": "Donk",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Daniel-Knights/changenog"
+  },
+  "bugs": {
+    "url": "https://github.com/Daniel-Knights/changenog/issues"
+  },
+  "keywords": [
+    "changelog",
+    "automation",
+    "monorepo",
+    "git",
+    "github",
+    "gitlab"
+  ],
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}

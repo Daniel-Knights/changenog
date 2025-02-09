@@ -1,11 +1,5 @@
-build-cmd := "cargo build --release -Z unstable-options --artifact-dir"
-
 build:
     cargo build --release
-build-js:
-    {{ build-cmd }} ./packages/js
-pack-js:
-    just build-js && pnpm pack --dir ./packages/js --pack-destination ../../
 changenog:
     just build && ./target/release/changenog --overwrite --commit-filter-preset=angular --commit-filter-preset=angular-readme-only-docs
 release-patch:

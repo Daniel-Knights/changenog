@@ -1,12 +1,10 @@
 {
-  "name": "changenog",
+  "name": "@changenog/aarch64-pc-windows-msvc",
+  "description": "aarch64-pc-windows-msvc binary for Changenog, the changelog generator.",
+  "bin": "./changenog.exe",
   "version": "1.2.0",
-  "description": "Zero-config changelog generator with monorepo support.",
   "author": "Donk",
   "license": "ISC",
-  "type": "module",
-  "readme": "../../README.md",
-  "bin": "./changenog",
   "repository": {
     "type": "git",
     "url": "https://github.com/Daniel-Knights/changenog"
@@ -21,5 +19,11 @@
     "git",
     "github",
     "gitlab"
+  ],
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "arm64"
   ]
 }
