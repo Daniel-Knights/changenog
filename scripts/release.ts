@@ -1,7 +1,5 @@
-/* eslint-disable n/no-unpublished-import */
 import { spawnSync, SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
-import { Octokit } from "octokit";
 
 const args = process.argv.slice(2);
 
@@ -11,19 +9,12 @@ if (run("git", ["status", "-s"], { stdio: "pipe" }).stdout.toString()) {
 
 //// Main
 
-const envFile = fs.readFileSync(".env", "utf-8");
-const [, githubToken] = envFile.match(/GITHUB_TOKEN=(.+)/)!;
-const octokit = new Octokit({ auth: githubToken });
-
-await octokit.rest.users.getAuthenticated(); // Will throw if token is invalid
-
 run("just", ["build"]);
 
-fs.copyFileSync("./target/release/changenog", "./packages/js/changenog");
-fs.copyFileSync("README.md", "./packages/js/README.md");
-
 const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
-const packageJson = JSON.parse(fs.readFileSync("./packages/js/package.json", "utf-8"));
+const packageJson = JSON.parse(
+  fs.readFileSync("./packages/js/core/package.json", "utf-8"),
+);
 const [, version] = cargoToml.match(/version = "([^"]+)"/)!;
 const newVersion = bumpVersion(version!, args[0]!);
 const newTag = `v${newVersion}`;
@@ -32,7 +23,7 @@ packageJson.version = newVersion;
 
 fs.writeFileSync("Cargo.toml", cargoToml.replace(version!, newVersion));
 fs.writeFileSync(
-  "./packages/js/package.json",
+  "./packages/js/core/package.json",
   `${JSON.stringify(packageJson, null, 2)}\n`,
 );
 
@@ -42,16 +33,6 @@ run("git", ["add", "."]);
 run("git", ["commit", "-m", `chore(release): ${newTag}`]);
 run("git", ["push"]);
 run("git", ["push", "--tags"]);
-run("cargo", ["publish"]);
-run("pnpm", ["publish", "./packages/js"]);
-
-// Create release
-await octokit.rest.repos.createRelease({
-  owner: "Daniel-Knights",
-  repo: "changenog",
-  tag_name: newTag,
-  body: "See [CHANGELOG.md](https://github.com/Daniel-Knights/changenog/blob/main/CHANGELOG.md) for details.",
-});
 
 //// Helper functions
 

@@ -1,0 +1,29 @@
+{
+  "name": "@changenog/x86_64-apple-darwin",
+  "description": "x86_64-apple-darwin binary for Changenog, the changelog generator.",
+  "bin": "./changenog",
+  "version": "1.2.0",
+  "author": "Donk",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Daniel-Knights/changenog"
+  },
+  "bugs": {
+    "url": "https://github.com/Daniel-Knights/changenog/issues"
+  },
+  "keywords": [
+    "changelog",
+    "automation",
+    "monorepo",
+    "git",
+    "github",
+    "gitlab"
+  ],
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}
