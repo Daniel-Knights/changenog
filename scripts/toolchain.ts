@@ -5,6 +5,9 @@ import fs from "node:fs";
     - The targets in the release github workflow and the core
     - package.json optional dependencies
     - packages/js/targets
+
+  Other locations this script doesn't handle:
+    - packages/js/core/target.js target maps
 */
 
 const targets = fs
