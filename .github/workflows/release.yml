@@ -30,6 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
+      id-token: write
     env:
       EXE_NAME: changenog${{ matrix.os == 'windows-latest' && '.exe' || '' }}
       EXE_DIR: target/${{ matrix.target }}/release
@@ -101,11 +102,14 @@ jobs:
         run: pnpm publish ./packages/js/targets/${{ matrix.target }} --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
   # Publish core to crates.io and NPM
   publish:
     needs: targets
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -129,3 +133,4 @@ jobs:
         run: pnpm publish ./packages/js/core --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
