@@ -13,7 +13,7 @@ const result = spawnSync(targetExePath, process.argv.slice(2), {
 if (result.error) {
   console.error(
     `[changenog]: failed to execute binary for target: ${targetTriple}.  ensure the` +
-      `correct optional dependency is installed (@changenog/${targetTriple})\n`,
+      ` correct optional dependency is installed (@changenog/${targetTriple})\n`,
   );
 
   throw result.error;
