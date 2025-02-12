@@ -23,9 +23,6 @@
     "github",
     "gitlab"
   ],
-  "scripts": {
-    "postinstall": "node ./postinstall.js"
-  },
   "optionalDependencies": {
     "@changenog/aarch64-apple-darwin": "1.2.0",
     "@changenog/x86_64-apple-darwin": "1.2.0",
