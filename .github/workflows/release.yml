@@ -78,31 +78,20 @@ jobs:
           cargo build --release --target ${{ matrix.target }}
           cp ${{ env.EXE_DIR }}/${{ env.EXE_NAME }} ./packages/js/targets/${{ matrix.target }}
 
-      - name: Add asset to release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ASSET_PATH: ${{ matrix.target }}-${{ env.EXE_NAME }}
-        run: |
-          mv ${{ env.EXE_DIR }}/${{ env.EXE_NAME }} ${{ env.ASSET_PATH }}
-          gh release upload ${{ env.TAG_NAME }} ${{ env.ASSET_PATH }}
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Upload asset
+        uses: ./.github/actions/upload-asset
         with:
-          version: "latest"
-          run_install: false
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "latest"
-          registry-url: "https://registry.npmjs.org"
+          exe_dir: ${{ env.EXE_DIR }}
+          exe_name: ${{ env.EXE_NAME }}
+          tag_name: ${{ env.TAG_NAME }}
+          target: ${{ matrix.target }}
+          asset_path: ${{ matrix.target }}-${{ env.EXE_NAME }}
 
       - name: Publish target to NPM
-        run: pnpm publish ./packages/js/targets/${{ matrix.target }} --no-git-checks --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+        uses: ./.github/actions/pnpm-publish
+        with:
+          npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
+          package_dir: ./packages/js/targets/${{ matrix.target }}
 
   # Publish core to crates.io and NPM
   publish:
@@ -117,20 +106,8 @@ jobs:
       - name: Publish to crates.io
         run: cargo publish --allow-dirty --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "latest"
-          run_install: false
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "latest"
-          registry-url: "https://registry.npmjs.org"
-
       - name: Publish core to NPM
-        run: pnpm publish ./packages/js/core --no-git-checks --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+        uses: ./.github/actions/pnpm-publish
+        with:
+          npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
+          package_dir: ./packages/js/core

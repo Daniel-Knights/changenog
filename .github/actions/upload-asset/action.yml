@@ -1,0 +1,40 @@
+name: "Upload Asset"
+description: "Move binary, create ZIP archive, and upload as release asset"
+inputs:
+  exe_dir:
+    description: "Directory containing binary to upload"
+    required: true
+  exe_name:
+    description: "Name of binary to upload"
+    required: true
+  tag_name:
+    description: "Name of release tag"
+    required: true
+  target:
+    description: "Target platform"
+    required: true
+  asset_path:
+    description: "Path to release asset"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Move Binary
+      shell: bash
+      run: mv ${{ inputs.exe_dir }}/${{ inputs.exe_name }} ${{ inputs.asset_path }}
+
+    - name: Create ZIP Archive
+      shell: bash
+      if: runner.os != 'Windows'
+      run: zip ${{ inputs.asset_path }}.zip ${{ inputs.asset_path }}
+
+    - name: Create ZIP Archive (Windows)
+      shell: pwsh
+      if: runner.os == 'Windows'
+      run: Compress-Archive ${{ inputs.asset_path }} ${{ inputs.asset_path }}.zip
+
+    - name: Upload Release Asset
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh release upload ${{ inputs.tag_name }} ${{ inputs.asset_path }}.zip
