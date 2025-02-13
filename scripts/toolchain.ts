@@ -90,10 +90,12 @@ targets.forEach((target) => {
   const pkg = {
     name: `@changenog/${target}`,
     description: `${target} binary for Changenog, the changelog generator.`,
-    bin: {
-      changenog: `./changenog${os === "win32" ? ".exe" : ""}`,
-    },
     ...corePkg,
+    // Can't be `changenog` as NPM doesn't link the binary correctly, PNPM handles it fine, though
+    // https://github.com/npm/cli/issues/3446
+    bin: {
+      [`changenog-${target}`]: `./changenog${os === "win32" ? ".exe" : ""}`,
+    },
     os: [os],
     cpu: [target?.includes("x86_64") ? "x64" : "arm64"],
   };
