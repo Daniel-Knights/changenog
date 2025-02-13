@@ -1,12 +1,13 @@
 {
   "name": "@changenog/aarch64-pc-windows-msvc",
   "description": "aarch64-pc-windows-msvc binary for Changenog, the changelog generator.",
-  "bin": {
-    "changenog": "./changenog.exe"
-  },
   "version": "1.2.0",
   "author": "Donk",
   "license": "ISC",
+  "type": "module",
+  "bin": {
+    "changenog-aarch64-pc-windows-msvc": "./changenog.exe"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Daniel-Knights/changenog"
