@@ -1,10 +1,9 @@
 {
   "name": "@changenog/aarch64-apple-darwin",
-  "description": "aarch64-apple-darwin binary for Changenog, the changelog generator.",
   "version": "1.2.0",
+  "description": "aarch64-apple-darwin binary for Changenog, the changelog generator.",
   "author": "Donk",
   "license": "ISC",
-  "type": "module",
   "bin": {
     "changenog-aarch64-apple-darwin": "./changenog"
   },
