@@ -68,10 +68,6 @@ fs.writeFileSync(
 fs.rmSync("./packages/js/targets", { recursive: true, force: true });
 fs.mkdirSync("./packages/js/targets");
 
-delete corePkg.name;
-delete corePkg.description;
-delete corePkg.optionalDependencies;
-
 targets.forEach((target) => {
   if (!fs.existsSync(`./packages/js/targets/${target}`)) {
     fs.mkdirSync(`./packages/js/targets/${target}`);
@@ -89,13 +85,18 @@ targets.forEach((target) => {
 
   const pkg = {
     name: `@changenog/${target}`,
+    version: corePkg.version,
     description: `${target} binary for Changenog, the changelog generator.`,
-    ...corePkg,
+    author: corePkg.author,
+    license: corePkg.license,
     // Can't be `changenog` as NPM doesn't link the binary correctly, PNPM handles it fine, though
     // https://github.com/npm/cli/issues/3446
     bin: {
       [`changenog-${target}`]: `./changenog${os === "win32" ? ".exe" : ""}`,
     },
+    repository: corePkg.repository,
+    bugs: corePkg.bugs,
+    keywords: corePkg.keywords,
     os: [os],
     cpu: [target?.includes("x86_64") ? "x64" : "arm64"],
   };
