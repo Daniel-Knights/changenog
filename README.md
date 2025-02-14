@@ -36,6 +36,10 @@ pnpm i -D changenog
 }
 ```
 
+### Manual
+
+Binaries are available on the [releases page](https://github.com/Daniel-Knights/changenog/releases).
+
 ## Options
 
 | Option                 | Type    | Description                                                                                          |
