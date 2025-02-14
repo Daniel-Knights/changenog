@@ -1,13 +1,13 @@
 import fs from "node:fs";
 
 /*
-  Using the targets described in rust-toolchain.yml, this script updates:
-    - The targets in the release github workflow and the core
-    - package.json optional dependencies
+  Using the targets defined in rust-toolchain.yml, this script updates:
+    - The targets in the release github workflow
+    - packages/js/core/package.json optional dependencies
     - packages/js/targets
 
   Other locations this script doesn't handle:
-    - packages/js/core/target.js target maps
+    - packages/js/core/loader.js target maps
 */
 
 const targets = fs
