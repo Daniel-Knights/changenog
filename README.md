@@ -6,6 +6,15 @@ Parses Git tags and commits since last entry, restricts them by current working 
 
 See this repo's changelog for example output.
 
+- [Usage](#usage)
+  - [Rust](#rust)
+  - [JS](#js)
+  - [Manual](#manual)
+- [Options](#options)
+  - [Filters](#filters)
+    - [Presets](#presets)
+- [Monorepo Support](#monorepo-support)
+
 ## Usage
 
 ### Rust
