@@ -88,7 +88,7 @@ pub fn generate_changelog(
         );
     });
 
-    new_changelog.trim().to_string()
+    new_changelog.trim().to_string() + "\n"
 }
 
 /// Parses existing changelog for the tag heading of the latest entry
