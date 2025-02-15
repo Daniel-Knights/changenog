@@ -1,21 +1,16 @@
 use chrono::DateTime;
 use fancy_regex::Regex;
 
-use crate::{
-    git::{get_remote_url, GitCommit, GitTag},
-    options::ChangenogOptions,
-};
+use crate::git::{GitCommit, GitTag};
 
 /// Generates the new changelog
 pub fn generate_changelog(
-    opts: &ChangenogOptions,
     existing_changelog: &str,
     all_tags: &[GitTag],
     tags_since: &[GitTag],
     mut commits_since: Vec<GitCommit>,
+    remote_url: Option<String>,
 ) -> String {
-    let remote_url = get_remote_url(&opts);
-
     let mut new_changelog = existing_changelog.to_string();
 
     tags_since.iter().for_each(|tag| {
