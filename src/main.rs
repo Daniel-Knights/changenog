@@ -73,13 +73,14 @@ fn main() {
     }
 
     let commits_since = GitCommit::get_commits_since(git_root.dir, cwd, prev_entry_date, &opts);
+    let remote_url = GitRoot::get_remote_url(&opts);
 
     let new_changelog = generate_changelog(
-        &opts,
         existing_changelog,
         &all_tags,
         &tags_since,
         commits_since,
+        remote_url,
     );
 
     if opts.output == "file" {
