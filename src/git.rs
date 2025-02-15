@@ -111,7 +111,7 @@ impl GitTag {
                 }
 
                 let raw_tag = tag_regex.captures(t).unwrap().unwrap();
-                let tag = Self::from_captures(raw_tag);
+                let tag = Self::from(raw_tag);
 
                 if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
                     return None;
@@ -137,8 +137,10 @@ impl GitTag {
             .cloned()
             .collect()
     }
+}
 
-    pub fn from_captures(captures: Captures) -> Self {
+impl From<Captures<'_>> for GitTag {
+    fn from(captures: Captures) -> Self {
         Self {
             name: captures.name("name").unwrap().as_str().to_string(),
             date: captures.name("date").unwrap().as_str().to_string(),
