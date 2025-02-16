@@ -1,7 +1,7 @@
 use chrono::DateTime;
 use fancy_regex::Regex;
 
-use crate::git::{GitCommit, GitTag};
+use crate::git::{commit::GitCommit, tag::GitTag};
 
 /// Generates the new changelog
 pub fn generate_changelog(
