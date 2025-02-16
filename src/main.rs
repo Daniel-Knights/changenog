@@ -5,7 +5,7 @@ use std::{
     process,
 };
 
-use changelog::{generate_changelog, get_prev_entry_tag};
+use changelog::Changelog;
 use chrono::DateTime;
 use git::{commit::GitCommit, root::GitRoot, tag::GitTag};
 use log::log_exit;
@@ -52,7 +52,7 @@ fn main() {
         &fs::read_to_string(&output_path).unwrap()
     };
 
-    let prev_entry_tag = get_prev_entry_tag(existing_changelog, &all_tags);
+    let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog, &all_tags);
 
     let prev_entry_date = if prev_entry_tag.is_some() {
         Some(DateTime::parse_from_rfc3339(prev_entry_tag.unwrap().date.as_str()).unwrap())
@@ -78,7 +78,7 @@ fn main() {
 
     let remote_url = GitRoot::get_remote_url(&opts);
 
-    let new_changelog = generate_changelog(
+    let new_changelog = Changelog::generate(
         existing_changelog,
         &all_tags,
         &tags_since,
