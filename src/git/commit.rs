@@ -1,20 +1,8 @@
 use std::process::Command;
 
 use chrono::{DateTime, FixedOffset, TimeDelta};
-use fancy_regex::{Captures, Regex};
 
-use crate::options::ChangenogOptions;
-
-//// Structs
-
-#[derive(Debug)]
-pub struct GitRoot;
-
-#[derive(Debug, Clone)]
-pub struct GitTag {
-    pub name: String,
-    pub date: String,
-}
+use crate::{git::root::GitRoot, options::ChangenogOptions};
 
 #[derive(Debug)]
 pub struct GitCommit {
@@ -23,115 +11,6 @@ pub struct GitCommit {
     pub author_date: String,
     pub subject: String,
     pub files: Vec<String>,
-}
-
-//// Implementations
-
-impl GitRoot {
-    pub fn get() -> String {
-        let cmd_output = Command::new("git")
-            .args(["rev-parse", "--show-toplevel"])
-            .output()
-            .unwrap();
-
-        String::from_utf8(cmd_output.stdout).unwrap()
-    }
-
-    pub fn get_remote_url(opts: &ChangenogOptions) -> Option<String> {
-        if opts.no_links {
-            return None;
-        }
-
-        if opts.remote_url.is_some() {
-            let mut url = opts.remote_url.clone().unwrap();
-
-            if url.ends_with("/") {
-                url.pop();
-            }
-
-            return Some(url);
-        }
-
-        let cmd_output = Command::new("git")
-            .args(["config", "--get", "remote.origin.url"])
-            .output();
-
-        if let Ok(cmd_output) = cmd_output {
-            let url = String::from_utf8(cmd_output.stdout)
-                .expect("unable to parse stdout")
-                .replace(".git", "")
-                .trim()
-                .to_string();
-
-            if !url.is_empty() {
-                return Some(url);
-            }
-        }
-
-        None
-    }
-}
-
-impl GitTag {
-    /// Gets all tags in the repo
-    pub fn get_tags(tag_filters: &[Regex]) -> Vec<Self> {
-        // Log in parsable format
-        let cmd_output = Command::new("git")
-            .args([
-                "tag",
-                "-l",
-                "--sort=-creatordate",
-                "--format=%(creatordate:iso-strict)//%(refname:short)",
-            ])
-            .output()
-            .unwrap();
-
-        let tags_log = String::from_utf8(cmd_output.stdout).expect("unable to parse stdout");
-        let tag_regex = Regex::new(r"(?<date>.+?)\/\/(?<name>.+)").unwrap();
-
-        tags_log
-            .lines()
-            .filter_map(|t| {
-                if t == "" {
-                    return None;
-                }
-
-                let raw_tag = tag_regex.captures(t).unwrap().unwrap();
-                let tag = Self::from(raw_tag);
-
-                if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
-                    return None;
-                }
-
-                Some(tag)
-            })
-            .collect()
-    }
-
-    /// Gets tags since the previous entry
-    pub fn get_tags_since(
-        all_tags: &[Self],
-        prev_entry_date: Option<DateTime<FixedOffset>>,
-    ) -> Vec<Self> {
-        all_tags
-            .iter()
-            .filter(|t| {
-                prev_entry_date.is_none()
-                    || DateTime::parse_from_rfc3339(&t.date).unwrap() > prev_entry_date.unwrap()
-            })
-            .rev() // Oldest to newest
-            .cloned()
-            .collect()
-    }
-}
-
-impl From<Captures<'_>> for GitTag {
-    fn from(captures: Captures) -> Self {
-        Self {
-            name: captures.name("name").unwrap().as_str().to_string(),
-            date: captures.name("date").unwrap().as_str().to_string(),
-        }
-    }
 }
 
 impl GitCommit {

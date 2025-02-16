@@ -7,7 +7,7 @@ use std::{
 
 use changelog::{generate_changelog, get_prev_entry_tag};
 use chrono::DateTime;
-use git::{GitCommit, GitRoot, GitTag};
+use git::{commit::GitCommit, root::GitRoot, tag::GitTag};
 use log::log_exit;
 use options::ChangenogOptions;
 
