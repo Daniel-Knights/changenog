@@ -54,7 +54,7 @@ Binaries are available on the [releases page](https://github.com/Daniel-Knights/
 | Option                 | Type    | Description                                                                                          |
 | ---------------------- | ------- | ---------------------------------------------------------------------------------------------------- |
 | --overwrite            | boolean | overwrite existing changelog                                                                         |
-| --input-path           | string  | path to the source changelog within the current working directory. default: 'CHANGELOG.md'           |
+| --root                 | string  | root dir relative to the current working directory. default: current working directory               |
 | --output               | string  | output of the generated changelog. one of ['file', 'stdout']. default: 'file'                        |
 | --no-links             | boolean | disable links                                                                                        |
 | --remote-url           | string  | remote URL to use for links. default: origin                                                         |

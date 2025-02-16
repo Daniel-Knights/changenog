@@ -1,6 +1,7 @@
 use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
+    path::PathBuf,
     process,
 };
 
@@ -17,7 +18,7 @@ use crate::{
 
 pub struct ChangenogOptions {
     pub overwrite: bool,
-    pub input_path: String,
+    pub root: PathBuf,
     pub output: String,
     pub no_links: bool,
     pub max_commits: i32,
@@ -54,11 +55,11 @@ impl ChangenogOptions {
             default: None,
         },
         CliArg {
-            name: "--input-path",
+            name: "--root",
             kind: CliArgKind::String,
-            description: "path to the source changelog within the current working directory",
+            description: "root dir relative to the current working directory.  default: current working directory",
             values: None,
-            default: Some("CHANGELOG.md"),
+            default: None,
         },
         CliArg {
             name: "--output",
@@ -117,7 +118,7 @@ impl ChangenogOptions {
     ];
 
     const OVERWRITE: &'static CliArg = &Self::DEFINITIONS[0];
-    const INPUT_PATH: &'static CliArg = &Self::DEFINITIONS[1];
+    const ROOT: &'static CliArg = &Self::DEFINITIONS[1];
     const OUTPUT: &'static CliArg = &Self::DEFINITIONS[2];
     const NO_LINKS: &'static CliArg = &Self::DEFINITIONS[3];
     const REMOTE_URL: &'static CliArg = &Self::DEFINITIONS[4];
@@ -138,16 +139,16 @@ impl ChangenogOptions {
 
         Self {
             overwrite: processed_args.contains_key(Self::OVERWRITE.name),
-            input_path: processed_args
-                .get(Self::INPUT_PATH.name)
-                .unwrap_or(&HashSet::from([Self::INPUT_PATH
-                    .default
-                    .unwrap()
-                    .to_string()]))
-                .iter()
-                .nth(0)
-                .unwrap()
-                .clone(),
+            root: PathBuf::from(
+                processed_args
+                    .get(Self::ROOT.name)
+                    .unwrap_or(&HashSet::from([".".to_string()]))
+                    .iter()
+                    .nth(0)
+                    .unwrap(),
+            )
+            .canonicalize()
+            .unwrap(),
             output: processed_args
                 .get(Self::OUTPUT.name)
                 .unwrap_or(&HashSet::from([Self::OUTPUT.default.unwrap().to_string()]))

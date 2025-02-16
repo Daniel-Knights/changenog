@@ -1,8 +1,7 @@
 use std::{
-    env::{args, current_dir},
+    env::args,
     fs,
     io::{stdout, Write},
-    path::Path,
     process,
 };
 
@@ -19,8 +18,6 @@ mod log;
 mod options;
 
 fn main() {
-    let cwd = current_dir().unwrap();
-    let cwd = Path::new(cwd.to_str().unwrap());
     let cli_args = args().skip(1).collect::<Vec<String>>();
 
     // Print version
@@ -39,7 +36,6 @@ fn main() {
 
     let opts = ChangenogOptions::from_args(&cli_args);
 
-    let git_root = GitRoot::get(cwd, 0);
     let all_tags = GitTag::get_tags(&opts.tag_filters);
 
     if all_tags.is_empty() {
@@ -48,12 +44,12 @@ fn main() {
         process::exit(0)
     }
 
-    let abs_input_path = cwd.join(&opts.input_path);
+    let output_path = opts.root.join("CHANGELOG.md");
 
-    let existing_changelog = if opts.overwrite {
+    let existing_changelog = if opts.overwrite || !output_path.exists() {
         ""
     } else {
-        &fs::read_to_string(cwd.join(&abs_input_path)).unwrap_or("".to_string())
+        &fs::read_to_string(&output_path).unwrap()
     };
 
     let prev_entry_tag = get_prev_entry_tag(existing_changelog, &all_tags);
@@ -64,15 +60,22 @@ fn main() {
         None
     };
 
+    let commits_since = GitCommit::get_commits_since(prev_entry_date, &opts);
+
+    if commits_since.is_empty() {
+        log_exit("no commits since previous version");
+
+        process::exit(0)
+    }
+
     let tags_since = GitTag::get_tags_since(&all_tags, prev_entry_date);
 
-    if !opts.overwrite && tags_since.len() == 0 {
+    if !opts.overwrite && tags_since.is_empty() {
         log_exit("no new version(s)");
 
         process::exit(0)
     }
 
-    let commits_since = GitCommit::get_commits_since(git_root.dir, cwd, prev_entry_date, &opts);
     let remote_url = GitRoot::get_remote_url(&opts);
 
     let new_changelog = generate_changelog(
@@ -84,7 +87,7 @@ fn main() {
     );
 
     if opts.output == "file" {
-        fs::write(abs_input_path, new_changelog).expect("unable to write changelog");
+        fs::write(output_path, new_changelog).expect("unable to write changelog");
     } else if opts.output == "stdout" {
         stdout()
             .write_all(new_changelog.as_bytes())
