@@ -12,7 +12,10 @@ impl GitRoot {
             .output()
             .unwrap();
 
-        String::from_utf8(cmd_output.stdout).unwrap()
+        String::from_utf8(cmd_output.stdout)
+            .unwrap()
+            .trim()
+            .to_string()
     }
 
     pub fn get_remote_url(opts: &ChangenogOptions) -> Option<String> {
