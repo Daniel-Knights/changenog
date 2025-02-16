@@ -1,20 +1,14 @@
-use std::{
-    fs,
-    path::{Path, PathBuf},
-    process::{self, Command},
-};
+use std::process::Command;
 
 use chrono::{DateTime, FixedOffset, TimeDelta};
 use fancy_regex::{Captures, Regex};
 
-use crate::{log::log_exit, options::ChangenogOptions};
+use crate::options::ChangenogOptions;
 
 //// Structs
 
 #[derive(Debug)]
-pub struct GitRoot {
-    pub dir: PathBuf,
-}
+pub struct GitRoot;
 
 #[derive(Debug, Clone)]
 pub struct GitTag {
@@ -34,21 +28,13 @@ pub struct GitCommit {
 //// Implementations
 
 impl GitRoot {
-    /// Gets the root of the git repo
-    pub fn get(dir: &Path, call_count: i8) -> Self {
-        if call_count > 20 {
-            log_exit("unable to find git root");
+    pub fn get() -> String {
+        let cmd_output = Command::new("git")
+            .args(["rev-parse", "--show-toplevel"])
+            .output()
+            .unwrap();
 
-            process::exit(0)
-        }
-
-        if fs::exists(dir.join(".git")).unwrap_or(false) {
-            return Self {
-                dir: dir.to_path_buf(),
-            };
-        }
-
-        Self::get(dir.parent().unwrap(), call_count + 1)
+        String::from_utf8(cmd_output.stdout).unwrap()
     }
 
     pub fn get_remote_url(opts: &ChangenogOptions) -> Option<String> {
@@ -151,14 +137,20 @@ impl From<Captures<'_>> for GitTag {
 impl GitCommit {
     /// Gets commits since the previous entry
     pub fn get_commits_since(
-        git_root_dir: PathBuf,
-        cwd: &Path,
         prev_entry_date: Option<DateTime<FixedOffset>>,
         opts: &ChangenogOptions,
     ) -> Vec<Self> {
-        let rel_package_path = cwd.strip_prefix(git_root_dir).unwrap();
+        let raw_commits = Self::get_raw_commits(opts, prev_entry_date);
+        let git_root = GitRoot::get();
 
-        Self::get_raw_commits(opts, prev_entry_date)
+        let formatted_root = opts
+            .root
+            .strip_prefix(git_root)
+            .expect("root arg must be within nearest git root")
+            .to_str()
+            .unwrap();
+
+        raw_commits
             .iter()
             .filter_map(|commit| {
                 let parsed_commit = Self::from_pretty(commit);
@@ -171,7 +163,7 @@ impl GitCommit {
                 if parsed_commit
                     .files
                     .iter()
-                    .all(|f| !f.starts_with(rel_package_path.to_str().unwrap()))
+                    .all(|f| !f.starts_with(formatted_root))
                 {
                     return None;
                 }
@@ -217,7 +209,7 @@ impl GitCommit {
         ];
 
         let cmd_output = Command::new("git").args(log_args).output().unwrap();
-        let full_log = String::from_utf8(cmd_output.stdout).expect("unable to parse stdout");
+        let full_log = String::from_utf8(cmd_output.stdout).unwrap();
 
         full_log
             .trim()

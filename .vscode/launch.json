@@ -6,7 +6,8 @@
       "request": "launch",
       "cargo": {
         "args": ["build"]
-      }
+      },
+      "args": []
     }
   ]
 }
