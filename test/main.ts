@@ -51,9 +51,9 @@ tests.forEach((testArgs) => {
 });
 
 // Run without remote or tags
-commit("foo", "feat: add foo");
-commit("bar", "feat: add bar");
-commit("bar/baz", "feat: add baz");
+commit("feat: add foo", "foo");
+commit("feat: add bar", "bar");
+commit("feat: add baz", "bar/baz");
 
 tests.forEach((testArgs) => {
   output(testArgs);
@@ -73,19 +73,19 @@ const mockCommits = [
 ];
 
 mockCommits.forEach((commitMessage) => {
-  commit("foo", commitMessage);
+  commit(commitMessage, "foo");
 });
 
 run("git", ["tag", "v0.0.1"]);
 
 mockCommits.forEach((commitMessage) => {
-  commit("bar", commitMessage);
+  commit(commitMessage, "bar");
 });
 
 run("git", ["tag", "v0.1.0"]);
 
 mockCommits.forEach((commitMessage) => {
-  commit("bar/baz", commitMessage);
+  commit(commitMessage, "bar/baz");
 });
 
 run("git", ["tag", "my-package/v1.0.0"]);
@@ -111,19 +111,18 @@ tests.forEach((testArgs) => {
 });
 
 // Run with partial changelog
-fs.writeFileSync("test/repo/CHANGELOG.md", fs.readFileSync("test/changelogs/PARTIAL.md"));
+fs.copyFileSync("test/changelogs/PARTIAL.md", "test/repo/CHANGELOG.md");
 
 tests.forEach((testArgs) => {
   output(testArgs);
 });
 
 // Run with full changelog
-fs.writeFileSync("test/repo/CHANGELOG.md", fs.readFileSync("test/changelogs/FULL.md"));
+fs.copyFileSync("test/changelogs/FULL.md", "test/repo/CHANGELOG.md");
 
 tests.forEach((testArgs) => {
   output(testArgs);
 });
 
 // Cleanup
-run("git", ["log", "--oneline"]);
 fs.rmSync("test/repo", { recursive: true });
