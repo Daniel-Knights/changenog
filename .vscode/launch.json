@@ -8,6 +8,14 @@
         "args": ["build"]
       },
       "args": []
+    },
+    {
+      "name": "tsx",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}",
+      "runtimeExecutable": "tsx",
+      "skipFiles": ["<node_internals>/**"]
     }
   ]
 }
