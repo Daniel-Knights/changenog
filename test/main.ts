@@ -33,11 +33,6 @@ if (fs.existsSync("test/repo")) {
   fs.rmSync("test/repo", { recursive: true });
 }
 
-fs.mkdirSync("test/output/changelogs");
-fs.mkdirSync("test/output/changelogs/foo");
-fs.mkdirSync("test/output/changelogs/bar");
-fs.mkdirSync("test/output/changelogs/bar/baz");
-
 fs.mkdirSync("test/repo");
 fs.mkdirSync("test/repo/foo");
 fs.mkdirSync("test/repo/bar");
@@ -47,7 +42,7 @@ run("git", ["init"]);
 
 // Run without remote, tags, or commits
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("no_repo", testArgs);
 });
 
 // Run without remote or tags
@@ -56,7 +51,7 @@ commit("feat: add bar", "bar");
 commit("feat: add baz", "bar/baz");
 
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("no_remote_or_tags", testArgs);
 });
 
 // Add mock commits and tags
@@ -93,35 +88,35 @@ run("git", ["tag", "v1.0.0"]);
 
 // Run without remote
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("no_remote", testArgs);
 });
 
 // Run with remote
 run("git", ["config", "remote.origin.url", "https://www.my-remote.com"]);
 
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("with_remote", testArgs);
 });
 
 // Run with empty changelog
 fs.writeFileSync("test/repo/CHANGELOG.md", "");
 
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("empty_changelog", testArgs);
 });
 
 // Run with partial changelog
 fs.copyFileSync("test/changelogs/PARTIAL.md", "test/repo/CHANGELOG.md");
 
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("partial_changelog", testArgs);
 });
 
 // Run with full changelog
 fs.copyFileSync("test/changelogs/FULL.md", "test/repo/CHANGELOG.md");
 
 tests.forEach((testArgs) => {
-  output(testArgs);
+  output("full_changelog", testArgs);
 });
 
 // Cleanup
