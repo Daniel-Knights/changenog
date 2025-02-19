@@ -15,7 +15,6 @@ export function run(
 
 export async function commit(dir: "foo" | "bar" | "bar/baz", commits: string[]) {
   for (const msg of commits) {
-    // eslint-disable-next-line no-await-in-loop
     await fs.promises.appendFile(`test/repo/${dir}/main.txt`, msg);
 
     run("git", ["add", "."]);
@@ -25,7 +24,7 @@ export async function commit(dir: "foo" | "bar" | "bar/baz", commits: string[]) 
 
 export async function suite(id: string, tests: string[][]) {
   for (const testArgs of tests) {
-    await output(id, testArgs); // eslint-disable-line no-await-in-loop
+    await output(id, testArgs);
   }
 }
 

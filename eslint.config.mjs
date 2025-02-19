@@ -137,7 +137,7 @@ export default typescriptEslint.config(
       "no-alert": "warn",
       "no-array-constructor": "error",
       "no-async-promise-executor": "error",
-      "no-await-in-loop": "warn",
+      "no-await-in-loop": "off",
       "no-bitwise": "error",
       "no-case-declarations": "error",
       "no-catch-shadow": "error",
