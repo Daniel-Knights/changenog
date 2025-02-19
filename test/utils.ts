@@ -13,43 +13,60 @@ export function run(
   });
 }
 
-export function commit(msg: string, dir: "foo" | "bar" | "bar/baz") {
-  fs.appendFileSync(`test/repo/${dir}/main.txt`, msg);
+export async function commit(dir: "foo" | "bar" | "bar/baz", commits: string[]) {
+  for (const msg of commits) {
+    // eslint-disable-next-line no-await-in-loop
+    await fs.promises.appendFile(`test/repo/${dir}/main.txt`, msg);
 
-  run("git", ["add", "."]);
-  run("git", ["commit", "-m", msg]);
+    run("git", ["add", "."]);
+    run("git", ["commit", "-m", msg]);
+  }
 }
 
-export function output(id: string, args: string[]) {
+export async function suite(id: string, tests: string[][]) {
+  for (const testArgs of tests) {
+    await output(id, testArgs); // eslint-disable-line no-await-in-loop
+  }
+}
+
+export async function output(id: string, args: string[]) {
   const result = run("../../target/release/changenog", args, {
     stdio: "pipe",
   });
 
-  fs.appendFileSync("test/output/stdout.txt", `test ${id}: ["${args.join(", ")}"]\n`);
-  fs.appendFileSync(
+  await fs.promises.appendFile(
+    "test/output/stdout.txt",
+    `test ${id}: ["${args.join(", ")}"]\n`,
+  );
+
+  await fs.promises.appendFile(
     "test/output/stdout.txt",
     `${replaceDynamicValues(result.stdout.toString())}\n\n`,
   );
 
   const filename = args.join("_").replace(/[^a-zA-Z0-9_]+/g, "_");
 
-  ["", "foo", "bar", "bar/baz"].forEach((dir) => {
+  const outputPromises = ["", "foo", "bar", "bar/baz"].map(async (dir) => {
     const sourcePath = path.normalize(`test/repo/${dir}/CHANGELOG.md`);
 
     if (!fs.existsSync(sourcePath)) return;
 
-    const replacedContent = replaceDynamicValues(fs.readFileSync(sourcePath, "utf-8"));
     const destPath = path.normalize(
       `test/output/changelogs/${dir || "root"}/${id}/${filename}.md`,
     );
 
     if (!fs.existsSync(path.dirname(destPath))) {
-      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+      await fs.promises.mkdir(path.dirname(destPath), { recursive: true });
     }
 
-    fs.writeFileSync(sourcePath, replacedContent);
-    fs.renameSync(sourcePath, destPath);
+    const content = await fs.promises.readFile(sourcePath, "utf-8");
+    const replacedContent = replaceDynamicValues(content);
+
+    await fs.promises.writeFile(sourcePath, replacedContent);
+    await fs.promises.rename(sourcePath, destPath);
   });
+
+  await Promise.all(outputPromises);
 }
 
 function replaceDynamicValues(content: string) {
