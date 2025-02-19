@@ -1,5 +1,6 @@
 import { spawnSync, SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
+import path from "node:path";
 
 export function run(
   cmd: string,
@@ -19,12 +20,12 @@ export function commit(msg: string, dir: "foo" | "bar" | "bar/baz") {
   run("git", ["commit", "-m", msg]);
 }
 
-export function output(args: string[]) {
+export function output(id: string, args: string[]) {
   const result = run("../../target/release/changenog", args, {
     stdio: "pipe",
   });
 
-  fs.appendFileSync("test/output/stdout.txt", `test: ["${args.join(", ")}"]\n`);
+  fs.appendFileSync("test/output/stdout.txt", `test ${id}: ["${args.join(", ")}"]\n`);
   fs.appendFileSync(
     "test/output/stdout.txt",
     `${replaceDynamicValues(result.stdout.toString())}\n\n`,
@@ -32,17 +33,22 @@ export function output(args: string[]) {
 
   const filename = args.join("_").replace(/[^a-zA-Z0-9_]+/g, "_");
 
-  ["/", "foo/", "bar/", "bar/baz/"].forEach((dir) => {
-    const sourcePath = `test/repo/${dir}CHANGELOG.md`;
+  ["", "foo", "bar", "bar/baz"].forEach((dir) => {
+    const sourcePath = path.normalize(`test/repo/${dir}/CHANGELOG.md`);
 
     if (!fs.existsSync(sourcePath)) return;
 
-    fs.writeFileSync(
-      sourcePath,
-      replaceDynamicValues(fs.readFileSync(sourcePath, "utf-8")),
+    const replacedContent = replaceDynamicValues(fs.readFileSync(sourcePath, "utf-8"));
+    const destPath = path.normalize(
+      `test/output/changelogs/${dir || "root"}/${id}/${filename}.md`,
     );
 
-    fs.renameSync(sourcePath, `test/output/changelogs/${dir}${filename}.md`);
+    if (!fs.existsSync(path.dirname(destPath))) {
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+    }
+
+    fs.writeFileSync(sourcePath, replacedContent);
+    fs.renameSync(sourcePath, destPath);
   });
 }
 

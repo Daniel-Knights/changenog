@@ -1,12 +1,12 @@
-test: ["--version"]
+test no_repo: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test no_repo: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test no_repo: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -19,7 +19,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test no_repo: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -32,63 +32,63 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test no_repo: ["--overwrite"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--root=./bar/baz"]
+test no_repo: ["--root=./bar/baz"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--output=stdout"]
+test no_repo: ["--output=stdout"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--no-links"]
+test no_repo: ["--no-links"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test no_repo: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--max-commits=3"]
+test no_repo: ["--max-commits=3"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test no_repo: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test no_repo: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test no_repo: ["--commit-filter-preset=angular"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test no_repo: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test no_repo: ["--commit-filter-preset=no-changelog"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test no_repo: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--version"]
+test no_remote_or_tags: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test no_remote_or_tags: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test no_remote_or_tags: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -101,7 +101,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test no_remote_or_tags: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -114,63 +114,63 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test no_remote_or_tags: ["--overwrite"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--root=./bar/baz"]
+test no_remote_or_tags: ["--root=./bar/baz"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--output=stdout"]
+test no_remote_or_tags: ["--output=stdout"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--no-links"]
+test no_remote_or_tags: ["--no-links"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test no_remote_or_tags: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--max-commits=3"]
+test no_remote_or_tags: ["--max-commits=3"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test no_remote_or_tags: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test no_remote_or_tags: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test no_remote_or_tags: ["--commit-filter-preset=angular"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test no_remote_or_tags: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test no_remote_or_tags: ["--commit-filter-preset=no-changelog"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test no_remote_or_tags: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--version"]
+test no_remote: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test no_remote: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test no_remote: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -183,7 +183,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test no_remote: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -196,13 +196,13 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test no_remote: ["--overwrite"]
 
 
-test: ["--root=./bar/baz"]
+test no_remote: ["--root=./bar/baz"]
 
 
-test: ["--output=stdout"]
+test no_remote: ["--output=stdout"]
 ## v1.0.0 (REPLACED)
 
 - 1.0.0 (REPLACED)
@@ -212,6 +212,9 @@ test: ["--output=stdout"]
 - chore(scripts): update scripts (REPLACED)
 - feat(scope): add another feature (REPLACED)
 - fix: fix bug (REPLACED)
+
+## v0.1.0 (REPLACED)
+
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
 - 1.0.0 (REPLACED)
@@ -237,45 +240,45 @@ test: ["--output=stdout"]
 - feat: add foo (REPLACED)
 
 
-test: ["--no-links"]
+test no_remote: ["--no-links"]
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test no_remote: ["--remote-url=https://www.my-repo.com"]
 
 
-test: ["--max-commits=3"]
+test no_remote: ["--max-commits=3"]
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test no_remote: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test no_remote: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test no_remote: ["--commit-filter-preset=angular"]
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test no_remote: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test no_remote: ["--commit-filter-preset=no-changelog"]
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test no_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--version"]
+test with_remote: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test with_remote: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test with_remote: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -288,7 +291,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test with_remote: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -301,14 +304,14 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test with_remote: ["--overwrite"]
 
 
-test: ["--root=./bar/baz"]
+test with_remote: ["--root=./bar/baz"]
 
 
-test: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+test with_remote: ["--output=stdout"]
+## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -317,6 +320,9 @@ test: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
+
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -342,45 +348,45 @@ test: ["--output=stdout"]
 - feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 
-test: ["--no-links"]
+test with_remote: ["--no-links"]
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test with_remote: ["--remote-url=https://www.my-repo.com"]
 
 
-test: ["--max-commits=3"]
+test with_remote: ["--max-commits=3"]
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test with_remote: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test with_remote: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test with_remote: ["--commit-filter-preset=angular"]
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test with_remote: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test with_remote: ["--commit-filter-preset=no-changelog"]
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test with_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--version"]
+test empty_changelog: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test empty_changelog: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test empty_changelog: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -393,7 +399,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test empty_changelog: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -406,14 +412,14 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test empty_changelog: ["--overwrite"]
 
 
-test: ["--root=./bar/baz"]
+test empty_changelog: ["--root=./bar/baz"]
 
 
-test: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+test empty_changelog: ["--output=stdout"]
+## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -422,6 +428,9 @@ test: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
+
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -447,45 +456,45 @@ test: ["--output=stdout"]
 - feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 
-test: ["--no-links"]
+test empty_changelog: ["--no-links"]
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test empty_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test: ["--max-commits=3"]
+test empty_changelog: ["--max-commits=3"]
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test empty_changelog: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test empty_changelog: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test empty_changelog: ["--commit-filter-preset=angular"]
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test empty_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test empty_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test empty_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--version"]
+test partial_changelog: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test partial_changelog: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test partial_changelog: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -498,7 +507,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test partial_changelog: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -511,14 +520,14 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test partial_changelog: ["--overwrite"]
 
 
-test: ["--root=./bar/baz"]
+test partial_changelog: ["--root=./bar/baz"]
 
 
-test: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+test partial_changelog: ["--output=stdout"]
+## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -527,6 +536,9 @@ test: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
+
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -552,45 +564,45 @@ test: ["--output=stdout"]
 - feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 
-test: ["--no-links"]
+test partial_changelog: ["--no-links"]
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test partial_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test: ["--max-commits=3"]
+test partial_changelog: ["--max-commits=3"]
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test partial_changelog: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test partial_changelog: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test partial_changelog: ["--commit-filter-preset=angular"]
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test partial_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test partial_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test partial_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--version"]
+test full_changelog: ["--version"]
 1.2.0
 
 
-test: ["-v"]
+test full_changelog: ["-v"]
 1.2.0
 
 
-test: ["--help"]
+test full_changelog: ["--help"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -603,7 +615,7 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["-h"]
+test full_changelog: ["-h"]
 Changenog options:
   --overwrite            | boolean | overwrite existing changelog
   --root                 | string  | root dir relative to the current working directory.  default: current working directory
@@ -616,14 +628,14 @@ Changenog options:
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
 
 
-test: ["--overwrite"]
+test full_changelog: ["--overwrite"]
 
 
-test: ["--root=./bar/baz"]
+test full_changelog: ["--root=./bar/baz"]
 
 
-test: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+test full_changelog: ["--output=stdout"]
+## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -632,6 +644,9 @@ test: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
+
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -657,33 +672,33 @@ test: ["--output=stdout"]
 - feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 
-test: ["--no-links"]
+test full_changelog: ["--no-links"]
 
 
-test: ["--remote-url=https://www.my-repo.com"]
+test full_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test: ["--max-commits=3"]
+test full_changelog: ["--max-commits=3"]
 
 
-test: ["--tag-filter-regex='my-package/.*'"]
+test full_changelog: ["--tag-filter-regex='my-package/.*'"]
 [33m[changenog][0m no tags found.  exiting...
 
 
-test: ["--commit-filter-regex='^(?!.*changelog).*$'"]
+test full_changelog: ["--commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
-test: ["--commit-filter-preset=angular"]
+test full_changelog: ["--commit-filter-preset=angular"]
 
 
-test: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test full_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
-test: ["--commit-filter-preset=no-changelog"]
+test full_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
+test full_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
 [33m[changenog][0m no commits since previous version.  exiting...
 
 
