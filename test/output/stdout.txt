@@ -212,9 +212,6 @@ test no_remote: ["--output=stdout"]
 - chore(scripts): update scripts (REPLACED)
 - feat(scope): add another feature (REPLACED)
 - fix: fix bug (REPLACED)
-
-## v0.1.0 (REPLACED)
-
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
 - 1.0.0 (REPLACED)
@@ -311,7 +308,7 @@ test with_remote: ["--root=./bar/baz"]
 
 
 test with_remote: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -320,9 +317,6 @@ test with_remote: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-
-## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
-
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -419,7 +413,7 @@ test empty_changelog: ["--root=./bar/baz"]
 
 
 test empty_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -428,9 +422,6 @@ test empty_changelog: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-
-## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
-
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -527,7 +518,7 @@ test partial_changelog: ["--root=./bar/baz"]
 
 
 test partial_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -536,9 +527,6 @@ test partial_changelog: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-
-## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
-
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -635,7 +623,7 @@ test full_changelog: ["--root=./bar/baz"]
 
 
 test full_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.0.1...v1.0.0) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -644,9 +632,6 @@ test full_changelog: ["--output=stdout"]
 - chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-
-## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
-
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))

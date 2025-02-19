@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-import { commit, output, run } from "./utils.js";
+import { commit, run, suite } from "./utils.js";
 
 const tests = [
   ["--version"],
@@ -22,37 +22,33 @@ const tests = [
 ];
 
 if (fs.existsSync("test/output/stdout.txt")) {
-  fs.rmSync("test/output/stdout.txt");
+  await fs.promises.rm("test/output/stdout.txt");
 }
 
 if (fs.existsSync("test/output/changelogs")) {
-  fs.rmSync("test/output/changelogs", { recursive: true });
+  await fs.promises.rm("test/output/changelogs", { recursive: true });
 }
 
 if (fs.existsSync("test/repo")) {
-  fs.rmSync("test/repo", { recursive: true });
+  await fs.promises.rm("test/repo", { recursive: true });
 }
 
-fs.mkdirSync("test/repo");
-fs.mkdirSync("test/repo/foo");
-fs.mkdirSync("test/repo/bar");
-fs.mkdirSync("test/repo/bar/baz");
+await fs.promises.mkdir("test/repo");
+await fs.promises.mkdir("test/repo/foo");
+await fs.promises.mkdir("test/repo/bar");
+await fs.promises.mkdir("test/repo/bar/baz");
 
 run("git", ["init"]);
 
 // Run without remote, tags, or commits
-tests.forEach((testArgs) => {
-  output("no_repo", testArgs);
-});
+await suite("no_repo", tests);
 
 // Run without remote or tags
-commit("feat: add foo", "foo");
-commit("feat: add bar", "bar");
-commit("feat: add baz", "bar/baz");
+await commit("foo", ["feat: add foo"]);
+await commit("bar", ["feat: add bar"]);
+await commit("bar/baz", ["feat: add baz"]);
 
-tests.forEach((testArgs) => {
-  output("no_remote_or_tags", testArgs);
-});
+await suite("no_remote_or_tags", tests);
 
 // Add mock commits and tags
 const mockCommits = [
@@ -67,57 +63,38 @@ const mockCommits = [
   "1.0.0",
 ];
 
-mockCommits.forEach((commitMessage) => {
-  commit(commitMessage, "foo");
-});
+await commit("foo", mockCommits);
 
 run("git", ["tag", "v0.0.1"]);
 
-mockCommits.forEach((commitMessage) => {
-  commit(commitMessage, "bar");
-});
+await commit("bar", mockCommits);
 
 run("git", ["tag", "v0.1.0"]);
 
-mockCommits.forEach((commitMessage) => {
-  commit(commitMessage, "bar/baz");
-});
+await commit("bar/baz", mockCommits);
 
 run("git", ["tag", "my-package/v1.0.0"]);
 run("git", ["tag", "v1.0.0"]);
 
 // Run without remote
-tests.forEach((testArgs) => {
-  output("no_remote", testArgs);
-});
+await suite("no_remote", tests);
 
 // Run with remote
 run("git", ["config", "remote.origin.url", "https://www.my-remote.com"]);
 
-tests.forEach((testArgs) => {
-  output("with_remote", testArgs);
-});
+await suite("with_remote", tests);
 
 // Run with empty changelog
-fs.writeFileSync("test/repo/CHANGELOG.md", "");
-
-tests.forEach((testArgs) => {
-  output("empty_changelog", testArgs);
-});
+await fs.promises.writeFile("test/repo/CHANGELOG.md", "");
+await suite("empty_changelog", tests);
 
 // Run with partial changelog
-fs.copyFileSync("test/changelogs/PARTIAL.md", "test/repo/CHANGELOG.md");
-
-tests.forEach((testArgs) => {
-  output("partial_changelog", testArgs);
-});
+await fs.promises.copyFile("test/changelogs/PARTIAL.md", "test/repo/CHANGELOG.md");
+await suite("partial_changelog", tests);
 
 // Run with full changelog
-fs.copyFileSync("test/changelogs/FULL.md", "test/repo/CHANGELOG.md");
-
-tests.forEach((testArgs) => {
-  output("full_changelog", testArgs);
-});
+await fs.promises.copyFile("test/changelogs/FULL.md", "test/repo/CHANGELOG.md");
+await suite("full_changelog", tests);
 
 // Cleanup
-fs.rmSync("test/repo", { recursive: true });
+await fs.promises.rm("test/repo", { recursive: true });

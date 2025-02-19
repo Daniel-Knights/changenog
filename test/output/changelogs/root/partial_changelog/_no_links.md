@@ -7,9 +7,6 @@
 - chore(scripts): update scripts (REPLACED)
 - feat(scope): add another feature (REPLACED)
 - fix: fix bug (REPLACED)
-
-## v0.1.0 (REPLACED)
-
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
 - 1.0.0 (REPLACED)
