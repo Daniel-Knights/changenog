@@ -1,6 +1,6 @@
 use std::process::Command;
 
-use chrono::{DateTime, FixedOffset, TimeDelta};
+use chrono::{DateTime, FixedOffset};
 
 use crate::{git::root::GitRoot, options::ChangenogOptions};
 
@@ -71,11 +71,7 @@ impl GitCommit {
 
         let since_arg = format!(
             "--since={}",
-            prev_entry_date
-                .unwrap_or(DateTime::UNIX_EPOCH.fixed_offset())
-                // Add 1s to exclude commits made at the same time as previous entry
-                .checked_add_signed(TimeDelta::new(1, 0).unwrap())
-                .unwrap()
+            prev_entry_date.unwrap_or(DateTime::UNIX_EPOCH.fixed_offset())
         );
 
         // Log in a parsable format
