@@ -17,7 +17,7 @@ export async function commit(dir: "foo" | "bar" | "bar/baz", commits: string[]) 
   for (const msg of commits) {
     await fs.promises.appendFile(`test/repo/${dir}/main.txt`, msg);
 
-    run("git", ["add", "."]);
+    run("git", ["add", "-A"]);
     run("git", ["commit", "-m", msg]);
   }
 }

@@ -9,6 +9,9 @@
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
+
+## v0.1.0 (REPLACED)
+
 - 1.0.0 (REPLACED)
 - non-angular commit (REPLACED)
 - refactor: refactor code (REPLACED)
@@ -18,6 +21,9 @@
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
+
+## v0.0.1 (REPLACED)
+
 - 1.0.0 (REPLACED)
 - non-angular commit (REPLACED)
 - refactor: refactor code (REPLACED)
