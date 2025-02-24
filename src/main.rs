@@ -6,7 +6,6 @@ use std::{
 };
 
 use changelog::Changelog;
-use chrono::DateTime;
 use git::{commit::GitCommit, root::GitRoot, tag::GitTag};
 use log::log_exit;
 use options::ChangenogOptions;
@@ -16,6 +15,7 @@ mod constant;
 mod git;
 mod log;
 mod options;
+mod utils;
 
 fn main() {
     let cli_args = args().skip(1).collect::<Vec<String>>();
@@ -36,14 +36,6 @@ fn main() {
 
     let opts = ChangenogOptions::from_args(&cli_args);
 
-    let all_tags = GitTag::get_tags(&opts.tag_filters);
-
-    if all_tags.is_empty() {
-        log_exit("no tags found");
-
-        process::exit(0)
-    }
-
     let output_path = opts.root.join("CHANGELOG.md");
 
     let existing_changelog = if opts.overwrite || !output_path.exists() {
@@ -52,39 +44,20 @@ fn main() {
         &fs::read_to_string(&output_path).unwrap()
     };
 
-    let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog, &all_tags);
+    let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog);
+    let commits_since = GitCommit::get_all_since(&prev_entry_tag, &opts);
+    let mut tags_since = GitTag::get_all_since(&prev_entry_tag, &opts.tag_filters);
 
-    let prev_entry_date = if prev_entry_tag.is_some() {
-        Some(DateTime::parse_from_rfc3339(prev_entry_tag.unwrap().date.as_str()).unwrap())
-    } else {
-        None
-    };
-
-    let commits_since = GitCommit::get_commits_since(prev_entry_date, &opts);
-
-    if commits_since.is_empty() {
-        log_exit("no commits since previous version");
-
-        process::exit(0)
-    }
-
-    let tags_since = GitTag::get_tags_since(&all_tags, prev_entry_date);
-
-    if !opts.overwrite && tags_since.is_empty() {
+    if !opts.overwrite && (tags_since.is_empty() || commits_since.is_empty()) {
         log_exit("no new version(s)");
 
         process::exit(0)
     }
 
-    let remote_url = GitRoot::get_remote_url(&opts);
+    GitTag::populate_commits(&mut tags_since, &commits_since);
 
-    let new_changelog = Changelog::generate(
-        existing_changelog,
-        &all_tags,
-        &tags_since,
-        commits_since,
-        remote_url,
-    );
+    let remote_url = GitRoot::get_remote_url(&opts);
+    let new_changelog = Changelog::generate(&tags_since, existing_changelog, remote_url);
 
     if opts.output == "file" {
         fs::write(output_path, new_changelog).expect("unable to write changelog");
