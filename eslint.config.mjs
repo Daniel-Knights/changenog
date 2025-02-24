@@ -190,7 +190,7 @@ export default typescriptEslint.config(
       "no-new-symbol": "error",
       "no-param-reassign": "error",
       "no-plusplus": "error",
-      "no-promise-executor-return": "error",
+      "no-promise-executor-return": "off",
       "no-prototype-builtins": "error",
       "no-redeclare": "error",
       "no-regex-spaces": "error",

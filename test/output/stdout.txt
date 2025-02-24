@@ -33,51 +33,50 @@ Changenog options:
 
 
 test no_repo: ["--overwrite"]
-[33m[changenog][0m no tags found.  exiting...
 
 
 test no_repo: ["--root=./bar/baz"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--output=stdout"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--no-links"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--remote-url=https://www.my-repo.com"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--max-commits=3"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_repo: ["--tag-filter-regex=my-package/.*"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_repo: ["--commit-filter-regex=^(?!.*changelog).*$"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--commit-filter-preset=angular"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_repo: ["--commit-filter-preset=no-changelog"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_repo: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--version"]
@@ -115,51 +114,50 @@ Changenog options:
 
 
 test no_remote_or_tags: ["--overwrite"]
-[33m[changenog][0m no tags found.  exiting...
 
 
 test no_remote_or_tags: ["--root=./bar/baz"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--output=stdout"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--no-links"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--remote-url=https://www.my-repo.com"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--max-commits=3"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_remote_or_tags: ["--tag-filter-regex=my-package/.*"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_remote_or_tags: ["--commit-filter-regex=^(?!.*changelog).*$"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--commit-filter-preset=angular"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote_or_tags: ["--commit-filter-preset=no-changelog"]
-[33m[changenog][0m no tags found.  exiting...
+[33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_remote_or_tags: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test no_remote: ["--version"]
@@ -214,6 +212,9 @@ test no_remote: ["--output=stdout"]
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
+
+## v0.1.0 (REPLACED)
+
 - 1.0.0 (REPLACED)
 - non-angular commit (REPLACED)
 - refactor: refactor code (REPLACED)
@@ -223,6 +224,9 @@ test no_remote: ["--output=stdout"]
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
+
+## v0.0.1 (REPLACED)
+
 - 1.0.0 (REPLACED)
 - non-angular commit (REPLACED)
 - refactor: refactor code (REPLACED)
@@ -246,12 +250,10 @@ test no_remote: ["--remote-url=https://www.my-repo.com"]
 test no_remote: ["--max-commits=3"]
 
 
-test no_remote: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test no_remote: ["--tag-filter-regex=my-package/.*"]
 
 
-test no_remote: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test no_remote: ["--commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test no_remote: ["--commit-filter-preset=angular"]
@@ -263,8 +265,7 @@ test no_remote: ["--commit-filter-preset=angular, --commit-filter-preset=angular
 test no_remote: ["--commit-filter-preset=no-changelog"]
 
 
-test no_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test no_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test with_remote: ["--version"]
@@ -308,7 +309,7 @@ test with_remote: ["--root=./bar/baz"]
 
 
 test with_remote: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -319,6 +320,9 @@ test with_remote: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -328,6 +332,9 @@ test with_remote: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -351,12 +358,10 @@ test with_remote: ["--remote-url=https://www.my-repo.com"]
 test with_remote: ["--max-commits=3"]
 
 
-test with_remote: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test with_remote: ["--tag-filter-regex=my-package/.*"]
 
 
-test with_remote: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test with_remote: ["--commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test with_remote: ["--commit-filter-preset=angular"]
@@ -368,8 +373,7 @@ test with_remote: ["--commit-filter-preset=angular, --commit-filter-preset=angul
 test with_remote: ["--commit-filter-preset=no-changelog"]
 
 
-test with_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test with_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test empty_changelog: ["--version"]
@@ -413,7 +417,7 @@ test empty_changelog: ["--root=./bar/baz"]
 
 
 test empty_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -424,6 +428,9 @@ test empty_changelog: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -433,6 +440,9 @@ test empty_changelog: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -456,12 +466,10 @@ test empty_changelog: ["--remote-url=https://www.my-repo.com"]
 test empty_changelog: ["--max-commits=3"]
 
 
-test empty_changelog: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test empty_changelog: ["--tag-filter-regex=my-package/.*"]
 
 
-test empty_changelog: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test empty_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test empty_changelog: ["--commit-filter-preset=angular"]
@@ -473,8 +481,7 @@ test empty_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=a
 test empty_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test empty_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test empty_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test partial_changelog: ["--version"]
@@ -518,7 +525,7 @@ test partial_changelog: ["--root=./bar/baz"]
 
 
 test partial_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -529,6 +536,9 @@ test partial_changelog: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -538,6 +548,9 @@ test partial_changelog: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -561,12 +574,10 @@ test partial_changelog: ["--remote-url=https://www.my-repo.com"]
 test partial_changelog: ["--max-commits=3"]
 
 
-test partial_changelog: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test partial_changelog: ["--tag-filter-regex=my-package/.*"]
 
 
-test partial_changelog: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test partial_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test partial_changelog: ["--commit-filter-preset=angular"]
@@ -578,8 +589,7 @@ test partial_changelog: ["--commit-filter-preset=angular, --commit-filter-preset
 test partial_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test partial_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test partial_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test full_changelog: ["--version"]
@@ -623,7 +633,7 @@ test full_changelog: ["--root=./bar/baz"]
 
 
 test full_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/tags) (REPLACED)
+## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -634,6 +644,9 @@ test full_changelog: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -643,6 +656,9 @@ test full_changelog: ["--output=stdout"]
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -666,12 +682,10 @@ test full_changelog: ["--remote-url=https://www.my-repo.com"]
 test full_changelog: ["--max-commits=3"]
 
 
-test full_changelog: ["--tag-filter-regex='my-package/.*'"]
-[33m[changenog][0m no tags found.  exiting...
+test full_changelog: ["--tag-filter-regex=my-package/.*"]
 
 
-test full_changelog: ["--commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test full_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test full_changelog: ["--commit-filter-preset=angular"]
@@ -683,7 +697,6 @@ test full_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=an
 test full_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test full_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex='^(?!.*changelog).*$'"]
-[33m[changenog][0m no commits since previous version.  exiting...
+test full_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
