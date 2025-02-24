@@ -1,23 +1,9 @@
-use std::process::Command;
-
-use crate::options::ChangenogOptions;
+use crate::{options::ChangenogOptions, utils::run};
 
 #[derive(Debug)]
 pub struct GitRoot;
 
 impl GitRoot {
-    pub fn get() -> String {
-        let cmd_output = Command::new("git")
-            .args(["rev-parse", "--show-toplevel"])
-            .output()
-            .unwrap();
-
-        String::from_utf8(cmd_output.stdout)
-            .unwrap()
-            .trim()
-            .to_string()
-    }
-
     pub fn get_remote_url(opts: &ChangenogOptions) -> Option<String> {
         if opts.no_links {
             return None;
@@ -33,16 +19,10 @@ impl GitRoot {
             return Some(url);
         }
 
-        let cmd_output = Command::new("git")
-            .args(["config", "--get", "remote.origin.url"])
-            .output();
+        let cmd_output = run("git", &["config", "--get", "remote.origin.url"]);
 
         if let Ok(cmd_output) = cmd_output {
-            let url = String::from_utf8(cmd_output.stdout)
-                .expect("unable to parse stdout")
-                .replace(".git", "")
-                .trim()
-                .to_string();
+            let url = cmd_output.replace(".git", "").trim().to_string();
 
             if !url.is_empty() {
                 return Some(url);

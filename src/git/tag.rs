@@ -1,72 +1,112 @@
-use std::process::Command;
+use fancy_regex::Regex;
 
-use chrono::{DateTime, FixedOffset};
-use fancy_regex::{Captures, Regex};
+use crate::utils::run;
+
+use super::commit::GitCommit;
 
 #[derive(Debug, Clone)]
 pub struct GitTag {
     pub name: String,
     pub date: String,
+    pub target_commit: String,
+    pub commits: Vec<GitCommit>,
+    pub prev_tag: Option<String>,
 }
 
 impl GitTag {
     /// Gets all tags in the repo
-    pub fn get_tags(tag_filters: &[Regex]) -> Vec<Self> {
-        // Log in parsable format
-        let cmd_output = Command::new("git")
-            .args([
-                "tag",
-                "-l",
-                "--sort=-creatordate",
-                "--format=%(creatordate:iso-strict)//%(refname:short)",
-            ])
-            .output()
-            .unwrap();
+    pub fn get_all_since(prev_entry_tag: &Option<String>, tag_filters: &[Regex]) -> Vec<Self> {
+        let raw_tags = Self::get_raw(prev_entry_tag);
 
-        let tags_log = String::from_utf8(cmd_output.stdout).expect("unable to parse stdout");
-        let tag_regex = Regex::new(r"(?<date>.+?)\/\/(?<name>.+)").unwrap();
+        let mut prev_tag = prev_entry_tag.clone();
 
-        tags_log
-            .lines()
+        let mut tags = raw_tags
+            .iter()
             .filter_map(|t| {
-                if t == "" {
+                let tag_parts: Vec<&str> = t.split("////").collect();
+
+                let (tag_name, tag_date, object, objectname) = (
+                    tag_parts[0].to_string(),
+                    tag_parts[1].to_string(),
+                    tag_parts[2].to_string(),
+                    tag_parts[3].to_string(),
+                );
+
+                if tag_filters.iter().any(|r| !r.is_match(&tag_name).unwrap()) {
                     return None;
                 }
 
-                let raw_tag = tag_regex.captures(t).unwrap().unwrap();
-                let tag = Self::from(raw_tag);
+                // `object`: target commit if tag is annotated
+                // `objectname`: target commit if tag is lightweight
+                let target_commit = if object.is_empty() {
+                    objectname
+                } else {
+                    object
+                };
 
-                if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
-                    return None;
-                }
+                let tag = Self {
+                    name: tag_name.clone(),
+                    date: tag_date,
+                    target_commit,
+                    commits: vec![],
+                    prev_tag: prev_tag.clone(),
+                };
+
+                prev_tag = Some(tag_name);
 
                 Some(tag)
             })
-            .collect()
+            .collect::<Vec<Self>>();
+
+        tags.reverse(); // Newest to oldest
+
+        tags
     }
 
-    /// Gets tags since the previous entry
-    pub fn get_tags_since(
-        all_tags: &[Self],
-        prev_entry_date: Option<DateTime<FixedOffset>>,
-    ) -> Vec<Self> {
-        all_tags
+    /// Returns raw tags since previous entry in a parsable format
+    fn get_raw(prev_entry_tag: &Option<String>) -> Vec<String> {
+        // Tags since and including `prev_entry_tag`
+        let no_merged_arg = if prev_entry_tag.is_some() {
+            &format!("--no-merged={}", prev_entry_tag.clone().unwrap())
+        } else {
+            ""
+        };
+
+        let tag_args = vec![
+            "tag",
+            no_merged_arg,
+            "--sort=creatordate",
+            // `%(object)`: target commit if tag is annotated
+            // `%(objectname)`: target commit if tag is lightweight
+            "--format=%(refname:short)////%(creatordate:iso-strict)////%(object)////%(objectname)",
+        ];
+
+        run("git", &tag_args)
+            .unwrap()
+            .lines()
+            .map(|l| l.to_string())
+            .collect::<Vec<String>>()
+    }
+
+    /// Populates each tag's `commit` field with the relevant commits.
+    /// `tags` and `commits` must be sorted newest to oldest.
+    pub fn populate_commits(tags: &mut [GitTag], commits: &[GitCommit]) {
+        // Skip any untagged commits
+        let skip_i = commits
             .iter()
-            .filter(|t| {
-                prev_entry_date.is_none()
-                    || DateTime::parse_from_rfc3339(&t.date).unwrap() > prev_entry_date.unwrap()
-            })
-            .rev() // Oldest to newest
-            .cloned()
-            .collect()
-    }
-}
+            .position(|c| c.hash == tags[0].target_commit)
+            .unwrap();
 
-impl From<Captures<'_>> for GitTag {
-    fn from(captures: Captures) -> Self {
-        Self {
-            name: captures.name("name").unwrap().as_str().to_string(),
-            date: captures.name("date").unwrap().as_str().to_string(),
+        let mut tag_i = 0;
+
+        for c in commits.iter().skip(skip_i) {
+            let next_tag = tags.get(tag_i + 1);
+
+            if next_tag.is_some() && c.hash == next_tag.unwrap().target_commit {
+                tag_i += 1;
+            }
+
+            tags[tag_i].commits.push(c.clone());
         }
     }
 }
