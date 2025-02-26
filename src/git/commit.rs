@@ -9,7 +9,7 @@ pub struct GitCommit {
 impl GitCommit {
     /// Gets all commits since `prev_entry_tag`
     pub fn get_all_since(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<Self> {
-        let raw_commits = Self::get_raw(opts, prev_entry_tag);
+        let raw_commits = Self::get_raw(prev_entry_tag, opts);
 
         raw_commits
             .iter()
@@ -31,7 +31,7 @@ impl GitCommit {
     }
 
     /// Returns raw commits since previous entry in a parsable format
-    fn get_raw(opts: &ChangenogOptions, prev_entry_tag: &Option<String>) -> Vec<String> {
+    fn get_raw(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<String> {
         let max_commits_arg = format!("--max-count={}", opts.max_commits.to_string());
 
         let since_arg = if prev_entry_tag.is_some() {
