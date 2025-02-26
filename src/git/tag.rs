@@ -23,36 +23,13 @@ impl GitTag {
         let mut tags = raw_tags
             .iter()
             .filter_map(|t| {
-                let tag_parts: Vec<&str> = t.split("////").collect();
+                let tag = Self::from_raw(t, &prev_tag);
 
-                let (tag_name, tag_date, object, objectname) = (
-                    tag_parts[0].to_string(),
-                    tag_parts[1].to_string(),
-                    tag_parts[2].to_string(),
-                    tag_parts[3].to_string(),
-                );
-
-                if tag_filters.iter().any(|r| !r.is_match(&tag_name).unwrap()) {
+                if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
                     return None;
                 }
 
-                // `object`: target commit if tag is annotated
-                // `objectname`: target commit if tag is lightweight
-                let target_commit = if object.is_empty() {
-                    objectname
-                } else {
-                    object
-                };
-
-                let tag = Self {
-                    name: tag_name.clone(),
-                    date: tag_date,
-                    target_commit,
-                    commits: vec![],
-                    prev_tag: prev_tag.clone(),
-                };
-
-                prev_tag = Some(tag_name);
+                prev_tag = Some(tag.name.clone());
 
                 Some(tag)
             })
@@ -61,6 +38,28 @@ impl GitTag {
         tags.reverse(); // Newest to oldest
 
         tags
+    }
+
+    /// Populates each tag's `commit` field with the relevant commits.
+    /// `tags` and `commits` must be sorted newest to oldest.
+    pub fn populate_commits(tags: &mut [GitTag], commits: &[GitCommit]) {
+        // Skip any untagged commits
+        let skip_i = commits
+            .iter()
+            .position(|c| c.hash == tags[0].target_commit)
+            .unwrap();
+
+        let mut tag_i = 0;
+
+        for c in commits.iter().skip(skip_i) {
+            let next_tag = tags.get(tag_i + 1);
+
+            if next_tag.is_some() && c.hash == next_tag.unwrap().target_commit {
+                tag_i += 1;
+            }
+
+            tags[tag_i].commits.push(c.clone());
+        }
     }
 
     /// Returns raw tags since previous entry in a parsable format
@@ -88,25 +87,31 @@ impl GitTag {
             .collect::<Vec<String>>()
     }
 
-    /// Populates each tag's `commit` field with the relevant commits.
-    /// `tags` and `commits` must be sorted newest to oldest.
-    pub fn populate_commits(tags: &mut [GitTag], commits: &[GitCommit]) {
-        // Skip any untagged commits
-        let skip_i = commits
-            .iter()
-            .position(|c| c.hash == tags[0].target_commit)
-            .unwrap();
+    /// Parses raw tag into GitTag
+    fn from_raw(raw_tag: &str, prev_tag: &Option<String>) -> Self {
+        let tag_parts: Vec<&str> = raw_tag.split("////").collect();
 
-        let mut tag_i = 0;
+        let (tag_name, tag_date, object, objectname) = (
+            tag_parts[0].to_string(),
+            tag_parts[1].to_string(),
+            tag_parts[2].to_string(),
+            tag_parts[3].to_string(),
+        );
 
-        for c in commits.iter().skip(skip_i) {
-            let next_tag = tags.get(tag_i + 1);
+        // `object`: target commit if tag is annotated
+        // `objectname`: target commit if tag is lightweight
+        let target_commit = if object.is_empty() {
+            objectname
+        } else {
+            object
+        };
 
-            if next_tag.is_some() && c.hash == next_tag.unwrap().target_commit {
-                tag_i += 1;
-            }
-
-            tags[tag_i].commits.push(c.clone());
+        Self {
+            name: tag_name.clone(),
+            date: tag_date,
+            target_commit,
+            commits: vec![],
+            prev_tag: prev_tag.clone(),
         }
     }
 }
