@@ -14,7 +14,7 @@ impl GitCommit {
         raw_commits
             .iter()
             .filter_map(|c| {
-                let parsed_commit = Self::from_pretty(c);
+                let parsed_commit = Self::from_raw(c);
 
                 // Apply CLI arg filters
                 if opts
@@ -58,8 +58,8 @@ impl GitCommit {
     }
 
     /// Parses raw commit into GitCommit
-    fn from_pretty(commit_str: &str) -> Self {
-        let parts = commit_str.split("////").collect::<Vec<&str>>();
+    fn from_raw(raw_commit: &str) -> Self {
+        let parts = raw_commit.split("////").collect::<Vec<&str>>();
 
         Self {
             hash: parts[0].to_string(),
