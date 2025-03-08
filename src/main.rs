@@ -9,12 +9,14 @@ use changelog::Changelog;
 use git::{commit::GitCommit, root::GitRoot, tag::GitTag};
 use log::log_exit;
 use options::ChangenogOptions;
+use release::ReleaseCollection;
 
 mod changelog;
 mod constant;
 mod git;
 mod log;
 mod options;
+mod release;
 mod utils;
 
 fn main() {
@@ -46,18 +48,18 @@ fn main() {
 
     let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog);
     let commits_since = GitCommit::get_all_since(&prev_entry_tag, &opts);
-    let mut tags_since = GitTag::get_all_since(&prev_entry_tag, &opts.tag_filters);
+    let tags_since = GitTag::get_all_since(&prev_entry_tag, &opts.tag_filters);
+    let releases = ReleaseCollection::from_tags(&tags_since).populate_commits(&commits_since);
 
-    if !opts.overwrite && (tags_since.is_empty() || commits_since.is_empty()) {
+    if !opts.overwrite && releases.0.is_empty() {
         log_exit("no new version(s)");
 
         process::exit(0)
     }
 
-    GitTag::populate_commits(&mut tags_since, &commits_since);
-
     let remote_url = GitRoot::get_remote_url(&opts);
-    let new_changelog = Changelog::generate(&tags_since, existing_changelog, remote_url);
+    let new_changelog =
+        Changelog::generate(&releases, existing_changelog, remote_url, prev_entry_tag);
 
     if opts.output == "file" {
         fs::write(output_path, new_changelog).expect("unable to write changelog");

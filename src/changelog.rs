@@ -1,28 +1,40 @@
 use chrono::DateTime;
 use fancy_regex::Regex;
 
-use crate::git::tag::GitTag;
+use crate::release::ReleaseCollection;
 
 pub struct Changelog;
 
 impl Changelog {
     /// Generates the new changelog
     pub fn generate(
-        tags_since: &[GitTag],
+        entries: &ReleaseCollection,
         existing_changelog: &str,
         remote_url: Option<String>,
+        prev_tag: Option<String>,
     ) -> String {
         let mut new_changelog = String::new();
 
-        tags_since.iter().for_each(|tag| {
-            if tag.commits.is_empty() {
+        entries.0.iter().enumerate().for_each(|(i, entry)| {
+            if entry.commits.is_empty() {
                 return;
             }
 
+            let prev_entry = entries.0.get(i + 1);
+            let prev_tag = if prev_entry.is_some() {
+                Some(prev_entry.unwrap().tags[0].name.clone())
+            } else if prev_tag.is_some() {
+                prev_tag.clone()
+            } else {
+                None
+            };
+
             // Format compare URL
-            let compare_url = match (&remote_url, tag.prev_tag.clone()) {
+            let compare_url = match (&remote_url, prev_tag) {
                 (Some(remote_url), Some(prev_tag)) => {
-                    let url = format!("{}/compare/{}...{}", remote_url, prev_tag, tag.name);
+                    // Use first tag from both entries
+                    let curr_tag = entry.tags[0].name.clone();
+                    let url = format!("{}/compare/{}...{}", remote_url, prev_tag, curr_tag);
 
                     Some(url)
                 }
@@ -34,22 +46,30 @@ impl Changelog {
                 _ => None,
             };
 
-            // Format version heading
-            let tag_date = DateTime::parse_from_rfc3339(&tag.date).unwrap();
+            // Format release heading
+            let tag_date = DateTime::parse_from_rfc3339(&entry.date).unwrap();
             let formatted_date = tag_date.format("%d/%m/%Y");
-            let version_heading = if compare_url.is_some() {
+
+            let joined_tags = entry
+                .tags
+                .iter()
+                .map(|t| t.name.clone())
+                .collect::<Vec<String>>()
+                .join(", ");
+
+            let release_heading = if compare_url.is_some() {
                 format!(
                     "## [{}]({}) ({})",
-                    tag.name,
+                    joined_tags,
                     compare_url.unwrap(),
                     formatted_date
                 )
             } else {
-                format!("## {} ({})", tag.name, formatted_date)
+                format!("## {} ({})", joined_tags, formatted_date)
             };
 
             // Format commits
-            let formatted_commits = tag
+            let formatted_commits = entry
                 .commits
                 .iter()
                 .map(|c| {
@@ -69,7 +89,7 @@ impl Changelog {
 
             new_changelog = format!(
                 "{}\n\n{}\n\n{}",
-                new_changelog, version_heading, formatted_commits
+                new_changelog, release_heading, formatted_commits
             );
         });
 

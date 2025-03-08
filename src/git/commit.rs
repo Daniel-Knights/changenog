@@ -7,7 +7,7 @@ pub struct GitCommit {
 }
 
 impl GitCommit {
-    /// Gets all commits since `prev_entry_tag`
+    /// Gets all commits since the previous entry
     pub fn get_all_since(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<Self> {
         let raw_commits = Self::get_raw(prev_entry_tag, opts);
 
