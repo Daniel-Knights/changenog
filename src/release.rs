@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::git::{commit::GitCommit, tag::GitTag};
 
 //// Structs
@@ -18,7 +16,7 @@ pub struct ReleaseCollection(pub Vec<ReleaseEntry>);
 //// Implementations
 
 impl ReleaseEntry {
-    pub fn from_tags(tags: &[GitTag]) -> Self {
+    fn from_tags(tags: &[GitTag]) -> Self {
         Self {
             tags: tags.to_vec(),
             date: tags[0].date.clone(),
@@ -30,30 +28,22 @@ impl ReleaseEntry {
 
 impl ReleaseCollection {
     pub fn from_tags(tags: &[GitTag]) -> Self {
-        let mut target_commit_map: HashMap<String, Vec<GitTag>> = HashMap::new();
-
-        tags.iter().for_each(|t| {
-            let target_commit_val = target_commit_map
-                .entry(t.target_commit.clone())
-                .or_insert_with(Vec::new);
-
-            target_commit_val.push(t.clone());
-        });
-
-        let releases = target_commit_map
-            .iter()
-            .map(|(_, v)| ReleaseEntry::from_tags(v))
+        let collection: Vec<ReleaseEntry> = tags
+            .chunk_by(|a, b| a.target_commit == b.target_commit)
+            .map(|g| ReleaseEntry::from_tags(g))
             .collect();
 
-        ReleaseCollection(releases)
+        ReleaseCollection(collection)
     }
 
-    /// Populates each entry's `commit` field with the relevant commits.
-    /// `entries` and `commits` must be sorted newest to oldest.
+    /// Populates each entry's `commits` field with the relevant commits.
+    /// Entries and commits must be sorted newest to oldest.
     /// Entries without commits are filtered out.
     pub fn populate_commits(&self, commits: &[GitCommit]) -> Self {
+        let mut new_self = self.clone();
+
         if self.0.is_empty() || commits.is_empty() {
-            return self.clone();
+            return new_self;
         }
 
         // Skip any untagged commits
@@ -62,19 +52,16 @@ impl ReleaseCollection {
             .position(|c| c.hash == self.0[0].target_commit)
             .unwrap_or(0);
 
-        let mut new_self = self.clone();
         let mut entry_i = 0;
 
         for c in commits.iter().skip(skip_i) {
             let next_entry = self.0.get(entry_i + 1);
 
-            if c.hash == new_self.0[entry_i].target_commit {
-                new_self.0[entry_i].commits.push(c.clone());
-            } else if next_entry.is_some() && c.hash == next_entry.unwrap().target_commit {
+            if next_entry.is_some_and(|e| c.hash == e.target_commit) {
                 entry_i += 1;
-            } else {
-                new_self.0[entry_i].commits.push(c.clone());
             }
+
+            new_self.0[entry_i].commits.push(c.clone());
         }
 
         new_self.0.retain(|r| !r.commits.is_empty());
