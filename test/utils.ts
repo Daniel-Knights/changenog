@@ -2,6 +2,8 @@ import { spawnSync, SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
+import { GitManager } from "./git.js";
+
 export function run(
   cmd: string,
   args: string[],
@@ -17,8 +19,8 @@ export async function commit(dir: "foo" | "bar" | "bar/baz", commits: string[]) 
   for (const msg of commits) {
     await fs.promises.appendFile(`test/repo/${dir}/main.txt`, msg);
 
-    run("git", ["add", "-A"]);
-    run("git", ["commit", "-m", msg]);
+    GitManager.add();
+    GitManager.commit(msg);
   }
 }
 

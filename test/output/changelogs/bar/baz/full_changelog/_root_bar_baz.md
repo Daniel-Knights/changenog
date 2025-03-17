@@ -1,4 +1,4 @@
-## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))

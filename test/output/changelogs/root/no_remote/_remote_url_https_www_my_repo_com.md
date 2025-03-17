@@ -1,4 +1,4 @@
-## [v1.0.0](https://www.my-repo.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [v1.0.0, my-package/v1.0.0](https://www.my-repo.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-repo.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-repo.com/commit/REPLACED))
@@ -22,7 +22,7 @@
 - feat: add feature ([REPLACED](https://www.my-repo.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-repo.com/commit/REPLACED))
 
-## [v0.0.1](https://www.my-repo.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+## [v0.0.1](https://www.my-repo.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-repo.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-repo.com/commit/REPLACED))

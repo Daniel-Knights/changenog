@@ -1,6 +1,9 @@
 import fs from "node:fs";
 
-import { commit, run, suite } from "./utils.js";
+import { GitManager } from "./git.js";
+import { commit, suite } from "./utils.js";
+
+const startTimestamp = Date.now();
 
 const tests = [
   ["--version"],
@@ -38,7 +41,7 @@ await fs.promises.mkdir("test/repo/foo");
 await fs.promises.mkdir("test/repo/bar");
 await fs.promises.mkdir("test/repo/bar/baz");
 
-run("git", ["init"]);
+GitManager.init();
 
 // Run without remote, tags, or commits
 await suite("no_repo", tests);
@@ -65,22 +68,22 @@ const mockCommits = [
 
 await commit("foo", mockCommits);
 
-run("git", ["tag", "v0.0.1"]);
+GitManager.tag("v0.0.1");
 
 await commit("bar", mockCommits);
 
-run("git", ["tag", "v0.1.0"]);
+GitManager.tag("v0.1.0");
 
 await commit("bar/baz", mockCommits);
 
-run("git", ["tag", "my-package/v1.0.0"]);
-run("git", ["tag", "v1.0.0"]);
+GitManager.tag("my-package/v1.0.0");
+GitManager.tag("v1.0.0");
 
 // Run without remote
 await suite("no_remote", tests);
 
 // Run with remote
-run("git", ["config", "remote.origin.url", "https://www.my-remote.com"]);
+GitManager.setRemote("https://www.my-remote.com");
 
 await suite("with_remote", tests);
 
@@ -98,3 +101,5 @@ await suite("full_changelog", tests);
 
 // Cleanup
 await fs.promises.rm("test/repo", { recursive: true });
+
+console.log(`Tests completed in ${Date.now() - startTimestamp}ms`);

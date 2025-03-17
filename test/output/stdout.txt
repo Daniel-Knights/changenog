@@ -201,7 +201,7 @@ test no_remote: ["--root=./bar/baz"]
 
 
 test no_remote: ["--output=stdout"]
-## v1.0.0 (REPLACED)
+## v1.0.0, my-package/v1.0.0 (REPLACED)
 
 - 1.0.0 (REPLACED)
 - non-angular commit (REPLACED)
@@ -309,7 +309,7 @@ test with_remote: ["--root=./bar/baz"]
 
 
 test with_remote: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -333,7 +333,7 @@ test with_remote: ["--output=stdout"]
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
-## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -417,7 +417,7 @@ test empty_changelog: ["--root=./bar/baz"]
 
 
 test empty_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -441,7 +441,7 @@ test empty_changelog: ["--output=stdout"]
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
-## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -525,7 +525,7 @@ test partial_changelog: ["--root=./bar/baz"]
 
 
 test partial_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -549,7 +549,7 @@ test partial_changelog: ["--output=stdout"]
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
-## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -633,7 +633,7 @@ test full_changelog: ["--root=./bar/baz"]
 
 
 test full_changelog: ["--output=stdout"]
-## [v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -657,7 +657,7 @@ test full_changelog: ["--output=stdout"]
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
-## [v0.0.1](https://www.my-remote.com/compare/my-package/v1.0.0...v0.0.1) (REPLACED)
+## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
