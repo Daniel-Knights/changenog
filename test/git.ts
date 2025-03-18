@@ -1,18 +1,18 @@
 import { run } from "./utils.js";
 
 /**
- * Git operations manager with synchronization and verification
+ * Git operations manager
  */
 export class GitManager {
   /**
-   * Initialize a new Git repository
+   * Initializes a new Git repository
    */
   static init() {
     this.#executeGitCommand(["init"]);
   }
 
   /**
-   * Add files to git staging
+   * Adds files to git staging
    */
   static add() {
     this.#executeGitCommand(["add", "-A"]);
@@ -20,7 +20,7 @@ export class GitManager {
   }
 
   /**
-   * Create a commit with synchronization and verification
+   * Commits staged files
    * @param message - Commit message
    */
   static commit(message: string) {
@@ -29,7 +29,7 @@ export class GitManager {
   }
 
   /**
-   * Create a tag with synchronization and verification
+   * Creates a new tag
    * @param tagName - Name of the tag
    */
   static tag(tagName: string) {
@@ -38,7 +38,7 @@ export class GitManager {
   }
 
   /**
-   * Set the remote URL for the repository
+   * Sets the remote URL for the repo
    * @param url - Remote URL
    */
   static setRemote(url: string) {
@@ -63,9 +63,9 @@ export class GitManager {
   }
 
   /**
-   * Ensure synchronization between operations
+   * Ensures Git has completed any filesystem operations before continuing
    */
   static #sync() {
-    this.#executeGitCommand(["fsck", "--full"]);
+    this.#executeGitCommand(["fsck"]);
   }
 }
