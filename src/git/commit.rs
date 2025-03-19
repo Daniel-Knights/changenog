@@ -1,3 +1,5 @@
+use fancy_regex::Regex;
+
 use crate::{options::ChangenogOptions, utils::run};
 
 #[derive(Debug, Clone)]
@@ -9,26 +11,32 @@ pub struct GitCommit {
 impl GitCommit {
     /// Gets all commits since the previous entry
     pub fn get_all_since(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<Self> {
-        let raw_commits = Self::get_raw(prev_entry_tag, opts);
-
-        raw_commits
+        Self::get_raw(prev_entry_tag, opts)
             .iter()
-            .filter_map(|c| {
-                let parsed_commit = Self::from_raw(c);
-
-                // Apply CLI arg filters
-                if opts
-                    .commit_filters
-                    .iter()
-                    .any(|f| !f.is_match(&parsed_commit.subject).unwrap())
-                {
-                    return None;
-                }
-
-                Some(parsed_commit)
-            })
+            .map(|c| Self::from_raw(c))
             .collect()
     }
+
+    /// Applies each filter in `commit_filters` to each commit in `commits` and returns the result.
+    /// All filters must match for a commit to be included.
+    pub fn apply_filters(commits: &[GitCommit], commit_filters: &[Regex]) -> Vec<GitCommit> {
+        commits
+            .iter()
+            .filter_map(|c| {
+                let all_filters_matched = commit_filters
+                    .iter()
+                    .all(|f| f.is_match(&c.subject).unwrap());
+
+                if all_filters_matched {
+                    Some(c.clone())
+                } else {
+                    None
+                }
+            })
+            .collect::<Vec<GitCommit>>()
+    }
+
+    //// Private
 
     /// Returns raw commits since previous entry in a parsable format
     fn get_raw(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<String> {

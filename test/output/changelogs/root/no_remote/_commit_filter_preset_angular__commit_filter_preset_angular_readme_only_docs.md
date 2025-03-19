@@ -4,10 +4,16 @@
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
+
+## v0.1.0 (REPLACED)
+
 - feat(scope): add another feature (REPLACED)
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
+
+## v0.0.1 (REPLACED)
+
 - feat(scope): add another feature (REPLACED)
 - fix: fix bug (REPLACED)
 - feat: add feature (REPLACED)

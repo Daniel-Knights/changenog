@@ -11,22 +11,30 @@ pub struct GitTag {
 
 impl GitTag {
     /// Gets all tags since the previous entry
-    pub fn get_all_since(prev_entry_tag: &Option<String>, tag_filters: &[Regex]) -> Vec<Self> {
-        let raw_tags = Self::get_raw(prev_entry_tag);
-
-        raw_tags
+    pub fn get_all_since(prev_entry_tag: &Option<String>) -> Vec<Self> {
+        Self::get_raw(prev_entry_tag)
             .iter()
-            .filter_map(|t| {
-                let tag = Self::from_raw(t);
-
-                if tag_filters.iter().any(|r| !r.is_match(&tag.name).unwrap()) {
-                    return None;
-                }
-
-                Some(tag)
-            })
+            .map(|t| Self::from_raw(t))
             .collect::<Vec<Self>>()
     }
+
+    /// Applies each filter in `tag_filters` to each tag in `tags` and returns the result.
+    /// All filters must match for a tag to be included.
+    pub fn apply_filters(tags: &[GitTag], tag_filters: &[Regex]) -> Vec<GitTag> {
+        tags.iter()
+            .filter_map(|t| {
+                let all_filters_matched = tag_filters.iter().all(|r| r.is_match(&t.name).unwrap());
+
+                if all_filters_matched {
+                    Some(t.clone())
+                } else {
+                    None
+                }
+            })
+            .collect::<Vec<GitTag>>()
+    }
+
+    //// Private
 
     /// Returns raw tags since previous entry in a parsable format
     fn get_raw(prev_entry_tag: &Option<String>) -> Vec<String> {
