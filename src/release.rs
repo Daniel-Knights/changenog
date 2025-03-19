@@ -1,3 +1,5 @@
+use fancy_regex::Regex;
+
 use crate::git::{commit::GitCommit, tag::GitTag};
 
 //// Structs
@@ -67,5 +69,42 @@ impl ReleaseCollection {
         new_self.0.retain(|r| !r.commits.is_empty());
 
         new_self
+    }
+
+    /// Applies all tag and commit filters to each entry.
+    /// If tags or commits are empty after filtering, the entry itself is also excluded.
+    pub fn apply_filters(&self, tag_filters: &[Regex], commit_filters: &[Regex]) -> Self {
+        let mut filtered_entries = self.0.clone();
+        let mut removed_count = 0;
+
+        self.0.iter().enumerate().for_each(|(i, e)| {
+            let adjusted_i = i - removed_count;
+            let filtered_entry = &mut filtered_entries[adjusted_i];
+
+            filtered_entry.commits = GitCommit::apply_filters(&e.commits, commit_filters);
+
+            if filtered_entry.commits.is_empty() {
+                filtered_entries.remove(adjusted_i);
+                removed_count += 1;
+
+                return;
+            }
+
+            filtered_entry.tags = GitTag::apply_filters(&e.tags, tag_filters);
+
+            if filtered_entry.tags.is_empty() {
+                // Move all commits to newer entry
+                if let Some(prev_entry) = filtered_entries.get_mut(adjusted_i - 1) {
+                    prev_entry.commits.extend(e.commits.clone());
+                }
+
+                filtered_entries.remove(adjusted_i);
+                removed_count += 1;
+
+                return;
+            }
+        });
+
+        ReleaseCollection(filtered_entries)
     }
 }

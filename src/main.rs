@@ -48,8 +48,11 @@ fn main() {
 
     let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog);
     let commits_since = GitCommit::get_all_since(&prev_entry_tag, &opts);
-    let tags_since = GitTag::get_all_since(&prev_entry_tag, &opts.tag_filters);
-    let releases = ReleaseCollection::from_tags(&tags_since).populate_commits(&commits_since);
+    let tags_since = GitTag::get_all_since(&prev_entry_tag);
+
+    let releases = ReleaseCollection::from_tags(&tags_since)
+        .populate_commits(&commits_since)
+        .apply_filters(&opts.tag_filters, &opts.commit_filters);
 
     if !opts.overwrite && releases.0.is_empty() {
         log_exit("no new version(s)");
