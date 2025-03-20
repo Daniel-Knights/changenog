@@ -73,37 +73,37 @@ impl ReleaseCollection {
 
     /// Applies all tag and commit filters to each entry.
     /// If tags or commits are empty after filtering, the entry itself is also excluded.
+    /// Entries must be sorted newest to oldest.
     pub fn apply_filters(&self, tag_filters: &[Regex], commit_filters: &[Regex]) -> Self {
-        let mut filtered_entries = self.0.clone();
-        let mut removed_count = 0;
+        let mut filtered_entries: Vec<ReleaseEntry> = Vec::with_capacity(self.0.len());
 
-        self.0.iter().enumerate().for_each(|(i, e)| {
-            let adjusted_i = i - removed_count;
-            let filtered_entry = &mut filtered_entries[adjusted_i];
+        for entry in &self.0 {
+            let filtered_commits = GitCommit::apply_filters(&entry.commits, commit_filters);
 
-            filtered_entry.commits = GitCommit::apply_filters(&e.commits, commit_filters);
-
-            if filtered_entry.commits.is_empty() {
-                filtered_entries.remove(adjusted_i);
-                removed_count += 1;
-
-                return;
+            if filtered_commits.is_empty() {
+                continue;
             }
 
-            filtered_entry.tags = GitTag::apply_filters(&e.tags, tag_filters);
+            let filtered_tags = GitTag::apply_filters(&entry.tags, tag_filters);
 
-            if filtered_entry.tags.is_empty() {
-                // Move all commits to newer entry
-                if let Some(prev_entry) = filtered_entries.get_mut(adjusted_i - 1) {
-                    prev_entry.commits.extend(e.commits.clone());
+            if filtered_tags.is_empty() {
+                // If no tags remain, merge commits with the next newest entry (actually the
+                // previous entry in this loop since they're ordered newest to oldest)
+                if let Some(prev_entry) = filtered_entries.last_mut() {
+                    prev_entry.commits.extend(filtered_commits);
                 }
 
-                filtered_entries.remove(adjusted_i);
-                removed_count += 1;
-
-                return;
+                continue;
             }
-        });
+
+            let filtered_entry = ReleaseEntry {
+                commits: filtered_commits,
+                tags: filtered_tags,
+                ..entry.clone()
+            };
+
+            filtered_entries.push(filtered_entry);
+        }
 
         ReleaseCollection(filtered_entries)
     }
