@@ -1,7 +1,7 @@
 import fs from "node:fs";
 
 import { GitManager } from "./git.js";
-import { commit, suite } from "./utils.js";
+import { commitAll, suite } from "./utils.js";
 
 const startTimestamp = Date.now();
 
@@ -47,9 +47,9 @@ GitManager.init();
 await suite("no_repo", tests);
 
 // Run without remote or tags
-await commit("foo", ["feat: add foo"]);
-await commit("bar", ["feat: add bar"]);
-await commit("bar/baz", ["feat: add baz"]);
+await commitAll("foo", ["feat: add foo"]);
+await commitAll("bar", ["feat: add bar"]);
+await commitAll("bar/baz", ["feat: add baz"]);
 
 await suite("no_remote_or_tags", tests);
 
@@ -66,15 +66,15 @@ const mockCommits = [
   "1.0.0",
 ];
 
-await commit("foo", mockCommits);
+await commitAll("foo", mockCommits);
 
 GitManager.tag("v0.0.1");
 
-await commit("bar", mockCommits);
+await commitAll("bar", mockCommits);
 
 GitManager.tag("v0.1.0");
 
-await commit("bar/baz", mockCommits);
+await commitAll("bar/baz", mockCommits);
 
 GitManager.tag("my-package/v1.0.0");
 GitManager.tag("v1.0.0");
@@ -92,12 +92,10 @@ await fs.promises.writeFile("test/repo/CHANGELOG.md", "");
 await suite("empty_changelog", tests);
 
 // Run with partial changelog
-await fs.promises.copyFile("test/changelogs/PARTIAL.md", "test/repo/CHANGELOG.md");
-await suite("partial_changelog", tests);
+await suite("partial_changelog", tests, "PARTIAL");
 
 // Run with full changelog
-await fs.promises.copyFile("test/changelogs/FULL.md", "test/repo/CHANGELOG.md");
-await suite("full_changelog", tests);
+await suite("full_changelog", tests, "FULL");
 
 // Cleanup
 await fs.promises.rm("test/repo", { recursive: true });

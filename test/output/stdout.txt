@@ -537,32 +537,17 @@ test partial_changelog: ["--output=stdout"]
 - feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
-## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
+## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
 
-- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit2 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit3 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 ## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
 
-- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add baz ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add bar ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit2 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit3 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 
 test partial_changelog: ["--no-links"]
@@ -633,70 +618,42 @@ test full_changelog: ["--root=./bar/baz"]
 
 
 test full_changelog: ["--output=stdout"]
-## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
-
-- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-
-## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
-
-- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-
-## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
-
-- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add baz ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add bar ([REPLACED](https://www.my-remote.com/commit/REPLACED))
-- feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--no-links"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--remote-url=https://www.my-repo.com"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--max-commits=3"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--tag-filter-regex=my-package/.*"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--commit-filter-preset=angular"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--commit-filter-preset=no-changelog"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
 test full_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+[33m[changenog][0m no new version(s).  exiting...
 
 
