@@ -64,6 +64,12 @@ fn main() {
     let new_changelog =
         Changelog::generate(&releases, existing_changelog, remote_url, prev_entry_tag);
 
+    if new_changelog.trim().is_empty() {
+        log_exit("no entries generated");
+
+        process::exit(0)
+    }
+
     if opts.output == "file" {
         fs::write(output_path, new_changelog).expect("unable to write changelog");
     } else if opts.output == "stdout" {
