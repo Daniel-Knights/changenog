@@ -98,6 +98,6 @@ my commit message
 
 ## Monorepo Support
 
-When run inside a subdirectory, `changenog` will find the nearest parent that's a git repository, and filter commits to only include those that have changes within the subdirectory.
+If the git root is in a parent directory, `changenog` will filter commits to only include those that have changes within the subdirectory.
 
-To include only the _tags_ that apply to that subdirectory, you can provide a `--tag-filter-regex` option, e.g. `--tag-filter-regex='my-package/.*'`.
+To include only the _tags_ that apply to that subdirectory, you can provide a `--tag-filter-regex` option, e.g. `--tag-filter-regex='my-package/.*'`. This is assuming you have a convention for tagging that scopes to that subdirectory.
