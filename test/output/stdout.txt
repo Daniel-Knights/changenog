@@ -33,6 +33,7 @@ Changenog options:
 
 
 test no_repo: ["--overwrite"]
+[33m[changenog][0m no entries generated.  exiting...
 
 
 test no_repo: ["--root=./bar/baz"]
@@ -114,6 +115,7 @@ Changenog options:
 
 
 test no_remote_or_tags: ["--overwrite"]
+[33m[changenog][0m no entries generated.  exiting...
 
 
 test no_remote_or_tags: ["--root=./bar/baz"]
