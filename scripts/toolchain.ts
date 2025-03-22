@@ -39,9 +39,9 @@ const newTargets = targets
 const workflow = fs.readFileSync(".github/workflows/release.yml", "utf-8");
 
 const newWorkflow = workflow
-  .replaceAll(/ {10}- target: .*\n/g, "")
-  .replaceAll(/ {12}os: .*\n/g, "")
-  .replace(/include:\n/, `include:\n${newTargets}`);
+  .replaceAll(/ {10}- target: .*(\n|\r\n)/g, "")
+  .replaceAll(/ {12}os: .*(\n|\r\n)/g, "")
+  .replace(/include:(\n|\r\n)/, `include:\n${newTargets}`);
 
 fs.writeFileSync(".github/workflows/release.yml", newWorkflow);
 

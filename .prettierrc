@@ -6,7 +6,7 @@
   "singleQuote": false,
   "trailingComma": "all",
   "arrowParens": "always",
-  
+
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": ["^@/", "^\\.\\./", "^\\./"],
   "importOrderSeparation": true,

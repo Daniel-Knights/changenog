@@ -124,6 +124,6 @@ function replaceDynamicValues(content: string) {
         return acc.replace(shaRegex, "REPLACED");
       }, content)
       // Replace no-link shas and dates
-      .replace(/\([^\)]+\)(?=\n)/g, "(REPLACED)")
+      .replace(/\([^\)]+\)(?=\n|\r\n)/g, "(REPLACED)")
   );
 }
