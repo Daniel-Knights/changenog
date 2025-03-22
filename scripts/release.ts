@@ -1,5 +1,6 @@
 import { spawnSync, SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
+import readline from "node:readline";
 
 const args = process.argv.slice(2);
 
@@ -29,6 +30,23 @@ fs.writeFileSync(
 
 run("git", ["tag", newTag]);
 run("just", ["changenog"]);
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+console.log("Review changes then press enter to continue...");
+
+await new Promise((res) => {
+  rl.on("line", () => {
+    rl.close();
+
+    // @ts-expect-error - JSDoc typing for this looks gross
+    res();
+  });
+});
+
 run("git", ["add", "."]);
 run("git", ["commit", "-m", `chore(release): ${newTag}`]);
 run("git", ["push"]);
