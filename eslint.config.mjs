@@ -42,7 +42,7 @@ export default typescriptEslint.config(
     rules: {
       "linebreak-style": ["error", process.platform === "win32" ? "windows" : "unix"],
 
-      "prettier/prettier": 1,
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
 
       "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
       "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
