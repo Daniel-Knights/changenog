@@ -7,7 +7,7 @@
       "cargo": {
         "args": ["build"]
       },
-      "args": []
+      "args": ["--overwrite"]
     },
     {
       "name": "tsx",
