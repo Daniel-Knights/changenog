@@ -1,6 +1,8 @@
 use fancy_regex::Regex;
 
-use crate::{options::ChangenogOptions, utils::run};
+use crate::{cli::options::ChangenogOptions, utils::run};
+
+use super::tag::GitTag;
 
 #[derive(Debug, Clone)]
 pub struct GitCommit {
@@ -9,12 +11,47 @@ pub struct GitCommit {
 }
 
 impl GitCommit {
-    /// Gets all commits since the previous entry
-    pub fn get_all_since(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<Self> {
-        Self::get_raw(prev_entry_tag, opts)
+    /// Returns all commits between `prev_tag` and `tag`.
+    /// If `prev_tag` is `None`, returns all commits from the beginning of the repo
+    /// history up to `tag`.
+    pub fn get_all_for_tag(
+        tag: &GitTag,
+        prev_tag: &Option<String>,
+        opts: &ChangenogOptions,
+    ) -> Vec<GitCommit> {
+        let tag_range = if prev_tag.is_some() {
+            let prev_tag_name = prev_tag.clone().unwrap_or("".to_string());
+
+            &format!("{}..{}", prev_tag_name, tag.name)
+        } else {
+            &tag.name
+        };
+
+        let log_args = &vec![
+            "log",
+            tag_range,
+            "--pretty=%H %s",
+            "--",
+            opts.root.to_str().unwrap(), // Only show commits with file changes in root
+        ];
+
+        let cmd_output = run("git", log_args).unwrap();
+        let raw_commits = cmd_output.lines().collect::<Vec<&str>>();
+
+        raw_commits
             .iter()
-            .map(|c| Self::from_raw(c))
-            .collect()
+            .map(|l| GitCommit::from_raw(l))
+            .collect::<Vec<GitCommit>>()
+    }
+
+    /// Parses raw commit into GitCommit
+    pub fn from_raw(raw_commit: &str) -> Self {
+        let (hash, subject) = raw_commit.split_once(" ").unwrap();
+
+        Self {
+            hash: hash.to_string(),
+            subject: subject.to_string(),
+        }
     }
 
     /// Applies each filter in `commit_filters` to each commit in `commits` and returns the result.
@@ -34,44 +71,5 @@ impl GitCommit {
                 }
             })
             .collect::<Vec<GitCommit>>()
-    }
-
-    //// Private
-
-    /// Returns raw commits since previous entry in a parsable format
-    fn get_raw(prev_entry_tag: &Option<String>, opts: &ChangenogOptions) -> Vec<String> {
-        let max_commits_arg = format!("--max-count={}", opts.max_commits.to_string());
-
-        let since_arg = if prev_entry_tag.is_some() {
-            &format!("{}..", prev_entry_tag.clone().unwrap())
-        } else {
-            ""
-        };
-
-        // Log in a parsable format
-        let log_args = vec![
-            "log",
-            max_commits_arg.as_str(),
-            "--pretty=%H////%s",
-            since_arg,
-            "--",
-            opts.root.to_str().unwrap(), // Only show commits with file changes in root
-        ];
-
-        run("git", &log_args)
-            .unwrap()
-            .lines()
-            .map(|s| s.to_string())
-            .collect::<Vec<String>>()
-    }
-
-    /// Parses raw commit into GitCommit
-    fn from_raw(raw_commit: &str) -> Self {
-        let parts = raw_commit.split("////").collect::<Vec<&str>>();
-
-        Self {
-            hash: parts[0].to_string(),
-            subject: parts[1].to_string(),
-        }
     }
 }

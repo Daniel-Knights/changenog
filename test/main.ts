@@ -15,7 +15,7 @@ const tests = [
   ["--output=stdout"],
   ["--no-links"],
   ["--remote-url=https://www.my-repo.com"],
-  ["--max-commits=3"],
+  ["--max-entries=2"],
   ["--tag-filter-regex=my-package/.*"],
   ["--commit-filter-regex=^(?!.*changelog).*$"],
   ["--commit-filter-preset=angular"],

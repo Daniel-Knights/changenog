@@ -1,4 +1,4 @@
-use crate::{options::ChangenogOptions, utils::run};
+use crate::{cli::options::ChangenogOptions, utils::run};
 
 #[derive(Debug)]
 pub struct GitRoot;

@@ -1,14 +1,13 @@
-use fancy_regex::Regex;
-
-use crate::git::{commit::GitCommit, tag::GitTag};
+use crate::{
+    cli::options::ChangenogOptions,
+    git::{commit::GitCommit, tag::GitTag},
+};
 
 //// Structs
 
 #[derive(Debug, Clone)]
 pub struct ReleaseEntry {
     pub tags: Vec<GitTag>,
-    pub date: String,
-    pub target_commit: String,
     pub commits: Vec<GitCommit>,
 }
 
@@ -18,93 +17,66 @@ pub struct ReleaseCollection(pub Vec<ReleaseEntry>);
 //// Implementations
 
 impl ReleaseEntry {
-    fn from_tags(tags: &[GitTag]) -> Self {
+    fn new() -> Self {
         Self {
-            tags: tags.to_vec(),
-            date: tags[0].date.clone(),
-            target_commit: tags[0].target_commit.clone(),
+            tags: vec![],
             commits: vec![],
+            // TODO: add prev entry field? if last entry and an earlier tag exists but is filtered out, the url will just be /tags instead <filtered tag>...<tag>
         }
     }
 }
 
 impl ReleaseCollection {
-    pub fn from_tags(tags: &[GitTag]) -> Self {
-        let collection: Vec<ReleaseEntry> = tags
-            .chunk_by(|a, b| a.target_commit == b.target_commit)
-            .map(|g| ReleaseEntry::from_tags(g))
-            .collect();
-
-        ReleaseCollection(collection)
-    }
-
-    /// Populates each entry's `commits` field with the relevant commits.
-    /// Entries and commits must be sorted newest to oldest.
-    /// Entries without commits are filtered out.
-    pub fn populate_commits(&self, commits: &[GitCommit]) -> Self {
-        let mut new_self = self.clone();
-
-        if self.0.is_empty() || commits.is_empty() {
-            return new_self;
-        }
-
-        // Skip any untagged commits
-        let skip_i = commits
-            .iter()
-            .position(|c| c.hash == self.0[0].target_commit)
-            .unwrap_or(0);
-
-        let mut entry_i = 0;
-
-        for c in commits.iter().skip(skip_i) {
-            let next_entry = self.0.get(entry_i + 1);
-
-            if next_entry.is_some_and(|e| c.hash == e.target_commit) {
-                entry_i += 1;
-            }
-
-            new_self.0[entry_i].commits.push(c.clone());
-        }
-
-        new_self.0.retain(|r| !r.commits.is_empty());
-
-        new_self
-    }
-
+    /// Loops over all tags, gets the relevant commits for each, and builds entries.
     /// Applies all tag and commit filters to each entry.
     /// If tags or commits are empty after filtering, the entry itself is also excluded.
-    /// Entries must be sorted newest to oldest.
-    pub fn apply_filters(&self, tag_filters: &[Regex], commit_filters: &[Regex]) -> Self {
-        let mut filtered_entries: Vec<ReleaseEntry> = Vec::with_capacity(self.0.len());
+    /// Tags must be sorted newest to oldest.
+    pub fn from(
+        tags: &[GitTag],
+        prev_entry_tag: &Option<String>,
+        opts: &ChangenogOptions,
+    ) -> ReleaseCollection {
+        let mut collection = ReleaseCollection(vec![]);
+        let mut entry = ReleaseEntry::new();
 
-        for entry in &self.0 {
-            let filtered_commits = GitCommit::apply_filters(&entry.commits, commit_filters);
+        for i in 0..tags.len() {
+            // Limit by --max-entries
+            if collection.0.len() >= opts.max_entries {
+                break;
+            }
+
+            let curr_tag = &tags[i];
+
+            let prev_tag_name = tags
+                .get(i + 1)
+                .map(|t| t.name.clone())
+                .or(prev_entry_tag.clone());
+
+            let commits = GitCommit::get_all_for_tag(curr_tag, &prev_tag_name, opts);
+            let filtered_commits = GitCommit::apply_filters(&commits, &opts.commit_filters);
+
+            // Apply tag filters
+            if curr_tag.passes_filters(&opts.tag_filters) {
+                entry.tags.push(curr_tag.clone());
+            }
 
             if filtered_commits.is_empty() {
+                // Next tag will be added along with its commits
                 continue;
             }
 
-            let filtered_tags = GitTag::apply_filters(&entry.tags, tag_filters);
+            if entry.tags.is_empty() {
+                // Merge commits with previous entry (or empty current entry if this is the first one)
+                let prev_entry = collection.0.last_mut().unwrap_or(&mut entry);
 
-            if filtered_tags.is_empty() {
-                // If no tags remain, merge commits with the next newest entry (actually the
-                // previous entry in this loop since they're ordered newest to oldest)
-                if let Some(prev_entry) = filtered_entries.last_mut() {
-                    prev_entry.commits.extend(filtered_commits);
-                }
-
-                continue;
+                prev_entry.commits.extend(filtered_commits);
+            } else {
+                entry.commits.extend(filtered_commits);
+                collection.0.push(entry);
+                entry = ReleaseEntry::new();
             }
-
-            let filtered_entry = ReleaseEntry {
-                commits: filtered_commits,
-                tags: filtered_tags,
-                ..entry.clone()
-            };
-
-            filtered_entries.push(filtered_entry);
         }
 
-        ReleaseCollection(filtered_entries)
+        collection
     }
 }

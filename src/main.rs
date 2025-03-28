@@ -6,16 +6,16 @@ use std::{
 };
 
 use changelog::Changelog;
-use git::{commit::GitCommit, root::GitRoot, tag::GitTag};
+use cli::{options::ChangenogOptions, subcommand::Subcommand};
+use git::{root::GitRoot, tag::GitTag};
 use log::log_exit;
-use options::ChangenogOptions;
 use release::ReleaseCollection;
 
 mod changelog;
+mod cli;
 mod constant;
 mod git;
 mod log;
-mod options;
 mod release;
 mod utils;
 
@@ -24,14 +24,14 @@ fn main() {
 
     // Print version
     if cli_args.contains(&"--version".to_string()) || cli_args.contains(&"-v".to_string()) {
-        println!("{}", env!("CARGO_PKG_VERSION"));
+        Subcommand::version();
 
         process::exit(0)
     }
 
     // Print help
     if cli_args.contains(&"--help".to_string()) || cli_args.contains(&"-h".to_string()) {
-        ChangenogOptions::help();
+        Subcommand::help();
 
         process::exit(0)
     }
@@ -47,12 +47,8 @@ fn main() {
     };
 
     let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog);
-    let commits_since = GitCommit::get_all_since(&prev_entry_tag, &opts);
     let tags_since = GitTag::get_all_since(&prev_entry_tag);
-
-    let releases = ReleaseCollection::from_tags(&tags_since)
-        .populate_commits(&commits_since)
-        .apply_filters(&opts.tag_filters, &opts.commit_filters);
+    let releases = ReleaseCollection::from(&tags_since, &prev_entry_tag, &opts);
 
     if !opts.overwrite && releases.0.is_empty() {
         log_exit("no new version(s)");

@@ -13,6 +13,7 @@ See this repo's changelog for example output.
 - [Options](#options)
   - [Filters](#filters)
     - [Presets](#presets)
+- [Entry Strategy](#entry-strategy)
 - [Monorepo Support](#monorepo-support)
 
 ## Usage
@@ -58,7 +59,7 @@ Binaries are available on the [releases page](https://github.com/Daniel-Knights/
 | --output               | string  | output of the generated changelog. one of ['file', 'stdout']. default: 'file'                        |
 | --no-links             | boolean | disable links                                                                                        |
 | --remote-url           | string  | remote URL to use for links. default: origin                                                         |
-| --max-commits          | number  | maximum number of commits to process. default: '1000'                                                |
+| --max-entries          | number  | maximum number of entries to process. default: '100'                                                 |
 | --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included                                             |
 | --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included                                          |
 | --commit-filter-preset | string  | filter preset(s) to use. one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver'] |
@@ -95,6 +96,18 @@ my commit message
 - `angular-readme-only-docs` - exclude Angular `docs` commits unless they have a scope of `readme`
 - `no-changelog` - exclude all commits with `changelog` in the subject
 - `no-semver` - exclude all commits that match the semver format, specifically, [this regex](https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string)
+
+## Entry Strategy
+
+This is the general strategy for building and filtering entries:
+
+1. All entries are processed, restricted by `--max-entries`
+2. Commits are filtered to only include those with changes in `--root`
+3. If `<tag a>..<tag b>` have no commits, the tags are made part of the same entry
+4. Commit filters are applied
+5. If an entry has no commits, the entry is excluded
+6. Tag filters are applied
+7. If an entry has no tags, all commits are merged into the next entry
 
 ## Monorepo Support
 

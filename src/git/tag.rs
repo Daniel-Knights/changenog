@@ -1,3 +1,4 @@
+use chrono::{DateTime, FixedOffset};
 use fancy_regex::Regex;
 
 use crate::utils::run;
@@ -5,8 +6,7 @@ use crate::utils::run;
 #[derive(Debug, Clone)]
 pub struct GitTag {
     pub name: String,
-    pub date: String,
-    pub target_commit: String,
+    pub date: DateTime<FixedOffset>,
 }
 
 impl GitTag {
@@ -18,20 +18,9 @@ impl GitTag {
             .collect::<Vec<Self>>()
     }
 
-    /// Applies each filter in `tag_filters` to each tag in `tags` and returns the result.
-    /// All filters must match for a tag to be included.
-    pub fn apply_filters(tags: &[GitTag], tag_filters: &[Regex]) -> Vec<GitTag> {
-        tags.iter()
-            .filter_map(|t| {
-                let all_filters_matched = tag_filters.iter().all(|r| r.is_match(&t.name).unwrap());
-
-                if all_filters_matched {
-                    Some(t.clone())
-                } else {
-                    None
-                }
-            })
-            .collect::<Vec<GitTag>>()
+    /// Validates `tag.name` against all filters.
+    pub fn passes_filters(&self, tag_filters: &[Regex]) -> bool {
+        tag_filters.iter().all(|r| r.is_match(&self.name).unwrap())
     }
 
     //// Private
@@ -49,9 +38,7 @@ impl GitTag {
             "tag",
             no_merged_arg,
             "--sort=-creatordate", // Newest to oldest
-            // `%(object)`: target commit if tag is annotated
-            // `%(objectname)`: target commit if tag is lightweight
-            "--format=%(refname:short)////%(creatordate:iso-strict)////%(object)////%(objectname)",
+            "--format=%(creatordate:iso-strict) %(refname:short)",
         ];
 
         run("git", &tag_args)
@@ -63,27 +50,11 @@ impl GitTag {
 
     /// Parses raw tag into GitTag
     fn from_raw(raw_tag: &str) -> Self {
-        let tag_parts: Vec<&str> = raw_tag.split("////").collect();
-
-        let (tag_name, tag_date, object, objectname) = (
-            tag_parts[0].to_string(),
-            tag_parts[1].to_string(),
-            tag_parts[2].to_string(),
-            tag_parts[3].to_string(),
-        );
-
-        // `object`: target commit if tag is annotated
-        // `objectname`: target commit if tag is lightweight
-        let target_commit = if object.is_empty() {
-            objectname
-        } else {
-            object
-        };
+        let (date, name) = raw_tag.split_once(" ").unwrap();
 
         Self {
-            name: tag_name.clone(),
-            date: tag_date,
-            target_commit,
+            name: name.to_string(),
+            date: DateTime::parse_from_rfc3339(date).unwrap(),
         }
     }
 }
