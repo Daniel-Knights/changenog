@@ -1,4 +1,3 @@
-use chrono::DateTime;
 use fancy_regex::Regex;
 
 use crate::release::ReleaseCollection;
@@ -47,8 +46,7 @@ impl Changelog {
             };
 
             // Format release heading
-            let tag_date = DateTime::parse_from_rfc3339(&entry.date).unwrap();
-            let formatted_date = tag_date.format("%d/%m/%Y");
+            let formatted_date = entry.tags[0].date.format("%d/%m/%Y");
 
             let joined_tags = entry
                 .tags

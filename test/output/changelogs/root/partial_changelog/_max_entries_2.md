@@ -3,6 +3,12 @@
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 
 ## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
 

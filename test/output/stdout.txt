@@ -13,7 +13,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -26,7 +26,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -52,7 +52,7 @@ test no_repo: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--max-commits=3"]
+test no_repo: ["--max-entries=2"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -95,7 +95,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -108,7 +108,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -134,7 +134,7 @@ test no_remote_or_tags: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--max-commits=3"]
+test no_remote_or_tags: ["--max-entries=2"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -177,7 +177,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -190,7 +190,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -249,7 +249,7 @@ test no_remote: ["--no-links"]
 test no_remote: ["--remote-url=https://www.my-repo.com"]
 
 
-test no_remote: ["--max-commits=3"]
+test no_remote: ["--max-entries=2"]
 
 
 test no_remote: ["--tag-filter-regex=my-package/.*"]
@@ -285,7 +285,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -298,7 +298,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -357,7 +357,7 @@ test with_remote: ["--no-links"]
 test with_remote: ["--remote-url=https://www.my-repo.com"]
 
 
-test with_remote: ["--max-commits=3"]
+test with_remote: ["--max-entries=2"]
 
 
 test with_remote: ["--tag-filter-regex=my-package/.*"]
@@ -393,7 +393,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -406,7 +406,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -465,7 +465,7 @@ test empty_changelog: ["--no-links"]
 test empty_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test empty_changelog: ["--max-commits=3"]
+test empty_changelog: ["--max-entries=2"]
 
 
 test empty_changelog: ["--tag-filter-regex=my-package/.*"]
@@ -501,7 +501,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -514,7 +514,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -558,7 +558,7 @@ test partial_changelog: ["--no-links"]
 test partial_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test partial_changelog: ["--max-commits=3"]
+test partial_changelog: ["--max-entries=2"]
 
 
 test partial_changelog: ["--tag-filter-regex=my-package/.*"]
@@ -594,7 +594,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -607,7 +607,7 @@ Changenog options:
   --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
   --no-links             | boolean | disable links
   --remote-url           | string  | remote URL to use for links.  default: origin
-  --max-commits          | number  | maximum number of commits to process.  default: '1000'
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
   --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
   --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
   --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
@@ -631,7 +631,7 @@ test full_changelog: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test full_changelog: ["--max-commits=3"]
+test full_changelog: ["--max-entries=2"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
