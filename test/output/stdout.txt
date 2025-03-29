@@ -40,7 +40,7 @@ test no_repo: ["--root=./bar/baz"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--output=stdout"]
+test no_repo: ["--output, stdout"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -52,7 +52,7 @@ test no_repo: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--max-entries=2"]
+test no_repo: ["--max-entries, 2"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -60,7 +60,7 @@ test no_repo: ["--tag-filter-regex=my-package/.*"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test no_repo: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -68,7 +68,7 @@ test no_repo: ["--commit-filter-preset=angular"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test no_repo: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -76,7 +76,7 @@ test no_repo: ["--commit-filter-preset=no-changelog"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_repo: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test no_repo: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -122,7 +122,7 @@ test no_remote_or_tags: ["--root=./bar/baz"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--output=stdout"]
+test no_remote_or_tags: ["--output, stdout"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -134,7 +134,7 @@ test no_remote_or_tags: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--max-entries=2"]
+test no_remote_or_tags: ["--max-entries, 2"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -142,7 +142,7 @@ test no_remote_or_tags: ["--tag-filter-regex=my-package/.*"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test no_remote_or_tags: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -150,7 +150,7 @@ test no_remote_or_tags: ["--commit-filter-preset=angular"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test no_remote_or_tags: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -158,7 +158,7 @@ test no_remote_or_tags: ["--commit-filter-preset=no-changelog"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test no_remote_or_tags: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test no_remote_or_tags: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -202,7 +202,7 @@ test no_remote: ["--overwrite"]
 test no_remote: ["--root=./bar/baz"]
 
 
-test no_remote: ["--output=stdout"]
+test no_remote: ["--output, stdout"]
 ## v1.0.0, my-package/v1.0.0 (REPLACED)
 
 - 1.0.0 (REPLACED)
@@ -249,25 +249,25 @@ test no_remote: ["--no-links"]
 test no_remote: ["--remote-url=https://www.my-repo.com"]
 
 
-test no_remote: ["--max-entries=2"]
+test no_remote: ["--max-entries, 2"]
 
 
 test no_remote: ["--tag-filter-regex=my-package/.*"]
 
 
-test no_remote: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test no_remote: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 
 
 test no_remote: ["--commit-filter-preset=angular"]
 
 
-test no_remote: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test no_remote: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
 test no_remote: ["--commit-filter-preset=no-changelog"]
 
 
-test no_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test no_remote: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test with_remote: ["--version"]
@@ -310,7 +310,7 @@ test with_remote: ["--overwrite"]
 test with_remote: ["--root=./bar/baz"]
 
 
-test with_remote: ["--output=stdout"]
+test with_remote: ["--output, stdout"]
 ## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -357,25 +357,25 @@ test with_remote: ["--no-links"]
 test with_remote: ["--remote-url=https://www.my-repo.com"]
 
 
-test with_remote: ["--max-entries=2"]
+test with_remote: ["--max-entries, 2"]
 
 
 test with_remote: ["--tag-filter-regex=my-package/.*"]
 
 
-test with_remote: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test with_remote: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 
 
 test with_remote: ["--commit-filter-preset=angular"]
 
 
-test with_remote: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test with_remote: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
 test with_remote: ["--commit-filter-preset=no-changelog"]
 
 
-test with_remote: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test with_remote: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test empty_changelog: ["--version"]
@@ -418,7 +418,7 @@ test empty_changelog: ["--overwrite"]
 test empty_changelog: ["--root=./bar/baz"]
 
 
-test empty_changelog: ["--output=stdout"]
+test empty_changelog: ["--output, stdout"]
 ## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -465,25 +465,25 @@ test empty_changelog: ["--no-links"]
 test empty_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test empty_changelog: ["--max-entries=2"]
+test empty_changelog: ["--max-entries, 2"]
 
 
 test empty_changelog: ["--tag-filter-regex=my-package/.*"]
 
 
-test empty_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test empty_changelog: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 
 
 test empty_changelog: ["--commit-filter-preset=angular"]
 
 
-test empty_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test empty_changelog: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
 test empty_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test empty_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test empty_changelog: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test partial_changelog: ["--version"]
@@ -526,7 +526,7 @@ test partial_changelog: ["--overwrite"]
 test partial_changelog: ["--root=./bar/baz"]
 
 
-test partial_changelog: ["--output=stdout"]
+test partial_changelog: ["--output, stdout"]
 ## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
 
 - 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
@@ -558,25 +558,25 @@ test partial_changelog: ["--no-links"]
 test partial_changelog: ["--remote-url=https://www.my-repo.com"]
 
 
-test partial_changelog: ["--max-entries=2"]
+test partial_changelog: ["--max-entries, 2"]
 
 
 test partial_changelog: ["--tag-filter-regex=my-package/.*"]
 
 
-test partial_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test partial_changelog: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 
 
 test partial_changelog: ["--commit-filter-preset=angular"]
 
 
-test partial_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test partial_changelog: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 
 
 test partial_changelog: ["--commit-filter-preset=no-changelog"]
 
 
-test partial_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test partial_changelog: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 
 
 test full_changelog: ["--version"]
@@ -619,7 +619,7 @@ test full_changelog: ["--overwrite"]
 test full_changelog: ["--root=./bar/baz"]
 
 
-test full_changelog: ["--output=stdout"]
+test full_changelog: ["--output, stdout"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -631,7 +631,7 @@ test full_changelog: ["--remote-url=https://www.my-repo.com"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test full_changelog: ["--max-entries=2"]
+test full_changelog: ["--max-entries, 2"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -639,7 +639,7 @@ test full_changelog: ["--tag-filter-regex=my-package/.*"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test full_changelog: ["--commit-filter-regex=^(?!.*changelog).*$"]
+test full_changelog: ["--commit-filter-regex, ^(?!.*changelog).*$"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -647,7 +647,7 @@ test full_changelog: ["--commit-filter-preset=angular"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test full_changelog: ["--commit-filter-preset=angular, --commit-filter-preset=angular-readme-only-docs"]
+test full_changelog: ["--commit-filter-preset, angular, --commit-filter-preset=angular-readme-only-docs"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
@@ -655,7 +655,7 @@ test full_changelog: ["--commit-filter-preset=no-changelog"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
-test full_changelog: ["--commit-filter-preset=no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
+test full_changelog: ["--commit-filter-preset, no-semver, --commit-filter-regex=^(?!.*changelog).*$"]
 [33m[changenog][0m no new version(s).  exiting...
 
 
