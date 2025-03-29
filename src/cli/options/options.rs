@@ -6,7 +6,6 @@ use fancy_regex::Regex;
 
 pub struct ChangenogOptions {
     pub overwrite: bool,
-    // TODO: does root work with nested git directories and symlinks?
     pub root: PathBuf,
     pub output: String,
     pub no_links: bool,

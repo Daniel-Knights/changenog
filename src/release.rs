@@ -21,7 +21,6 @@ impl ReleaseEntry {
         Self {
             tags: vec![],
             commits: vec![],
-            // TODO: add prev entry field? if last entry and an earlier tag exists but is filtered out, the url will just be /tags instead <filtered tag>...<tag>
         }
     }
 }

@@ -1,16 +1,13 @@
-use std::{io::Error, process::Command};
+use std::{error::Error, process::Command};
 
-pub fn run(cmd: &str, args: &[&str]) -> Result<String, Error> {
+pub fn run(cmd: &str, args: &[&str]) -> Result<String, Box<dyn Error>> {
     let args = args
         .iter()
-        .filter_map(|a| if !a.is_empty() { Some(*a) } else { None })
+        .filter(|a| !a.is_empty())
+        .copied()
         .collect::<Vec<&str>>();
 
-    let output = Command::new(cmd).args(args).output();
+    let output = Command::new(cmd).args(args).output()?;
 
-    if let Ok(output) = output {
-        return Ok(String::from_utf8(output.stdout).unwrap());
-    }
-
-    Err(output.err().unwrap())
+    Ok(String::from_utf8(output.stdout)?)
 }

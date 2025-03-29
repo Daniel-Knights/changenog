@@ -1,31 +1,47 @@
 use std::{
     collections::{HashMap, HashSet},
+    fmt::{self, Display},
     path::PathBuf,
-    process,
 };
 
 use fancy_regex::Regex;
 
 use crate::{
-    cli::validator::Validator,
+    cli::validator::{ValidateArgError, Validator},
     constant::{
         ANGULAR_README_ONLY_DOCS_REGEX, ANGULAR_REGEX, NO_CHANGELOG_REGEX, NO_SEMVER_REGEX,
     },
-    log::log_exit,
 };
 
 use super::options::ChangenogOptions;
 
+//// Structs
+
 type ParsedArgs = HashMap<String, HashSet<String>>;
+
+#[derive(Debug)]
+pub enum ParseArgError {
+    Unknown(String),
+    Invalid(ValidateArgError),
+}
+
+impl Display for ParseArgError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ParseArgError::Unknown(v) => write!(f, "unknown arg: {v}"),
+            ParseArgError::Invalid(e) => write!(f, "{e}"),
+        }
+    }
+}
 
 //// Implementations
 
 impl ChangenogOptions {
     /// Gets parsed options from CLI args
-    pub fn from_args(cli_args: &[String]) -> ChangenogOptions {
-        let parsed_args = ChangenogOptions::parse_args(cli_args);
+    pub fn from_args(cli_args: &[String]) -> Result<ChangenogOptions, ParseArgError> {
+        let parsed_args = ChangenogOptions::parse_args(cli_args)?;
 
-        ChangenogOptions {
+        Ok(ChangenogOptions {
             overwrite: Self::parse_overwrite(&parsed_args),
             root: Self::parse_root(&parsed_args),
             output: Self::parse_output(&parsed_args),
@@ -34,71 +50,61 @@ impl ChangenogOptions {
             remote_url: Self::parse_remote_url(&parsed_args),
             tag_filters: Self::parse_tag_filters(&parsed_args),
             commit_filters: Self::parse_commit_filters(&parsed_args),
-        }
+        })
     }
 
     //// Private
 
-    fn parse_args(cli_args: &[String]) -> ParsedArgs {
+    fn parse_args(cli_args: &[String]) -> Result<ParsedArgs, ParseArgError> {
         let mut parsed_args: ParsedArgs = HashMap::new();
 
         // Next may be the value for current, so skip it
         let mut skip_next = false;
 
-        cli_args.iter().enumerate().for_each(|(i, arg)| {
+        for (i, arg) in cli_args.iter().enumerate() {
             if skip_next {
                 skip_next = false;
 
-                return;
+                continue;
             }
 
             let (key, val) = arg.split_once('=').unwrap_or((arg, ""));
             let found_opt = ChangenogOptions::DEFINITIONS.iter().find(|f| f.name == key);
 
             // Exit on unknown arg
-            if found_opt.is_none() {
-                log_exit(&format!("unknown arg: {}", key));
-
-                process::exit(1)
+            if let None = found_opt {
+                return Err(ParseArgError::Unknown(key.to_string()));
             }
 
             let opt = found_opt.unwrap();
-
-            // Validate arg
-            if !Validator::validate_arg(opt, val) {
-                // TODO: defer exits to main?
-                process::exit(1);
-            }
-
-            let entry = parsed_args
-                .entry(opt.name.to_string())
-                .or_insert(HashSet::new());
-
-            // Insert val from `<key>=<val>` format
-            if !val.is_empty() {
-                entry.insert(val.to_string());
-
-                return;
-            }
-
             let next_arg = &cli_args.get(i + 1);
 
-            // If next arg starts with `--`, assume bool and insert empty string
-            if next_arg.is_none() || next_arg.unwrap().starts_with("--") {
-                entry.insert("".to_string());
+            let val = if !val.is_empty() {
+                // `<key>=<val>` format
+                val.to_string()
+            } else if next_arg.is_none() || next_arg.unwrap().starts_with("--") {
+                // If next arg starts with `--`, assume bool and insert empty string
+                String::new()
+            } else {
+                // Next arg is value for current
+                next_arg.unwrap().clone()
+            };
 
-                return;
+            // Skip next arg if it's the value for current
+            skip_next = next_arg.is_some_and(|a| a == &val);
+
+            // Validate arg
+            if let Err(err) = Validator::validate_arg(opt, &val) {
+                return Err(ParseArgError::Invalid(err));
             }
 
-            // Insert next arg
-            let val = next_arg.unwrap();
+            parsed_args
+                .entry(opt.name.to_string())
+                .or_insert(HashSet::new())
+                .insert(val);
+        }
 
-            entry.insert(val.clone());
-
-            skip_next = true;
-        });
-
-        parsed_args
+        Ok(parsed_args)
     }
 
     fn parse_overwrite(parsed_args: &ParsedArgs) -> bool {

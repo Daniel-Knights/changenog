@@ -12,16 +12,20 @@ const tests = [
   ["-h"],
   ["--overwrite"],
   ["--root=./bar/baz"],
-  ["--output=stdout"],
+  ["--output", "stdout"],
   ["--no-links"],
   ["--remote-url=https://www.my-repo.com"],
-  ["--max-entries=2"],
+  ["--max-entries", "2"],
   ["--tag-filter-regex=my-package/.*"],
-  ["--commit-filter-regex=^(?!.*changelog).*$"],
+  ["--commit-filter-regex", "^(?!.*changelog).*$"],
   ["--commit-filter-preset=angular"],
-  ["--commit-filter-preset=angular", "--commit-filter-preset=angular-readme-only-docs"],
+  [
+    "--commit-filter-preset",
+    "angular",
+    "--commit-filter-preset=angular-readme-only-docs",
+  ],
   ["--commit-filter-preset=no-changelog"],
-  ["--commit-filter-preset=no-semver", "--commit-filter-regex=^(?!.*changelog).*$"],
+  ["--commit-filter-preset", "no-semver", "--commit-filter-regex=^(?!.*changelog).*$"],
 ];
 
 if (fs.existsSync("test/output/stdout.txt")) {

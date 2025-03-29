@@ -20,11 +20,11 @@ impl Subcommand {
             let mut description = d.description.to_string();
 
             if let Some(values) = d.values {
-                description = format!("{}.  one of ['{}']", description, values.join("', '"));
+                description = format!("{description}.  one of ['{}']", values.join("', '"));
             }
 
             if let Some(default) = d.default {
-                description = format!("{}.  default: '{}'", description, default);
+                description = format!("{description}.  default: '{default}'");
             };
 
             println!(
