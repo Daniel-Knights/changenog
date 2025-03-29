@@ -47,12 +47,17 @@ impl Validator {
     }
 
     fn validate_root(val: &str) -> Result<(), ValidateArgError> {
-        let curr_dir = current_dir().unwrap();
+        let root_path = PathBuf::from(val).canonicalize();
 
-        let is_within_cwd = PathBuf::from(val)
-            .canonicalize()
-            .unwrap()
-            .starts_with(curr_dir);
+        if let Err(err) = root_path {
+            return Err(ValidateArgError(format!(
+                "invalid root path: '{}={val}', err: '{err}'",
+                ChangenogOptions::ROOT.name,
+            )));
+        }
+
+        let curr_dir = current_dir().unwrap();
+        let is_within_cwd = root_path.unwrap().starts_with(curr_dir);
 
         if !is_within_cwd {
             return Err(ValidateArgError(format!(
