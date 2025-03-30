@@ -11,11 +11,11 @@ pub struct GitTag {
 
 impl GitTag {
     /// Gets all tags since the previous entry
-    pub fn get_all_since(prev_entry_tag: &Option<String>) -> Vec<Self> {
-        Self::get_raw(prev_entry_tag)
+    pub fn get_all_since(prev_entry_tag: &Option<String>) -> Vec<GitTag> {
+        GitTag::get_raw(prev_entry_tag)
             .iter()
-            .map(|t| Self::from_raw(t))
-            .collect::<Vec<Self>>()
+            .map(|t| GitTag::from_raw(t))
+            .collect::<Vec<GitTag>>()
     }
 
     /// Validates `tag.name` against all filters.
@@ -49,10 +49,10 @@ impl GitTag {
     }
 
     /// Parses raw tag into GitTag
-    fn from_raw(raw_tag: &str) -> Self {
+    fn from_raw(raw_tag: &str) -> GitTag {
         let (date, name) = raw_tag.split_once(" ").unwrap();
 
-        Self {
+        GitTag {
             name: name.to_string(),
             date: DateTime::parse_from_rfc3339(date).unwrap(),
         }

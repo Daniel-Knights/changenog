@@ -17,8 +17,8 @@ pub struct ReleaseCollection(pub Vec<ReleaseEntry>);
 //// Implementations
 
 impl ReleaseEntry {
-    fn new() -> Self {
-        Self {
+    fn new() -> ReleaseEntry {
+        ReleaseEntry {
             tags: vec![],
             commits: vec![],
         }
@@ -70,8 +70,12 @@ impl ReleaseCollection {
 
                 prev_entry.commits.extend(filtered_commits);
             } else {
+                // Tag ordering can be unstable across machines, so sort by name
+                entry.tags.sort_by(|a, b| a.name.cmp(&b.name));
                 entry.commits.extend(filtered_commits);
+
                 collection.0.push(entry);
+
                 entry = ReleaseEntry::new();
             }
         }
