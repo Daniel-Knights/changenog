@@ -877,3 +877,67 @@ Changenog options:
 [33m[changenog][0m no new version(s).  exiting...
 ```
 
+## test args: ["--overwrite val"]
+
+### stderr
+
+```
+[33m[changenog][0m unexpected value for boolean option: '--overwrite=val'.  exiting...
+```
+
+## test args: ["--root"]
+
+### stderr
+
+```
+[33m[changenog][0m expected value for arg: '--root'.  exiting...
+```
+
+## test args: ["--root=./quux"]
+
+### stderr
+
+```
+[33m[changenog][0m invalid root path: '--root=./quux'.  err: 'No such file or directory (os error 2)'.  exiting...
+```
+
+## test args: ["--root=../../"]
+
+### stderr
+
+```
+[33m[changenog][0m root must be within the current working directory: '--root=../../'.  exiting...
+```
+
+## test args: ["--max-entries foo"]
+
+### stderr
+
+```
+[33m[changenog][0m unable to parse max-entries: '--max-entries=foo'.  err: 'invalid digit found in string'.  exiting...
+```
+
+## test args: ["--tag-filter-regex"]
+
+### stderr
+
+```
+[33m[changenog][0m expected value for arg: '--tag-filter-regex'.  exiting...
+```
+
+## test args: ["--tag-filter-regex (?!)*"]
+
+### stderr
+
+```
+[33m[changenog][0m invalid regex: '--tag-filter-regex=(?!)*'.  err: 'Parsing error at position 4: Target of repeat operator is invalid'.  exiting...
+```
+
+## test args: ["--commit-filter-preset=foo"]
+
+### stderr
+
+```
+[33m[changenog][0m invalid value for option: '--commit-filter-preset=foo'.  must be one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver'].  exiting...
+```
+

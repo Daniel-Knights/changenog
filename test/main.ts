@@ -104,6 +104,18 @@ await suite("partial_changelog", tests, "PARTIAL");
 // Run with full changelog
 await suite("full_changelog", tests, "FULL");
 
+// Validate args
+await suite("args", [
+  ["--overwrite", "val"],
+  ["--root"],
+  ["--root=./quux"],
+  ["--root=../../"],
+  ["--max-entries", "foo"],
+  ["--tag-filter-regex"],
+  ["--tag-filter-regex", "(?!)*"],
+  ["--commit-filter-preset=foo"],
+]);
+
 // Cleanup
 await fs.promises.rm("test/repo", { recursive: true });
 
