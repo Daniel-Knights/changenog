@@ -1,4 +1,4 @@
-## v1.0.0, my-package/v1.0.0 (REPLACED)
+## my-package/v1.0.0, v1.0.0 (REPLACED)
 
 - 1.0.0 (REPLACED)
 - non-angular commit (REPLACED)
@@ -10,6 +10,6 @@
 - feat: add feature (REPLACED)
 - docs(readme): update readme (REPLACED)
 
-## v0.1.0, v0.0.1 (REPLACED)
+## v0.0.1, v0.1.0 (REPLACED)
 
 - feat: add baz (REPLACED)

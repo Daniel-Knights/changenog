@@ -1,4 +1,4 @@
-## v1.0.0, my-package/v1.0.0 (REPLACED)
+## my-package/v1.0.0, v1.0.0 (REPLACED)
 
 - feat(scope): add another feature (REPLACED)
 - fix: fix bug (REPLACED)

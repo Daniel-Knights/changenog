@@ -1,4 +1,4 @@
-## [v1.0.0, my-package/v1.0.0](https://www.my-remote.com/compare/v0.1.0...v1.0.0) (REPLACED)
+## [my-package/v1.0.0, v1.0.0](https://www.my-remote.com/compare/v0.1.0...my-package/v1.0.0) (REPLACED)
 
 - feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
 - fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))

@@ -1,9 +1,15 @@
+import { SpawnSyncOptions } from "node:child_process";
+
 import { run } from "./utils.js";
 
 /**
  * Git operations manager
  */
 export class GitManager {
+  // The docs say Unix time time is supported, but instead I get 'fatal: invalid date format: 0 +0100'
+  // (on Linux), so we have to use a Date object instead
+  static #committerDate = new Date(0);
+
   /**
    * Initializes a new Git repository
    */
@@ -24,8 +30,18 @@ export class GitManager {
    * @param message - Commit message
    */
   static commit(message: string) {
-    this.#executeGitCommand(["commit", "-m", message]);
+    this.#executeGitCommand(["commit", "-m", message], {
+      env: {
+        // Ensure distinct commit dates
+        GIT_COMMITTER_DATE: this.#committerDate.toISOString(),
+        // These are needed when setting committer date, no idea why
+        GIT_AUTHOR_NAME: ".",
+        GIT_COMMITTER_NAME: ".",
+      },
+    });
+
     this.#sync();
+    this.#committerDate.setTime(this.#committerDate.getTime() + 1000);
   }
 
   /**
@@ -52,9 +68,13 @@ export class GitManager {
    * @param args - Args passed to Git
    * @returns Command output
    */
-  static #executeGitCommand(args: string[]) {
+  static #executeGitCommand(args: string[], options?: SpawnSyncOptions) {
     try {
-      const output = run("git", args, { stdio: "pipe" });
+      const output = run("git", args, { stdio: "pipe", ...options });
+
+      if (output.status !== 0) {
+        throw output.stderr.toString();
+      }
 
       return output.stdout?.toString().trim();
     } catch (error) {
