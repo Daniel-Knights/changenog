@@ -1,5 +1,7 @@
 use std::{env::current_dir, fmt::Display, path::PathBuf};
 
+use fancy_regex::Regex;
+
 use super::options::options::{ChangenogOptions, CliOption};
 
 //// Structs
@@ -47,11 +49,13 @@ impl Validator {
     }
 
     fn validate_root(val: &str) -> Result<(), ValidateArgError> {
+        Validator::validate_not_empty(ChangenogOptions::ROOT, val)?;
+
         let root_path = PathBuf::from(val).canonicalize();
 
         if let Err(err) = root_path {
             return Err(ValidateArgError(format!(
-                "invalid root path: '{}={val}', err: '{err}'",
+                "invalid root path: '{}={val}'.  err: '{err}'",
                 ChangenogOptions::ROOT.name,
             )));
         }
@@ -78,9 +82,9 @@ impl Validator {
     }
 
     fn validate_max_entries(val: &str) -> Result<(), ValidateArgError> {
-        if let Err(_) = val.parse::<usize>() {
+        if let Err(err) = val.parse::<usize>() {
             return Err(ValidateArgError(format!(
-                "unable to parse max-entries: '{}={val}'",
+                "unable to parse max-entries: '{}={val}'.  err: '{err}'",
                 ChangenogOptions::MAX_ENTRIES.name,
             )));
         }
@@ -93,11 +97,11 @@ impl Validator {
     }
 
     fn validate_tag_filter_regex(val: &str) -> Result<(), ValidateArgError> {
-        Validator::validate_not_empty(ChangenogOptions::TAG_FILTER_REGEX, val)
+        Validator::validate_regex(ChangenogOptions::TAG_FILTER_REGEX, val)
     }
 
     fn validate_commit_filter_regex(val: &str) -> Result<(), ValidateArgError> {
-        Validator::validate_not_empty(ChangenogOptions::COMMIT_FILTER_REGEX, val)
+        Validator::validate_regex(ChangenogOptions::COMMIT_FILTER_REGEX, val)
     }
 
     fn validate_commit_filter_preset(val: &str) -> Result<(), ValidateArgError> {
@@ -136,6 +140,20 @@ impl Validator {
         if val.is_empty() {
             return Err(ValidateArgError(format!(
                 "expected value for arg: '{}'",
+                arg.name
+            )));
+        }
+
+        Ok(())
+    }
+
+    /// Validates regex pattern
+    fn validate_regex(arg: &CliOption, val: &str) -> Result<(), ValidateArgError> {
+        Validator::validate_not_empty(arg, val)?;
+
+        if let Err(err) = Regex::new(val) {
+            return Err(ValidateArgError(format!(
+                "invalid regex: '{}={val}'.  err: '{err}'",
                 arg.name
             )));
         }
