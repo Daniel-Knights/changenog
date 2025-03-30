@@ -28,8 +28,8 @@ const tests = [
   ["--commit-filter-preset", "no-semver", "--commit-filter-regex=^(?!.*changelog).*$"],
 ];
 
-if (fs.existsSync("test/output/stdout.txt")) {
-  await fs.promises.rm("test/output/stdout.txt");
+if (fs.existsSync("test/output/terminal.md")) {
+  await fs.promises.rm("test/output/terminal.md");
 }
 
 if (fs.existsSync("test/output/changelogs")) {
@@ -44,6 +44,9 @@ await fs.promises.mkdir("test/repo");
 await fs.promises.mkdir("test/repo/foo");
 await fs.promises.mkdir("test/repo/bar");
 await fs.promises.mkdir("test/repo/bar/baz");
+
+// Ensure consistent line endings when running tests on different platforms
+await fs.promises.writeFile("test/repo/.gitattributes", "* text=auto eol=lf");
 
 GitManager.init();
 

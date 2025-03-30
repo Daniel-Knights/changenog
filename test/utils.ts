@@ -65,17 +65,10 @@ export async function output(id: string, args: string[]) {
     stdio: "pipe",
   });
 
-  // Append test heading to `stdout.txt`
-  await fs.promises.appendFile(
-    "test/output/stdout.txt",
-    `test ${id}: ["${args.join(", ")}"]\n`,
-  );
+  // Append output to `terminal.md`
+  const formattedTerminalOutput = formatTerminalOutput(id, args, result);
 
-  // Append test output to `stdout.txt`
-  await fs.promises.appendFile(
-    "test/output/stdout.txt",
-    `${replaceDynamicValues(result.stdout.toString())}\n\n`,
-  );
+  await fs.promises.appendFile("test/output/terminal.md", formattedTerminalOutput);
 
   // Normalise output filename
   const filename = args.join("_").replace(/[^a-zA-Z0-9_]+/g, "_");
@@ -98,7 +91,7 @@ export async function output(id: string, args: string[]) {
     }
 
     const content = await fs.promises.readFile(sourcePath, "utf-8");
-    const replacedContent = replaceDynamicValues(content);
+    const replacedContent = replaceDynamicText(content);
 
     // Normalise file content and move to output directory
     await fs.promises.writeFile(sourcePath, replacedContent);
@@ -109,9 +102,33 @@ export async function output(id: string, args: string[]) {
 }
 
 /**
+ * Formats the result of running `changenog`, for appending to `terminal.md`.
+ */
+function formatTerminalOutput(
+  testId: string,
+  args: string[],
+  result: ReturnType<typeof spawnSync>,
+) {
+  const normalisedStdout = replaceDynamicText(result.stdout.toString());
+  const stderrString = result.stderr.toString();
+
+  let formattedStdout = `## test ${testId}: ["${args.join(" ")}"]`;
+
+  if (normalisedStdout) {
+    formattedStdout += `\n\n### stdout\n\n\`\`\`\n${normalisedStdout}\`\`\``;
+  }
+
+  if (stderrString) {
+    formattedStdout += `\n\n### stderr\n\n\`\`\`\n${stderrString}\`\`\``;
+  }
+
+  return `${formattedStdout}\n\n`;
+}
+
+/**
  * Replaces commit SHAs and dates with static values.
  */
-function replaceDynamicValues(content: string) {
+function replaceDynamicText(content: string) {
   const shaMatches = content.match(/(?<=\/commit\/)[^\)]+/g) ?? [];
 
   return (
