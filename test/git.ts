@@ -35,8 +35,8 @@ export class GitManager {
         // Ensure distinct commit dates
         GIT_COMMITTER_DATE: this.#committerDate.toISOString(),
         // These are needed when setting committer date, no idea why
-        GIT_AUTHOR_NAME: ".",
-        GIT_COMMITTER_NAME: ".",
+        GIT_AUTHOR_NAME: "a",
+        GIT_COMMITTER_NAME: "a",
       },
     });
 
