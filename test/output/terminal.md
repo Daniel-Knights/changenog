@@ -898,7 +898,7 @@ Changenog options:
 ### stderr
 
 ```
-[33m[changenog][0m invalid root path: '--root=./quux'.  err: 'No such file or directory (os error 2)'.  exiting...
+[33m[changenog][0m invalid root path: '--root=./quux'.  err: 'REPLACED'.  exiting...
 ```
 
 ## test args: ["--root=../../"]
@@ -914,7 +914,7 @@ Changenog options:
 ### stderr
 
 ```
-[33m[changenog][0m unable to parse max-entries: '--max-entries=foo'.  err: 'invalid digit found in string'.  exiting...
+[33m[changenog][0m unable to parse max-entries: '--max-entries=foo'.  err: 'REPLACED'.  exiting...
 ```
 
 ## test args: ["--tag-filter-regex"]
@@ -930,7 +930,7 @@ Changenog options:
 ### stderr
 
 ```
-[33m[changenog][0m invalid regex: '--tag-filter-regex=(?!)*'.  err: 'Parsing error at position 4: Target of repeat operator is invalid'.  exiting...
+[33m[changenog][0m invalid regex: '--tag-filter-regex=(?!)*'.  err: 'REPLACED'.  exiting...
 ```
 
 ## test args: ["--commit-filter-preset=foo"]

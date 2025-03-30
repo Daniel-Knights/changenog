@@ -119,7 +119,10 @@ function formatTerminalOutput(
   }
 
   if (stderrString) {
-    formattedStdout += `\n\n### stderr\n\n\`\`\`\n${stderrString}\`\`\``;
+    // Errors can be OS-specific
+    const replacedStderr = stderrString.replace(/err: '.+'/, "err: 'REPLACED'");
+
+    formattedStdout += `\n\n### stderr\n\n\`\`\`\n${replacedStderr}\`\`\``;
   }
 
   return `${formattedStdout}\n\n`;
