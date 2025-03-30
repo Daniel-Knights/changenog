@@ -56,7 +56,7 @@ impl Validator {
             )));
         }
 
-        let curr_dir = current_dir().unwrap();
+        let curr_dir = current_dir().unwrap().canonicalize().unwrap();
         let is_within_cwd = root_path.unwrap().starts_with(curr_dir);
 
         if !is_within_cwd {
@@ -72,6 +72,7 @@ impl Validator {
     fn validate_output(val: &str) -> Result<(), ValidateArgError> {
         Validator::validate_values(ChangenogOptions::OUTPUT, val)
     }
+
     fn validate_no_links(val: &str) -> Result<(), ValidateArgError> {
         Validator::validate_boolean(ChangenogOptions::NO_LINKS, val)
     }
