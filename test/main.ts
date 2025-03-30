@@ -106,6 +106,7 @@ await suite("full_changelog", tests, "FULL");
 
 // Validate args
 await suite("args", [
+  ["--foo"],
   ["--overwrite", "val"],
   ["--root"],
   ["--root=./quux"],

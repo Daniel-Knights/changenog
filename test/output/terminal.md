@@ -877,6 +877,14 @@ Changenog options:
 [33m[changenog][0m no new version(s).  exiting...
 ```
 
+## test args: ["--foo"]
+
+### stderr
+
+```
+[33m[changenog][0m unknown arg: --foo.  exiting...
+```
+
 ## test args: ["--overwrite val"]
 
 ### stderr
