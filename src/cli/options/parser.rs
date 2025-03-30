@@ -168,7 +168,7 @@ impl ChangenogOptions {
             .get(ChangenogOptions::TAG_FILTER_REGEX.name)
             .unwrap_or(&HashSet::new())
             .iter()
-            .map(|r| Regex::new(r).expect(&format!("invalid tag-filter-regex: {}", r)))
+            .map(|r| Regex::new(r).expect(&format!("invalid tag-filter-regex: '{}'", r)))
             .collect::<Vec<Regex>>()
     }
 
@@ -185,7 +185,7 @@ impl ChangenogOptions {
             .get(ChangenogOptions::COMMIT_FILTER_REGEX.name)
             .unwrap_or(&default_val)
             .iter()
-            .map(|r| Regex::new(r).expect(&format!("invalid commit-filter-regex: {}", r)))
+            .map(|r| Regex::new(r).expect(&format!("invalid commit-filter-regex: '{}'", r)))
             .chain(commit_filter_presets)
             .collect::<Vec<Regex>>()
     }

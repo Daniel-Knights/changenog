@@ -65,10 +65,10 @@ impl ReleaseCollection {
             }
 
             if entry.tags.is_empty() {
-                // Merge commits with previous entry (or empty current entry if this is the first one)
-                let prev_entry = collection.0.last_mut().unwrap_or(&mut entry);
-
-                prev_entry.commits.extend(filtered_commits);
+                // Merge commits with previous entry
+                if let Some(prev_entry) = collection.0.last_mut() {
+                    prev_entry.commits.extend(filtered_commits);
+                }
             } else {
                 // Tag ordering can be unstable across machines, so sort by name
                 entry.tags.sort_by(|a, b| a.name.cmp(&b.name));
