@@ -1,7 +1,7 @@
 import fs from "node:fs";
 
 import { GitManager } from "./git.js";
-import { commitAll, suite } from "./utils.js";
+import { commitAll, run, suite } from "./utils.js";
 
 const startTimestamp = Date.now();
 
@@ -121,3 +121,13 @@ await suite("args", [
 await fs.promises.rm("test/repo", { recursive: true });
 
 console.log(`Tests completed in ${Date.now() - startTimestamp}ms`);
+
+// Check if output has changed
+const outputChanges = run("git", ["status", "-s", "--", "./output"], {
+  stdio: "pipe",
+  cwd: "./test",
+});
+
+if (outputChanges.stdout?.toString()) {
+  throw new Error("Output has changed. Please commit them if expected.");
+}
