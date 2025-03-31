@@ -28,6 +28,7 @@ const tests = [
   ["--commit-filter-preset", "no-semver", "--commit-filter-regex=^(?!.*changelog).*$"],
 ];
 
+// Setup
 if (fs.existsSync("test/output/terminal.md")) {
   await fs.promises.rm("test/output/terminal.md");
 }
