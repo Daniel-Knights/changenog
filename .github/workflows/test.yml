@@ -1,0 +1,54 @@
+name: Test
+description: "Runs tests for changenog. Triggers release workflow on success."
+# on:
+#   push:
+#     tags:
+#       - "v*.*.*"
+on: push
+
+jobs:
+  # Build and test targets
+  targets:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - target: aarch64-apple-darwin
+            os: macos-latest
+          - target: x86_64-apple-darwin
+            os: macos-13
+          # TBR: https://github.com/actions/partner-runner-images?tab=readme-ov-file#windows-11-on-arm
+          # - target: aarch64-pc-windows-msvc
+          #   os: windows-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-24.04-arm
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build for target
+        uses: ./.github/actions/target-build
+        with:
+          target: ${{ matrix.target }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run tests
+        run: |
+          pnpm tsx ./test/main.ts --target ${{ matrix.target }}

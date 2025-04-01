@@ -61,7 +61,10 @@ export async function suite(
  */
 export async function output(id: string, args: string[]) {
   // Run `changenog`
-  const result = run("../../target/release/changenog", args, {
+  const targetArgIndex = process.argv.indexOf("--target");
+  const targetPath = targetArgIndex > -1 ? `${process.argv[targetArgIndex + 1]}/` : "";
+
+  const result = run(`../../target/${targetPath}release/changenog`, args, {
     stdio: "pipe",
   });
 

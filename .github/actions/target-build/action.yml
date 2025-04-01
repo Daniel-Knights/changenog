@@ -1,0 +1,36 @@
+name: "Target Build"
+description: "Build Rust project for a specific target"
+inputs:
+  target:
+    description: "Target triple to build for"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        case ${{ inputs.target }} in
+          aarch64-unknown-linux-gnu)
+            sudo apt-get install -y gcc-aarch64-linux-gnu
+            echo "[target.aarch64-unknown-linux-gnu]" >> ~/.cargo/config.toml
+            echo "linker = \"aarch64-linux-gnu-gcc\"" >> ~/.cargo/config.toml
+            ;;
+          x86_64-unknown-linux-gnu)
+            sudo apt-get install -y gcc-multilib
+        esac
+
+    - name: Add Rust target
+      shell: bash
+      run: |
+        rustup target add ${{ inputs.target }}
+
+    - name: Rust cache
+      uses: swatinem/rust-cache@v2
+
+    - name: Build for target
+      shell: bash
+      run: |
+        cargo build --release --target ${{ inputs.target }}

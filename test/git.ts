@@ -36,7 +36,9 @@ export class GitManager {
         GIT_COMMITTER_DATE: this.#committerDate.toISOString(),
         // These are needed when setting committer date, no idea why
         GIT_AUTHOR_NAME: "a",
+        GIT_AUTHOR_EMAIL: "a",
         GIT_COMMITTER_NAME: "a",
+        GIT_COMMITTER_EMAIL: "a",
       },
     });
 

@@ -130,5 +130,10 @@ const outputChanges = run("git", ["status", "-s", "--", "./output"], {
 });
 
 if (outputChanges.stdout?.toString()) {
+  run("git", ["diff", "--", "./output"], {
+    stdio: "inherit",
+    cwd: "./test",
+  });
+
   throw new Error("Output has changed. Please commit them if expected.");
 }
