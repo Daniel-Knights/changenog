@@ -1,5 +1,8 @@
 # changenog
 
+![GitHub Tag](https://img.shields.io/github/v/tag/Daniel-Knights/changenog)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Daniel-Knights/changenog/test.yml?label=tests)
+
 Zero-config changelog generator with monorepo support.
 
 Parses Git tags and commits since last entry, restricts them by current working directory, and adds any missing entries to the changelog.
@@ -10,6 +13,7 @@ See this repo's changelog for example output.
   - [Rust](#rust)
   - [JS](#js)
   - [Manual](#manual)
+- [Supported Platforms](#supported-platforms)
 - [Options](#options)
   - [Filters](#filters)
     - [Presets](#presets)
@@ -49,6 +53,17 @@ pnpm i -D changenog
 ### Manual
 
 Binaries are available on the [releases page](https://github.com/Daniel-Knights/changenog/releases).
+
+## Supported Platforms
+
+| Platform | Architecture | Notes                   |
+| -------- | ------------ | ----------------------- |
+| Linux    | x86_64       | Tested on Ubuntu latest |
+| Linux    | aarch64      | Tested on Ubuntu 22.04  |
+| MacOS    | x86_64       | Tested on MacOS 13.0    |
+| MacOS    | aarch64      | Tested on MacOS latest  |
+| Windows  | x86_64       | Tested on Windows 11    |
+| Windows  | aarch64      | Untested ⚠️             |
 
 ## Options
 
