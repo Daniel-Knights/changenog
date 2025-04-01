@@ -1,10 +1,9 @@
 name: Test
 description: "Runs tests for changenog. Triggers release workflow on success."
-# on:
-#   push:
-#     tags:
-#       - "v*.*.*"
-on: push
+on:
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   # Build and test targets

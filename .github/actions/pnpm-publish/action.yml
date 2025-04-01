@@ -13,13 +13,12 @@ runs:
     - name: Install pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: "latest"
         run_install: false
 
     - name: Install Node
       uses: actions/setup-node@v4
       with:
-        node-version: "latest"
+        node-version: 20
         registry-url: "https://registry.npmjs.org"
 
     - name: Publish package to NPM

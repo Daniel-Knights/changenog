@@ -1,14 +1,17 @@
 name: Release
+description: "Creates a GitHub release and publishes targets to crates.io and NPM"
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_run:
+    workflows: [Test]
+    types: [completed]
+    branches: [main]
 env:
   TAG_NAME: ${{ github.ref_name }}
 
 jobs:
   # Create GitHub release
   release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -46,36 +49,20 @@ jobs:
           - target: x86_64-pc-windows-msvc
             os: windows-latest
           - target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
+            os: ubuntu-24.04-arm
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-multilib
-          case ${{ matrix.target }} in
-            aarch64-unknown-linux-gnu)
-              sudo apt-get install -y gcc-aarch64-linux-gnu
-              echo "[target.aarch64-unknown-linux-gnu]" >> ~/.cargo/config.toml
-              echo "linker = \"aarch64-linux-gnu-gcc\"" >> ~/.cargo/config.toml
-              ;;
-          esac
-
-      - name: Add Rust target
-        run: |
-          rustup target add ${{ matrix.target }}
-
-      - name: Rust cache
-        uses: swatinem/rust-cache@v2
-
       - name: Build for target
+        uses: ./.github/actions/target-build
+        with:
+          target: ${{ matrix.target }}
+
+      - name: Copy built executable to package directory
         run: |
-          cargo build --release --target ${{ matrix.target }}
           cp ${{ env.EXE_DIR }}/${{ env.EXE_NAME }} ./packages/js/targets/${{ matrix.target }}
 
       - name: Upload asset
