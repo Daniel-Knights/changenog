@@ -4,9 +4,8 @@ on:
   workflow_run:
     workflows: [Test]
     types: [completed]
-    branches: [main]
 env:
-  TAG_NAME: ${{ github.ref_name }}
+  TAG_NAME: ${{ github.event.workflow_run.head_branch }}
 
 jobs:
   # Create GitHub release
