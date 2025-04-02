@@ -23,15 +23,15 @@ const newTargets = targets
     let os;
 
     if (target?.includes("windows")) {
-      os = "windows";
+      os = "windows-latest";
     } else if (target?.includes("apple")) {
-      os = "macos";
-    } else {
-      os = "ubuntu";
+      os = "macos-latest";
+    } else if (target?.includes("linux")) {
+      os = target.includes("x86_64") ? "ubuntu-latest" : "ubuntu-24.04-arm";
     }
 
     return `          - target: ${target}
-            os: ${os}-latest
+            os: ${os}
 `;
   })
   .join("");
@@ -103,6 +103,6 @@ targets.forEach((target) => {
 
   fs.writeFileSync(
     `./packages/js/targets/${target}/package.json`,
-    JSON.stringify(pkg, null, 2),
+    `${JSON.stringify(pkg, null, 2)}\n`,
   );
 });
