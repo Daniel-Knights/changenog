@@ -28,6 +28,7 @@ fs.writeFileSync(
   `${JSON.stringify(packageJson, null, 2)}\n`,
 );
 
+run("just", ["toolchain"]);
 run("git", ["tag", newTag]);
 run("just", ["changenog"]);
 
@@ -38,11 +39,10 @@ const rl = readline.createInterface({
 
 console.log("Review changes then press enter to continue...");
 
-await new Promise((res) => {
+await new Promise<void>((res) => {
   rl.on("line", () => {
     rl.close();
 
-    // @ts-expect-error - JSDoc typing for this looks gross
     res();
   });
 });

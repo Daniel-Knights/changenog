@@ -106,3 +106,7 @@ targets.forEach((target) => {
     `${JSON.stringify(pkg, null, 2)}\n`,
   );
 });
+
+console.warn(
+  "WARNING: This script doesn't update `packages/js/core/loader.js`. Please check it to ensure it's correct.",
+);
