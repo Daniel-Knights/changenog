@@ -3,7 +3,7 @@ build:
 test:
     just build && pnpm tsx ./test/main
 changenog:
-    just build && ./target/release/changenog --overwrite --commit-filter-preset=angular --commit-filter-preset=angular-readme-only-docs
+    just build && ./target/release/changenog --commit-filter-preset=angular --commit-filter-preset=angular-readme-only-docs
 toolchain:
     pnpm tsx ./scripts/toolchain
 release-patch:
