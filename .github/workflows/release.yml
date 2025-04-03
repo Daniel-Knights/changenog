@@ -79,8 +79,24 @@ jobs:
           npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
           package_dir: ./packages/js/targets/${{ matrix.target }}
 
-  # Publish core to crates.io and NPM
-  publish:
+  # Publish core to NPM
+  publish-core-npm:
+    needs: targets
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Publish core to NPM
+        uses: ./.github/actions/pnpm-publish
+        with:
+          npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
+          package_dir: ./packages/js/core
+
+  # Publish core to crates.io
+  publish-core-crates:
     needs: targets
     runs-on: ubuntu-latest
     permissions:
@@ -91,9 +107,3 @@ jobs:
 
       - name: Publish to crates.io
         run: cargo publish --allow-dirty --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
-
-      - name: Publish core to NPM
-        uses: ./.github/actions/pnpm-publish
-        with:
-          npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
-          package_dir: ./packages/js/core
