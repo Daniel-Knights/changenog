@@ -89,6 +89,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Copy README to package directory
+        run: |
+          cp README.md ./packages/js/core/README.md
+
       - name: Publish core to NPM
         uses: ./.github/actions/pnpm-publish
         with:
