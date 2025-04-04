@@ -1,3 +1,12 @@
+## [v2.0.2](https://github.com/Daniel-Knights/changenog/compare/v2.0.1...v2.0.2) (04/04/2025)
+
+- docs(readme): copy readme to core js package before publish ([3812311](https://github.com/Daniel-Knights/changenog/commit/38123116b58df139206c64ae0034b7cb13469834))
+- docs(readme): crates.io and npm shields, shield links ([cf84271](https://github.com/Daniel-Knights/changenog/commit/cf84271223069d51a3b23bdb5c463592708d1650))
+
+## [v2.0.1](https://github.com/Daniel-Knights/changenog/compare/v2.0.0...v2.0.1) (03/04/2025)
+
+- chore(release): v2.0.1 of js core package, as unable to republish under v2.0.0 having previously been published then unpublished ([36484c6](https://github.com/Daniel-Knights/changenog/commit/36484c6717b3b6b93b058ca6535867ef89018bb5))
+
 ## [v2.0.0](https://github.com/Daniel-Knights/changenog/compare/v1.2.0...v2.0.0) (03/04/2025)
 
 - feat(cli): validate regex values ([07a3187](https://github.com/Daniel-Knights/changenog/commit/07a3187dad8950dd545b4b87aef3bb0efbcae027))
