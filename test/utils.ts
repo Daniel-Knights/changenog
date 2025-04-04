@@ -112,7 +112,12 @@ function formatTerminalOutput(
   args: string[],
   result: ReturnType<typeof spawnSync>,
 ) {
-  const normalisedStdout = replaceDynamicText(result.stdout.toString());
+  const normalisedStdout = replaceDynamicText(result.stdout.toString()).replace(
+    // Replace `--version` output
+    /(?<=^\s*)\d\d?\.\d\d?\.\d\d?(?=\s*$)/,
+    "<REPLACED>",
+  );
+
   const stderrString = result.stderr.toString();
 
   let formattedStdout = `## test ${testId}: ["${args.join(" ")}"]`;

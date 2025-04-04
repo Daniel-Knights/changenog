@@ -3,7 +3,7 @@
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test no_repo: ["-v"]
@@ -11,7 +11,7 @@
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test no_repo: ["--help"]
@@ -149,7 +149,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test no_remote_or_tags: ["-v"]
@@ -157,7 +157,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test no_remote_or_tags: ["--help"]
@@ -295,7 +295,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test no_remote: ["-v"]
@@ -303,7 +303,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test no_remote: ["--help"]
@@ -412,7 +412,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test with_remote: ["-v"]
@@ -420,7 +420,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test with_remote: ["--help"]
@@ -529,7 +529,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test empty_changelog: ["-v"]
@@ -537,7 +537,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test empty_changelog: ["--help"]
@@ -646,7 +646,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test partial_changelog: ["-v"]
@@ -654,7 +654,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test partial_changelog: ["--help"]
@@ -748,7 +748,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test full_changelog: ["-v"]
@@ -756,7 +756,7 @@ Changenog options:
 ### stdout
 
 ```
-1.2.0
+<REPLACED>
 ```
 
 ## test full_changelog: ["--help"]
