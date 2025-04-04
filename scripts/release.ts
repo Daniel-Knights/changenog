@@ -8,9 +8,11 @@ if (run("git", ["status", "-s"], { stdio: "pipe" }).stdout.toString()) {
   throw new Error("Please commit all changes before running this script.");
 }
 
-//// Main
+if (run("just", ["test"]).status !== 0) {
+  throw new Error("Tests failed. Please fix them before releasing.");
+}
 
-run("just", ["build"]);
+//// Main
 
 const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
 const packageJson = JSON.parse(
