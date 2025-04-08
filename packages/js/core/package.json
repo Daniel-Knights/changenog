@@ -1,6 +1,6 @@
 {
   "name": "changenog",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Zero-config changelog generator with monorepo support.",
   "author": "Donk",
   "license": "ISC",
@@ -24,11 +24,11 @@
     "gitlab"
   ],
   "optionalDependencies": {
-    "@changenog/aarch64-apple-darwin": "2.0.2",
-    "@changenog/x86_64-apple-darwin": "2.0.2",
-    "@changenog/aarch64-pc-windows-msvc": "2.0.2",
-    "@changenog/x86_64-pc-windows-msvc": "2.0.2",
-    "@changenog/aarch64-unknown-linux-gnu": "2.0.2",
-    "@changenog/x86_64-unknown-linux-gnu": "2.0.2"
+    "@changenog/aarch64-apple-darwin": "2.0.3",
+    "@changenog/x86_64-apple-darwin": "2.0.3",
+    "@changenog/aarch64-pc-windows-msvc": "2.0.3",
+    "@changenog/x86_64-pc-windows-msvc": "2.0.3",
+    "@changenog/aarch64-unknown-linux-gnu": "2.0.3",
+    "@changenog/x86_64-unknown-linux-gnu": "2.0.3"
   }
 }

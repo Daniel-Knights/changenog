@@ -1,3 +1,7 @@
+## [v2.0.3](https://github.com/Daniel-Knights/changenog/compare/v2.0.2...v2.0.3) (08/04/2025)
+
+- fix: continue on invalid prev entry tag ([3ccd371](https://github.com/Daniel-Knights/changenog/commit/3ccd3718212c5491a7a09f11ee503e3fab689e1f))
+
 ## [v2.0.2](https://github.com/Daniel-Knights/changenog/compare/v2.0.1...v2.0.2) (04/04/2025)
 
 - docs(readme): copy readme to core js package before publish ([3812311](https://github.com/Daniel-Knights/changenog/commit/38123116b58df139206c64ae0034b7cb13469834))
