@@ -23,13 +23,18 @@ impl GitTag {
         tag_filters.iter().all(|r| r.is_match(&self.name).unwrap())
     }
 
+    /// Returns bool indicating if the given tag exists in the repo
+    pub fn exists(tag_name: &str) -> bool {
+        !run("git", &["tag", "-l", tag_name]).unwrap().is_empty()
+    }
+
     //// Private
 
-    /// Returns raw tags since previous entry in a parsable format
-    fn get_raw(prev_entry_tag: &Option<String>) -> Vec<String> {
-        // Tags since and including `prev_entry_tag`
-        let no_merged_arg = if prev_entry_tag.is_some() {
-            &format!("--no-merged={}", prev_entry_tag.clone().unwrap())
+    /// Returns raw tags since previous tag in a parsable format
+    fn get_raw(prev_tag_name: &Option<String>) -> Vec<String> {
+        // Tags since and including `prev_tag_name`
+        let no_merged_arg = if prev_tag_name.is_some() {
+            &format!("--no-merged={}", prev_tag_name.as_ref().unwrap())
         } else {
             ""
         };

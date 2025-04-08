@@ -11,23 +11,21 @@ pub struct GitCommit {
 }
 
 impl GitCommit {
-    /// Returns all commits between `prev_tag` and `tag`.
-    /// If `prev_tag` is `None`, returns all commits from the beginning of the repo
+    /// Returns all commits between `prev_tag_name` and `tag`.
+    /// If `prev_tag_name` is `None`, returns all commits from the beginning of the repo
     /// history up to `tag`.
     pub fn get_all_for_tag(
         tag: &GitTag,
-        prev_tag: &Option<String>,
+        prev_tag_name: &Option<String>,
         opts: &ChangenogOptions,
     ) -> Vec<GitCommit> {
-        let tag_range = if prev_tag.is_some() {
-            let prev_tag_name = prev_tag.clone().unwrap_or("".to_string());
-
-            &format!("{}..{}", prev_tag_name, tag.name)
+        let tag_range = if prev_tag_name.is_some() {
+            &format!("{}..{}", prev_tag_name.as_ref().unwrap(), tag.name)
         } else {
             &tag.name
         };
 
-        let log_args = &vec![
+        let log_args = vec![
             "log",
             tag_range,
             "--pretty=%H %s",
@@ -35,7 +33,7 @@ impl GitCommit {
             opts.root.to_str().unwrap(), // Only show commits with file changes in root
         ];
 
-        let cmd_output = run("git", log_args).unwrap();
+        let cmd_output = run("git", &log_args).unwrap();
         let raw_commits = cmd_output.lines().collect::<Vec<&str>>();
 
         raw_commits

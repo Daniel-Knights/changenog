@@ -9,5 +9,9 @@ pub fn run(cmd: &str, args: &[&str]) -> Result<String, Box<dyn Error>> {
 
     let output = Command::new(cmd).args(args).output()?;
 
+    if !output.status.success() {
+        return Err(String::from_utf8(output.stderr)?.into());
+    }
+
     Ok(String::from_utf8(output.stdout)?)
 }

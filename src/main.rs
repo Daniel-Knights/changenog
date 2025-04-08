@@ -55,7 +55,15 @@ fn main() -> ExitCode {
     };
 
     // Build entries
-    let prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog);
+    let mut prev_entry_tag = Changelog::get_prev_entry_tag(existing_changelog);
+
+    // Prev entry tag may be invalid
+    if let Some(tag_name) = &prev_entry_tag {
+        if !GitTag::exists(tag_name) {
+            prev_entry_tag = None;
+        }
+    }
+
     let tags_since = GitTag::get_all_since(&prev_entry_tag);
     let releases = ReleaseCollection::from(&tags_since, &prev_entry_tag, &opts);
 
