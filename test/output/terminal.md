@@ -877,6 +877,141 @@ Changenog options:
 [33m[changenog][0m no new version(s).  exiting...
 ```
 
+## test invalid_prev_entry_tag_changelog: ["--version"]
+
+### stdout
+
+```
+<REPLACED>
+```
+
+## test invalid_prev_entry_tag_changelog: ["-v"]
+
+### stdout
+
+```
+<REPLACED>
+```
+
+## test invalid_prev_entry_tag_changelog: ["--help"]
+
+### stdout
+
+```
+Changenog options:
+  --overwrite            | boolean | overwrite existing changelog
+  --root                 | string  | root dir relative to the current working directory.  default: current working directory
+  --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
+  --no-links             | boolean | disable links
+  --remote-url           | string  | remote URL to use for links.  default: origin
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
+  --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
+  --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
+  --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
+```
+
+## test invalid_prev_entry_tag_changelog: ["-h"]
+
+### stdout
+
+```
+Changenog options:
+  --overwrite            | boolean | overwrite existing changelog
+  --root                 | string  | root dir relative to the current working directory.  default: current working directory
+  --output               | string  | output of the generated changelog.  one of ['file', 'stdout'].  default: 'file'
+  --no-links             | boolean | disable links
+  --remote-url           | string  | remote URL to use for links.  default: origin
+  --max-entries          | number  | maximum number of entries to process.  default: '100'
+  --tag-filter-regex     | regex   | regex pattern(s) that each tag must match to be included
+  --commit-filter-regex  | regex   | regex pattern(s) that each commit must match to be included
+  --commit-filter-preset | string  | filter preset(s) to use.  one of ['angular', 'angular-readme-only-docs', 'no-changelog', 'no-semver']
+```
+
+## test invalid_prev_entry_tag_changelog: ["--overwrite"]
+
+## test invalid_prev_entry_tag_changelog: ["--root=./bar/baz"]
+
+## test invalid_prev_entry_tag_changelog: ["--output stdout"]
+
+### stdout
+
+```
+## [my-package/v1.0.0, v1.0.0](https://www.my-remote.com/compare/v0.1.0...my-package/v1.0.0) (REPLACED)
+
+- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/compare/v0.0.1...v0.1.0) (REPLACED)
+
+- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
+
+- 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- non-angular commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- refactor: refactor code ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(changelog): 1.0.0 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- chore(scripts): update scripts ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat(scope): add another feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- fix: fix bug ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add feature ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- docs(readme): update readme ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add baz ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add bar ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- feat: add foo ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [foo](https://www.my-remote.com/tags) (REPLACED)
+
+- my-commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit2 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit3 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.1.0](https://www.my-remote.com/tags) (REPLACED)
+
+- my-commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit2 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit3 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+
+## [v0.0.1](https://www.my-remote.com/tags) (REPLACED)
+
+- my-commit ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit2 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+- my-commit3 ([REPLACED](https://www.my-remote.com/commit/REPLACED))
+```
+
+## test invalid_prev_entry_tag_changelog: ["--no-links"]
+
+## test invalid_prev_entry_tag_changelog: ["--remote-url=https://www.my-repo.com"]
+
+## test invalid_prev_entry_tag_changelog: ["--max-entries 2"]
+
+## test invalid_prev_entry_tag_changelog: ["--tag-filter-regex=my-package/.*"]
+
+## test invalid_prev_entry_tag_changelog: ["--commit-filter-regex ^(?!.*changelog).*$"]
+
+## test invalid_prev_entry_tag_changelog: ["--commit-filter-preset=angular"]
+
+## test invalid_prev_entry_tag_changelog: ["--commit-filter-preset angular --commit-filter-preset=angular-readme-only-docs"]
+
+## test invalid_prev_entry_tag_changelog: ["--commit-filter-preset=no-changelog"]
+
+## test invalid_prev_entry_tag_changelog: ["--commit-filter-preset no-semver --commit-filter-regex=^(?!.*changelog).*$"]
+
 ## test args: ["--foo"]
 
 ### stderr

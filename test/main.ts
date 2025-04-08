@@ -105,6 +105,9 @@ await suite("partial_changelog", tests, "PARTIAL");
 // Run with full changelog
 await suite("full_changelog", tests, "FULL");
 
+// Run with full changelog
+await suite("invalid_prev_entry_tag_changelog", tests, "INVALID_PREV_ENTRY_TAG");
+
 // Validate args
 await suite("args", [
   ["--foo"],

@@ -41,7 +41,7 @@ export async function commitAll(dir: "foo" | "bar" | "bar/baz", commits: string[
 export async function suite(
   id: string,
   tests: string[][],
-  existingChangelog?: "FULL" | "PARTIAL",
+  existingChangelog?: "FULL" | "PARTIAL" | "INVALID_PREV_ENTRY_TAG",
 ) {
   for (const testArgs of tests) {
     // Reset existing changelog
