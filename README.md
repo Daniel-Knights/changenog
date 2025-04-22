@@ -3,6 +3,7 @@
 [![GitHub Tag](https://img.shields.io/github/v/tag/Daniel-Knights/changenog)](https://github.com/Daniel-Knights/changenog/releases/latest)
 [![Crates.io Version](https://img.shields.io/crates/v/changenog?color=%23E5B14D)](https://crates.io/crates/changenog)
 [![NPM Version](https://img.shields.io/npm/v/changenog?color=%23CB0000)](https://www.npmjs.com/package/changenog)
+[![PyPI Version](https://img.shields.io/pypi/v/changenog?color=%230074B7)](https://pypi.org/project/changenog/)
 [![GitHub Actions Test Workflow Status](https://img.shields.io/github/actions/workflow/status/Daniel-Knights/changenog/test.yml?label=tests)](https://github.com/Daniel-Knights/changenog/actions/workflows/test.yml)
 
 Zero-config changelog generator with monorepo support.
@@ -14,6 +15,7 @@ See this repo's changelog for example output.
 - [Usage](#usage)
   - [Rust](#rust)
   - [JS](#js)
+  - [Python](#python)
   - [Manual](#manual)
 - [Supported Platforms](#supported-platforms)
 - [Options](#options)
@@ -50,6 +52,18 @@ pnpm i -D changenog
     "changenog": "changenog"
   }
 }
+```
+
+### Python
+
+https://pypi.org/project/changenog/
+
+```bash
+pip install changenog
+```
+
+```bash
+changenog
 ```
 
 ### Manual

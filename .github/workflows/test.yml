@@ -25,8 +25,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Build for target
         uses: ./.github/actions/target-build
@@ -44,9 +43,5 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run tests
-        run: |
-          pnpm tsx ./test/main.ts --target ${{ matrix.target }}
+      - run: pnpm install
+      - run: pnpm tsx ./test/main.ts --target ${{ matrix.target }}

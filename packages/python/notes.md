@@ -1,0 +1,1 @@
+The Python setup is one core package that includes [wheels](https://packaging.python.org/en/latest/specifications/binary-distribution-format/#binary-distribution-format) for each target, built using [`PyO3/maturin-action@v1`](https://github.com/PyO3/maturin-action).

@@ -27,8 +27,7 @@ runs:
       run: |
         rustup target add ${{ inputs.target }}
 
-    - name: Rust cache
-      uses: swatinem/rust-cache@v2
+    - uses: swatinem/rust-cache@v2
 
     - name: Build for target
       shell: bash
