@@ -16,9 +16,8 @@ jobs:
             os: macos-latest
           - target: x86_64-apple-darwin
             os: macos-13
-          # TBR: https://github.com/actions/partner-runner-images?tab=readme-ov-file#windows-11-on-arm
-          # - target: aarch64-pc-windows-msvc
-          #   os: windows-latest
+          - target: aarch64-pc-windows-msvc
+            os: windows-11-arm
           - target: x86_64-pc-windows-msvc
             os: windows-latest
           - target: aarch64-unknown-linux-gnu
