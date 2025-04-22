@@ -6,6 +6,7 @@ on:
     types: [completed]
 env:
   TAG_NAME: ${{ github.event.workflow_run.head_branch }}
+  PYTHON_DIST_PATH: ./target/wheels/
 
 jobs:
   # Create GitHub release
@@ -15,8 +16,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -26,9 +27,34 @@ jobs:
             --title "${{ env.TAG_NAME }}" \
             --notes "See [CHANGELOG.md](https://github.com/Daniel-Knights/changenog/blob/main/CHANGELOG.md) for details."
 
+  # Copy README to package directories
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - run: pnpm install
+      - run: pnpm tsx scripts/readme.ts
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: readme
+          path: packages/**/README.md
+
   # Build and publish targets
   targets:
-    needs: release
+    needs: [readme]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -38,6 +64,7 @@ jobs:
       EXE_DIR: target/${{ matrix.target }}/release
     strategy:
       matrix:
+        # Dynamically generated in scripts/toolchain.ts
         include:
           - target: aarch64-apple-darwin
             os: macos-latest
@@ -52,17 +79,39 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Download README artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: readme
+          path: ./packages
 
       - name: Build for target
         uses: ./.github/actions/target-build
         with:
           target: ${{ matrix.target }}
 
-      - name: Copy built executable to package directory
+      - name: Copy built executable to package directories
         run: |
           cp ${{ env.EXE_DIR }}/${{ env.EXE_NAME }} ./packages/js/targets/${{ matrix.target }}
+          cp ${{ env.EXE_DIR }}/${{ env.EXE_NAME }} ./packages/python/core/${{ env.EXE_NAME }}
+
+      - name: Build Python wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          working-directory: ./packages/python/core
+          command: build
+          args: --release
+          target: ${{ matrix.target }}
+          sccache: true
+
+      - name: Store wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.target }}
+          path: ${{ env.PYTHON_DIST_PATH }}/*.whl
+          if-no-files-found: error
 
       - name: Upload asset
         uses: ./.github/actions/upload-asset
@@ -81,17 +130,18 @@ jobs:
 
   # Publish core to NPM
   publish-core-npm:
-    needs: targets
+    needs: [release, readme, targets]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Copy README to package directory
-        run: |
-          cp README.md ./packages/js/core/README.md
+      - name: Download README artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: readme
+          path: ./packages
 
       - name: Publish core to NPM
         uses: ./.github/actions/pnpm-publish
@@ -99,15 +149,37 @@ jobs:
           npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
           package_dir: ./packages/js/core
 
+  # Publish core to PyPI
+  publish-core-pypi:
+    needs: [targets]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/changenog
+    steps:
+      - name: Download wheel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.PYTHON_DIST_PATH }}
+          pattern: wheel-*
+          merge-multiple: true
+
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ${{ env.PYTHON_DIST_PATH }}
+          verbose: true
+
   # Publish core to crates.io
   publish-core-crates:
-    needs: targets
+    needs: [release, targets]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Publish to crates.io
         run: cargo publish --allow-dirty --token ${{ secrets.CARGO_REGISTRY_TOKEN }}

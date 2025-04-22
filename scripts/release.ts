@@ -14,13 +14,23 @@ if (run("just", ["test"]).status !== 0) {
 
 //// Main
 
+const TOML_VERSION_REGEX = /version = "([^"]+)"/;
+
 const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
+const pyprojectToml = fs.readFileSync("./packages/python/core/pyproject.toml", "utf-8");
 const packageJson = JSON.parse(
   fs.readFileSync("./packages/js/core/package.json", "utf-8"),
 );
-const [, version] = cargoToml.match(/version = "([^"]+)"/)!;
+
+const [, version] = cargoToml.match(TOML_VERSION_REGEX)!;
 const newVersion = bumpVersion(version!, args[0]!);
 const newTag = `v${newVersion}`;
+
+const [pyprojectHead, pyprojectTail] = pyprojectToml.split("[project]", 2);
+const newPyprojectTail = pyprojectTail!.replace(
+  TOML_VERSION_REGEX,
+  `version = "${newVersion}"`,
+);
 
 packageJson.version = newVersion;
 
@@ -28,6 +38,10 @@ fs.writeFileSync("Cargo.toml", cargoToml.replace(version!, newVersion));
 fs.writeFileSync(
   "./packages/js/core/package.json",
   `${JSON.stringify(packageJson, null, 2)}\n`,
+);
+fs.writeFileSync(
+  "./packages/python/core/pyproject.toml",
+  `${pyprojectHead}[project]${newPyprojectTail}`,
 );
 
 run("just", ["toolchain"]);

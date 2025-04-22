@@ -1,0 +1,36 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "changenog"
+version = "2.0.3"
+description = "Zero-config changelog generator with monorepo support."
+readme = "README.md"
+authors = [{ name = "Donk" }]
+license = { text = "ISC" }
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: ISC License (ISCL)",
+  "Natural Language :: English",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Rust",
+  "Topic :: Software Development :: Build Tools",
+  "Topic :: Software Development :: Documentation",
+  "Topic :: Text Processing :: Markup :: Markdown",
+  "Topic :: Utilities",
+]
+dependencies = []
+
+[project.urls]
+homepage = "https://github.com/Daniel-Knights/changenog"
+bugs = "https://github.com/Daniel-Knights/changenog/issues"
+changelog = "https://github.com/Daniel-Knights/changenog/blob/main/CHANGELOG.md"
+
+[tool.maturin]
+manifest-path = "../../../Cargo.toml"
