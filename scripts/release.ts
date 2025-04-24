@@ -1,6 +1,7 @@
 import { spawnSync, SpawnSyncOptions } from "node:child_process";
-import fs from "node:fs";
 import readline from "node:readline";
+
+import { bumpCoreVersions } from "./version.js";
 
 const args = process.argv.slice(2);
 
@@ -14,35 +15,8 @@ if (run("just", ["test"]).status !== 0) {
 
 //// Main
 
-const TOML_VERSION_REGEX = /version = "([^"]+)"/;
-
-const cargoToml = fs.readFileSync("Cargo.toml", "utf-8");
-const pyprojectToml = fs.readFileSync("./packages/python/core/pyproject.toml", "utf-8");
-const packageJson = JSON.parse(
-  fs.readFileSync("./packages/js/core/package.json", "utf-8"),
-);
-
-const [, version] = cargoToml.match(TOML_VERSION_REGEX)!;
-const newVersion = bumpVersion(version!, args[0]!);
-const newTag = `v${newVersion}`;
-
-const [pyprojectHead, pyprojectTail] = pyprojectToml.split("[project]", 2);
-const newPyprojectTail = pyprojectTail!.replace(
-  TOML_VERSION_REGEX,
-  `version = "${newVersion}"`,
-);
-
-packageJson.version = newVersion;
-
-fs.writeFileSync("Cargo.toml", cargoToml.replace(version!, newVersion));
-fs.writeFileSync(
-  "./packages/js/core/package.json",
-  `${JSON.stringify(packageJson, null, 2)}\n`,
-);
-fs.writeFileSync(
-  "./packages/python/core/pyproject.toml",
-  `${pyprojectHead}[project]${newPyprojectTail}`,
-);
+const newVersions = await bumpCoreVersions(args[0] as "major" | "minor" | "patch");
+const newTag = `v${newVersions.cargoToml}`;
 
 run("just", ["toolchain"]);
 run("git", ["tag", newTag]);
@@ -69,39 +43,6 @@ run("git", ["push"]);
 run("git", ["push", "--tags"]);
 
 //// Helper functions
-
-function bumpVersion(versionStr: string, kind: string) {
-  const versionFields = versionStr.split(".").map((n) => Number(n));
-
-  if (!/major|minor|patch/.test(kind)) {
-    throw new Error("Invalid version kind.");
-  }
-
-  if (versionFields.length !== 3) {
-    throw new Error("Invalid version string.");
-  }
-
-  switch (kind) {
-    case "major": {
-      versionFields[0]! += 1;
-      versionFields[1] = 0;
-      versionFields[2] = 0;
-
-      break;
-    }
-    case "minor": {
-      versionFields[1]! += 1;
-      versionFields[2] = 0;
-
-      break;
-    }
-    case "patch": {
-      versionFields[2]! += 1;
-    }
-  }
-
-  return versionFields.join(".");
-}
 
 function run(
   cmd: string,

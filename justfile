@@ -8,6 +8,8 @@ toolchain:
     pnpm tsx ./scripts/toolchain
 readme:
     pnpm tsx ./scripts/readme
+version kind:
+    pnpm tsx ./scripts/version {{kind}}
 release-patch:
     pnpm tsx ./scripts/release patch
 release-minor:
