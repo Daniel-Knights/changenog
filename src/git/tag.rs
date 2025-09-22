@@ -12,10 +12,30 @@ pub struct GitTag {
 impl GitTag {
     /// Gets all tags since the previous entry
     pub fn get_all_since(prev_entry_tag: &Option<String>) -> Vec<GitTag> {
-        GitTag::get_raw(prev_entry_tag)
-            .iter()
-            .map(|t| GitTag::from_raw(t))
-            .collect::<Vec<GitTag>>()
+        let tag_args = vec![
+            "tag",
+            "--sort=-creatordate", // Newest to oldest
+            "--format=%(creatordate:iso-strict) %(refname:short)",
+        ];
+
+        let cmd_output = run("git", &tag_args).unwrap();
+        let tag_lines = cmd_output.lines();
+
+        let mut tags = vec![];
+
+        for line in tag_lines {
+            let line_str = line.to_string();
+            let tag = GitTag::from_raw(&line_str);
+
+            // Break once we reach the previous tag name
+            if prev_entry_tag.as_ref().is_some_and(|t| &tag.name == t) {
+                break;
+            }
+
+            tags.push(tag)
+        }
+
+        tags
     }
 
     /// Validates `tag.name` against all filters.
@@ -29,29 +49,6 @@ impl GitTag {
     }
 
     //// Private
-
-    /// Returns raw tags since previous tag in a parsable format
-    fn get_raw(prev_tag_name: &Option<String>) -> Vec<String> {
-        // Tags since and including `prev_tag_name`
-        let no_merged_arg = if prev_tag_name.is_some() {
-            &format!("--no-merged={}", prev_tag_name.as_ref().unwrap())
-        } else {
-            ""
-        };
-
-        let tag_args = vec![
-            "tag",
-            no_merged_arg,
-            "--sort=-creatordate", // Newest to oldest
-            "--format=%(creatordate:iso-strict) %(refname:short)",
-        ];
-
-        run("git", &tag_args)
-            .unwrap()
-            .lines()
-            .map(|l| l.to_string())
-            .collect::<Vec<String>>()
-    }
 
     /// Parses raw tag into GitTag
     fn from_raw(raw_tag: &str) -> GitTag {
