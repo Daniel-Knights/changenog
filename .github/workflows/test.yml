@@ -1,5 +1,4 @@
 name: Test
-description: "Runs tests for changenog. Triggers release workflow on success."
 on:
   push:
     tags:

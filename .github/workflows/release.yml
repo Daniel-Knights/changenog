@@ -1,5 +1,4 @@
 name: Release
-description: "Creates a GitHub release and publishes targets to crates.io and NPM"
 on:
   workflow_run:
     workflows: [Test]
