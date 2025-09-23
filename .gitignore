@@ -5,3 +5,4 @@ packages/**/changenog
 packages/**/README.md
 todo.txt
 .env
+test/repo
