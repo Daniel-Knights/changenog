@@ -18,29 +18,28 @@ if (run("just", ["test"]).status !== 0) {
 const newVersions = await bumpCoreVersions(args[0] as "major" | "minor" | "patch");
 const newTag = `v${newVersions.cargoToml}`;
 
-run("just", ["toolchain"]);
-run("git", ["tag", newTag]);
-run("just", ["changenog"]);
-
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-console.log("Review changes then press enter to continue...");
+run("just", ["toolchain"]);
 
-await new Promise<void>((res) => {
-  rl.on("line", () => {
-    rl.close();
+await confirmChanges();
 
-    res();
-  });
-});
+run("git", ["add", "."]);
+run("git", ["commit", "-m", `chore(release): prepare ${newTag}`]);
+run("git", ["tag", newTag]);
+run("just", ["changenog"]);
+
+await confirmChanges();
 
 run("git", ["add", "."]);
 run("git", ["commit", "-m", `chore(release): ${newTag}`]);
 run("git", ["push"]);
 run("git", ["push", "--tags"]);
+
+rl.close();
 
 //// Helper functions
 
@@ -50,4 +49,14 @@ function run(
   options: SpawnSyncOptions = { stdio: "inherit" },
 ): ReturnType<typeof spawnSync> {
   return spawnSync(cmd, passedArgs, options);
+}
+
+function confirmChanges() {
+  console.log("Review changes then press enter to continue...");
+
+  return new Promise<void>((res) => {
+    rl.on("line", () => {
+      res();
+    });
+  });
 }
