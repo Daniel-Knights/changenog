@@ -129,6 +129,7 @@ jobs:
 
       - name: Publish target to NPM
         uses: ./.github/actions/pnpm-publish
+        if: ${{ matrix.target != 'aarch64-apple-darwin' && matrix.target != 'x86_64-apple-darwin' }}
         with:
           npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
           package_dir: ./packages/js/targets/${{ matrix.target }}
