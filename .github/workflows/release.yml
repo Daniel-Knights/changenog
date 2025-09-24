@@ -17,6 +17,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG_NAME }}
 
       - name: Create release
         env:
@@ -32,6 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG_NAME }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -80,6 +84,8 @@ jobs:
             os: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG_NAME }}
 
       - name: Download README artifacts
         uses: actions/download-artifact@v5
@@ -136,6 +142,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG_NAME }}
 
       - name: Download README artifacts
         uses: actions/download-artifact@v5
@@ -180,6 +188,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG_NAME }}
 
       - name: Publish to crates.io
         run: cargo publish --allow-dirty --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
