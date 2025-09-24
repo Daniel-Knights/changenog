@@ -45,7 +45,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "latest"
-          cache: "pnpm"
+          package-manager-cache: false
 
       - run: pnpm install
       - run: pnpm tsx scripts/readme.ts
