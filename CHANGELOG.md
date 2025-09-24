@@ -1,3 +1,7 @@
+## [v2.0.4](https://github.com/Daniel-Knights/changenog/compare/v2.0.3...v2.0.4) (24/09/2025)
+
+- fix: exclude tags that point to orphaned commits ([a34970d](https://github.com/Daniel-Knights/changenog/commit/a34970dbda0b35a0dc526445ebb61f669c1b9e64))
+
 ## [v2.0.3](https://github.com/Daniel-Knights/changenog/compare/v2.0.2...v2.0.3) (08/04/2025)
 
 - fix: continue on invalid prev entry tag ([3ccd371](https://github.com/Daniel-Knights/changenog/commit/3ccd3718212c5491a7a09f11ee503e3fab689e1f))
