@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ env.TAG_NAME }}
 
@@ -32,7 +32,7 @@ jobs:
   readme:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ env.TAG_NAME }}
 
@@ -42,7 +42,7 @@ jobs:
           run_install: false
 
       - name: Install Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: "latest"
           package-manager-cache: false
@@ -50,7 +50,7 @@ jobs:
       - run: pnpm install
       - run: pnpm tsx scripts/readme.ts
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: readme
           path: packages/**/README.md
@@ -82,12 +82,12 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ env.TAG_NAME }}
 
       - name: Download README artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: readme
           path: ./packages
@@ -112,7 +112,7 @@ jobs:
           sccache: true
 
       - name: Store wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wheel-${{ matrix.target }}
           path: ${{ env.PYTHON_DIST_PATH }}/*.whl
@@ -140,12 +140,12 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ env.TAG_NAME }}
 
       - name: Download README artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: readme
           path: ./packages
@@ -167,7 +167,7 @@ jobs:
       url: https://pypi.org/p/changenog
     steps:
       - name: Download wheel artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: ${{ env.PYTHON_DIST_PATH }}
           pattern: wheel-*
@@ -186,7 +186,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ env.TAG_NAME }}
 
