@@ -1,3 +1,8 @@
+## [v2.0.5](https://github.com/Daniel-Knights/changenog/compare/v2.0.4...v2.0.5) (14/12/2025)
+
+- chore(deps): bump all dependencies ([f35cea0](https://github.com/Daniel-Knights/changenog/commit/f35cea08545caa461497e16bfe0e1b19256b2871))
+- docs(readme): add rebase/squash merge known limitation ([f300d77](https://github.com/Daniel-Knights/changenog/commit/f300d777b057f65408e2aa83c5120bd291b5bce4))
+
 ## [v2.0.4](https://github.com/Daniel-Knights/changenog/compare/v2.0.3...v2.0.4) (24/09/2025)
 
 - fix: exclude tags that point to orphaned commits ([a34970d](https://github.com/Daniel-Knights/changenog/commit/a34970dbda0b35a0dc526445ebb61f669c1b9e64))
