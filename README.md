@@ -23,6 +23,8 @@ See this repo's changelog for example output.
     - [Presets](#presets)
 - [Entry Strategy](#entry-strategy)
 - [Monorepo Support](#monorepo-support)
+- [Known Limitations](#known-limitations)
+  - [Cross-Branch Tag Ranges (Rebase/Squash Workflows)](#cross-branch-tag-ranges-rebasesquash-workflows)
 
 ## Usage
 
@@ -145,3 +147,15 @@ This is the general strategy for building and filtering entries:
 If the git root is in a parent directory, `changenog` will filter commits to only include those that have changes within the subdirectory.
 
 To include only the _tags_ that apply to that subdirectory, you can provide a `--tag-filter-regex` option, e.g. `--tag-filter-regex='my-package/.*'`. This is assuming you have a convention for tagging that scopes to that subdirectory.
+
+## Known Limitations
+
+### Cross-Branch Tag Ranges (Rebase/Squash Workflows)
+
+When using rebase or squash merge workflows, the commits merged into the main branch are new commits, and any tag created on the merged branch remains pointing at their original commit. There's no way to link the new commits back to the original ones, so the changelog entry for a new tag will include the commits associated with the previous entry.
+
+**Workarounds:**
+
+- Manually delete the entries for these newer commits in the changelog
+- Only create tags after merging to your target branch
+- Use merge commits
