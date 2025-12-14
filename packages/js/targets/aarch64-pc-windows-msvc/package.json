@@ -1,6 +1,6 @@
 {
   "name": "@changenog/aarch64-pc-windows-msvc",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "aarch64-pc-windows-msvc binary for Changenog, the changelog generator.",
   "author": "Donk",
   "license": "ISC",
