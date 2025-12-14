@@ -78,7 +78,7 @@ Binaries are available on the [releases page](https://github.com/Daniel-Knights/
 | -------- | ------------ | ----------------------- |
 | Linux    | x86_64       | Tested on Ubuntu latest |
 | Linux    | aarch64      | Tested on Ubuntu 22.04  |
-| MacOS    | x86_64       | Tested on MacOS 13.0    |
+| MacOS    | x86_64       | Tested on MacOS 15      |
 | MacOS    | aarch64      | Tested on MacOS latest  |
 | Windows  | x86_64       | Tested on Windows 11    |
 | Windows  | aarch64      | Untested ⚠️             |
