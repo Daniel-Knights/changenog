@@ -81,7 +81,7 @@ Binaries are available on the [releases page](https://github.com/Daniel-Knights/
 | MacOS    | x86_64       | Tested on MacOS 15      |
 | MacOS    | aarch64      | Tested on MacOS latest  |
 | Windows  | x86_64       | Tested on Windows 11    |
-| Windows  | aarch64      | Untested ⚠️             |
+| Windows  | aarch64      | Tested on Windows 11    |
 
 ## Options
 
