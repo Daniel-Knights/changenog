@@ -50,7 +50,7 @@ jobs:
       - run: pnpm install
       - run: pnpm tsx scripts/readme.ts
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: readme
           path: packages/**/README.md
@@ -112,7 +112,7 @@ jobs:
           sccache: true
 
       - name: Store wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: wheel-${{ matrix.target }}
           path: ${{ env.PYTHON_DIST_PATH }}/*.whl
@@ -145,7 +145,7 @@ jobs:
           ref: ${{ env.TAG_NAME }}
 
       - name: Download README artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: readme
           path: ./packages
@@ -167,7 +167,7 @@ jobs:
       url: https://pypi.org/p/changenog
     steps:
       - name: Download wheel artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: ${{ env.PYTHON_DIST_PATH }}
           pattern: wheel-*

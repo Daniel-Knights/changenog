@@ -1,21 +1,21 @@
 {
   "type": "module",
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
-    "@types/node": "^25.0.2",
-    "@typescript-eslint/parser": "^8.49.0",
-    "eslint": "^9.39.2",
+    "@eslint/js": "^9.39.3",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "@types/node": "^25.3.2",
+    "@typescript-eslint/parser": "^8.56.1",
+    "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-n": "^17.23.1",
-    "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^16.5.0",
-    "prettier": "^3.7.4",
+    "eslint-plugin-n": "^17.24.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.3.0",
+    "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.56.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -23,5 +23,5 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@10.25.0"
+  "packageManager": "pnpm@10.30.3"
 }

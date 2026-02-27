@@ -2,7 +2,6 @@
 /* eslint-disable n/no-unpublished-import */
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-// @ts-expect-error - eslint-plugin-import does not have types
 import eslintPluginImport from "eslint-plugin-import";
 import eslintPluginN from "eslint-plugin-n";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
