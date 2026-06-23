@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG_NAME }}
 
@@ -32,19 +32,19 @@ jobs:
   readme:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG_NAME }}
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
       - name: Install Node
         uses: actions/setup-node@v6
         with:
-          node-version: "latest"
+          node-version: 22
           package-manager-cache: false
 
       - run: pnpm install
@@ -82,12 +82,12 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG_NAME }}
 
       - name: Download README artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: readme
           path: ./packages
@@ -140,7 +140,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG_NAME }}
 
@@ -186,7 +186,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG_NAME }}
 

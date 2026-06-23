@@ -24,7 +24,7 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Build for target
         uses: ./.github/actions/target-build
@@ -32,14 +32,14 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
       - name: Install Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "latest"
+          node-version: 22
           package-manager-cache: false
 
       - run: pnpm install
