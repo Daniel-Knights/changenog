@@ -5,10 +5,11 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginImport from "eslint-plugin-import";
 import eslintPluginN from "eslint-plugin-n";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
-import typescriptEslint, { configs as typescriptEslintConfigs } from "typescript-eslint";
+import { configs as typescriptEslintConfigs } from "typescript-eslint";
 
-export default typescriptEslint.config(
+export default defineConfig(
   js.configs.recommended,
   eslintConfigPrettier,
   eslintPluginImport.flatConfigs.recommended,

@@ -80,7 +80,9 @@ export class GitManager {
 
       return output.stdout?.toString().trim();
     } catch (error) {
-      throw new Error(`Git command failed: git ${args.join(" ")}\n${error}`);
+      throw new Error(`Git command failed: git ${args.join(" ")}\n${error}`, {
+        cause: error,
+      });
     }
   }
 

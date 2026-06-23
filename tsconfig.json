@@ -21,6 +21,7 @@
     "strictPropertyInitialization": true,
     "resolveJsonModule": true,
     "erasableSyntaxOnly": true,
+    "types": ["node"],
     "typeRoots": ["./node_modules/@types", "./typings/"]
   },
   "exclude": ["./node_modules/"]
