@@ -36,18 +36,11 @@ jobs:
         with:
           ref: ${{ env.TAG_NAME }}
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
+      - uses: pnpm/setup@v3
         with:
-          run_install: false
+          runtime: node@22
+          require-lockfile: true
 
-      - name: Install Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          package-manager-cache: false
-
-      - run: pnpm install
       - run: pnpm tsx scripts/readme.ts
 
       - uses: actions/upload-artifact@v7
