@@ -10,17 +10,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install pnpm
-      uses: pnpm/action-setup@v6
+    - uses: pnpm/setup@v3
       with:
-        run_install: false
-
-    - name: Install Node
-      uses: actions/setup-node@v6
-      with:
-        node-version: 22
-        package-manager-cache: false
-        registry-url: "https://registry.npmjs.org"
+        runtime: node@22
+        require-lockfile: true
+        install: false
 
     - name: Publish package to NPM
       shell: bash
