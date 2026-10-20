@@ -1,5 +1,5 @@
 name: "PNPM Publish"
-description: "Publish package to NPM using PNPM"
+description: "Stage package for NPM publishing using PNPM (requires manual approval with 2FA)"
 inputs:
   package_dir:
     description: "Directory containing package to publish"
@@ -16,9 +16,9 @@ runs:
         require-lockfile: true
         install: false
 
-    - name: Publish package to NPM
+    - name: Stage package for NPM publishing
       shell: bash
-      run: pnpm publish ${{ inputs.package_dir }} --no-git-checks --access public
+      run: pnpm stage publish ${{ inputs.package_dir }} --no-git-checks --access public
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm_auth_token }}
         NPM_CONFIG_PROVENANCE: true
