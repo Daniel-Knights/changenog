@@ -120,7 +120,7 @@ jobs:
           target: ${{ matrix.target }}
           asset_path: ${{ matrix.target }}-${{ env.EXE_NAME }}
 
-      - name: Publish target to NPM
+      - name: Stage target NPM package (requires manual approval with 2FA)
         uses: ./.github/actions/pnpm-publish
         with:
           npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
@@ -143,7 +143,7 @@ jobs:
           name: readme
           path: ./packages
 
-      - name: Publish core to NPM
+      - name: Stage core NPM package (requires manual approval with 2FA)
         uses: ./.github/actions/pnpm-publish
         with:
           npm_auth_token: ${{ secrets.NPM_AUTH_TOKEN }}
