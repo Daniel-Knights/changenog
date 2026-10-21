@@ -1,3 +1,7 @@
+## [v2.0.8](https://github.com/Daniel-Knights/changenog/compare/v2.0.7...v2.0.8) (21/10/2026)
+
+- chore(deps): bump all dependencies
+
 ## [v2.0.7](https://github.com/Daniel-Knights/changenog/compare/v2.0.6...v2.0.7) (23/06/2026)
 
 - chore(deps): bump all dependencies
